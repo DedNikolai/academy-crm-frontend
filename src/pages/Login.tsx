@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -5,13 +6,27 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Container } from '@mui/material';
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
+import { AuthContext } from '../components/AuthProvider';
+import SignInContainer from '../components/SignInContainer';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+import { IAuth } from '../types/user';
+import { logIn } from '../api/user';
+import Loader from '../components/Loader';
+
+const schema = yup
+  .object({
+    email: yup.string().email('Invalid Email format').required('Email is required'),
+    password: yup.string().required('Password is required'),
+  })
+  .required()
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -32,34 +47,22 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
-  const handleSubmit = () => {
-
+export default function SignIn() {
+  const authContext = useContext(AuthContext);
+  const {register, handleSubmit, reset, formState: {errors}} = useForm<IAuth>({mode: 'onSubmit', resolver: yupResolver(schema)})
+  
+  const onSubmit: SubmitHandler<IAuth> = (data) => {
+    authContext?.setIsUserLoading(true);
+    logIn(data).then(res => {
+      if (res) authContext?.setUser(res.user)
+    }).finally(() => authContext?.setIsUserLoading(false))
+    reset()
   };
+
+  if (authContext?.user) return <Navigate to='/dashboard/main'/>
+  if (authContext?.isUserLoading) return <Loader />
 
   return (
     <Container component="main">
@@ -80,7 +83,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{
               display: 'flex',
@@ -92,8 +95,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
-                // error={emailError}
-                // helperText={emailErrorMessage}
+                {...register('email')}
+                error={!!errors.email}
+                helperText={errors.email?.message}
                 id="email"
                 type="email"
                 name="email"
@@ -102,7 +106,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 required
                 fullWidth
                 variant="outlined"
-                // color={emailError ? 'error' : 'primary'}
+                color={!!errors.email ? 'error' : 'primary'}
                 sx={{ ariaLabel: 'email' }}
               />
             </FormControl>
@@ -111,8 +115,9 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 <FormLabel htmlFor="password">Пароль</FormLabel>
               </Box>
               <TextField
-                // error={passwordError}
-                // helperText={passwordErrorMessage}
+                {...register('password')}
+                error={!!errors.password}
+                helperText={errors.password?.message}
                 name="password"
                 type="password"
                 id="password"
@@ -121,7 +126,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 required
                 fullWidth
                 variant="outlined"
-                // color={passwordError ? 'error' : 'primary'}
+                color={!!errors.password ? 'error' : 'primary'}
               />
             </FormControl>
             <Button

@@ -12,7 +12,7 @@ import Students from "../pages/DashboardPages/Students";
 const AdminRouter: FC = () => {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/main" element={<Home />} />
             <Route path="/teachers" element={<Teachers />} />
             <Route path="/students" element={<Students />} /> 
         </Routes>

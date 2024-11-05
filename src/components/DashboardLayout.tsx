@@ -19,7 +19,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import AccountMenu from './AccountMenu';
 import AdminRouter from '../routes/AdminRouter';
-import {Link} from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 import { title } from 'process';
 import HomeIcon from '@mui/icons-material/Home';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
@@ -29,7 +29,7 @@ const menuList = [
   {
     id: 1,
     title: 'Головна',
-    link: '/dashboard',
+    link: '/dashboard/main',
     icon: <HomeIcon />
   },
   {
@@ -171,9 +171,10 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List className='nav' sx={{paddingTop: 0}}>
           {menuList.map(item => (
-            <Link to={item.link} key={item.id} >
+            <div key={item.id} >
+            <NavLink to={item.link} className={({ isActive }) => (isActive ? 'active' : '')}>
               <ListItem disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={[
@@ -195,6 +196,7 @@ export default function MiniDrawer() {
                       {
                         minWidth: 0,
                         justifyContent: 'center',
+                        color: 'inherit'
                       },
                       open
                         ? {
@@ -221,7 +223,9 @@ export default function MiniDrawer() {
                   />
                 </ListItemButton>
               </ListItem>
-            </Link>
+            </NavLink>
+            <Divider />
+            </div>
           ))}
         </List>
       </Drawer>
