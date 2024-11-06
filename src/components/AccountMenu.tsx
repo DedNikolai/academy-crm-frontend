@@ -30,7 +30,7 @@ export default function AccountMenu() {
   const logOut = () => {
     handleClose();
     authContext?.setUser(null);
-    removeCookie("auth-token");
+    removeCookie("auth-token", {path: '/', domain: 'http://localhost:3000'});
   }
 
   return (
@@ -106,16 +106,16 @@ export default function AccountMenu() {
           </MenuItem>
         }
         {
+          isOwner &&<Divider />
+        }
+        {
           isOwner &&
-          <>
-            <Divider />
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
               Додати Адміністратора
             </MenuItem>
-          </>
         }
         {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>

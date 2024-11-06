@@ -20,6 +20,7 @@ import * as yup from "yup"
 import { IAuth } from '../types/user';
 import { logIn } from '../api/user';
 import Loader from '../components/Loader';
+import CustomCard from '../components/CustomCard';
 
 const schema = yup
   .object({
@@ -28,27 +29,6 @@ const schema = yup
   })
   .required()
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
-}));
-
-
-
 export default function SignIn() {
   const authContext = useContext(AuthContext);
   const {register, handleSubmit, reset, formState: {errors}} = useForm<IAuth>({mode: 'onSubmit', resolver: yupResolver(schema)})
@@ -56,7 +36,7 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<IAuth> = (data) => {
     authContext?.setIsUserLoading(true);
     logIn(data).then(res => {
-      if (res) authContext?.setUser(res.user)
+      if (res) authContext?.setUser(res)
     }).finally(() => authContext?.setIsUserLoading(false))
     reset()
   };
@@ -68,7 +48,7 @@ export default function SignIn() {
     <Container component="main">
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
+        <CustomCard variant="outlined">
           <Box sx={{display: 'flex', justifyContent: 'center'}}>
             <Avatar sx={{ my: 1, mb: 2, bgcolor: 'primary.main' }}>
                 <LockOutlinedIcon />
@@ -144,7 +124,7 @@ export default function SignIn() {
           </Link>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           </Box>
-        </Card>
+        </CustomCard>
       </SignInContainer>
     </Container>
   );

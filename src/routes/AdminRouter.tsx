@@ -1,8 +1,6 @@
 
 import { FC } from "react";
-import {Routes, Route, Navigate} from 'react-router-dom';
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
+import {Routes, Route} from 'react-router-dom';
 import Home from "../pages/DashboardPages/Home";
 import Teachers from "../pages/DashboardPages/Teachers";
 import Students from "../pages/DashboardPages/Students";
