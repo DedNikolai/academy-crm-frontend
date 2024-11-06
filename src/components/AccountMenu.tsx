@@ -30,7 +30,8 @@ export default function AccountMenu() {
   const logOut = () => {
     handleClose();
     authContext?.setUser(null);
-    removeCookie("auth-token", {path: '/', domain: 'http://localhost:3000'});
+    // removeCookie("auth-token", {path: '/', domain: 'http://localhost:3000'});
+    window.localStorage.removeItem("auth-token");
   }
 
   return (

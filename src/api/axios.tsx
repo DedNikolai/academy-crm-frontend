@@ -8,8 +8,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     config => {
-        const authToken = getCookie("auth-token");
-
+        // const authToken = getCookie("auth-token");
+        const authToken = window.localStorage.getItem("auth-token")
         if (authToken) {
             config.headers.authorization = `Bearer ${authToken}`;
             config.headers['Content-Type'] = 'application/json';

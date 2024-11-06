@@ -12,7 +12,8 @@ export const logIn = async (data: IAuth) => {
         const user: IUser = response.data.user;
         const token: string = response.data.token;
         toast.success('Authorization Success!!!');
-        setCookie("auth-token", token, {path: '/', domain: 'http://localhost:3000'});
+        window.localStorage.setItem("auth-token", token)
+        // setCookie("auth-token", token, {path: '/', domain: 'http://localhost:3000'});
         return user;
 
     } catch(error) {
