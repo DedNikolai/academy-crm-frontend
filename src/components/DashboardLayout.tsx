@@ -15,12 +15,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import AccountMenu from './AccountMenu';
 import AdminRouter from '../routes/AdminRouter';
-import {Link, NavLink} from 'react-router-dom';
-import { title } from 'process';
+import {NavLink} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PersonIcon from '@mui/icons-material/Person';
@@ -229,7 +226,7 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '50px' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '80px', minHeight: '100vh', backgroundColor: '#eeeeee' }}>
         <AdminRouter />
       </Box>
     </Box>

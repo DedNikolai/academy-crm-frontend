@@ -1,13 +1,5 @@
 import {createContext, FC, useState} from 'react';
 import { IUser } from '../types/user';
-import { Roles } from '../types/roles';
-
-const mock = {
-    id: '1',
-    fullName: "Name",
-    email: 'email',
-    roles: [Roles.ADMIN]
-}
 
 export interface IAuthContextUserState {
     user: IUser | null;
@@ -28,7 +20,7 @@ export const AuthContext = createContext<IAuthContextUserState & IAuthContextLoa
 
 const AuthProvider: FC<IAuthProviderProps> = ({children}) => {
     const [user, setUser] = useState<IUser | null>(null);
-    const [isUserLoading, setIsUserLoading] = useState<boolean>(false)
+    const [isUserLoading, setIsUserLoading] = useState<boolean>(true)
     return (
         <AuthContext.Provider value={{user, setUser, isUserLoading, setIsUserLoading}}>
             {children}

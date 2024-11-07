@@ -1,7 +1,7 @@
 import { Roles } from "./roles";
 
 export interface IUser {
-    id: string;
+    _id: string;
     fullName: string;
     email: string;
     roles: Roles[];
@@ -10,4 +10,9 @@ export interface IUser {
 export interface IAuth {
     email: string;
     password: string;
+}
+
+export interface IUserProfile {
+    fullName: string;
+    email: string;
 }

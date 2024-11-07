@@ -1,6 +1,6 @@
 import { IAuth, IUser } from "../types/user";
 import axios from './axios';
-import {setCookie} from 'typescript-cookie';
+// import {setCookie} from 'typescript-cookie';
 import { toast } from 'react-toastify';
 import {AxiosResponse} from "axios";
 
@@ -63,3 +63,18 @@ export const resetPassword = async (id: string, data: {password: string}, token:
         console.log(error);
     }
 }
+
+    export const updateUser = async (user: IUser) => {
+        console.log(user._id)
+        try {
+            const response: AxiosResponse = await axios.patch(`/auth/update/${user._id}`, user)
+
+            if (response.status === 200) {
+                toast.success('Дані оновлено');
+                return response.data;
+            }
+        } catch(error) {
+            toast.error('Не вдалоя оновити дані');
+            console.log(error);
+        }
+    }

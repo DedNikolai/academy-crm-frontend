@@ -12,8 +12,9 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 // import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { AuthContext } from './AuthProvider';
-import {removeCookie} from 'typescript-cookie';
+// import {removeCookie} from 'typescript-cookie';
 import { Roles } from '../types/roles';
+import {NavLink} from 'react-router-dom';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -95,16 +96,20 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {
-          isOwner && 
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Профіль
-          </MenuItem>
+          isOwner &&
+          <NavLink to='/dashboard/profile'>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Профіль
+            </MenuItem>
+          </NavLink> 
         }
         {
-          isOwner && 
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Адміністратори
-          </MenuItem>
+          isOwner &&
+          <NavLink to='/dashboard/admins'>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Адміністратори
+            </MenuItem>
+          </NavLink>  
         }
         {
           isOwner &&<Divider />
