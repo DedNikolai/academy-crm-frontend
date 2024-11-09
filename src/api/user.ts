@@ -23,7 +23,6 @@ export const logIn = async (data: IAuth) => {
 }
 
 export const getMe = async () => {
-
     try {
         const response: AxiosResponse = await axios.get('/auth/me')
         const user: IUser = response.data.user
@@ -64,8 +63,7 @@ export const resetPassword = async (id: string, data: {password: string}, token:
     }
 }
 
-    export const updateUser = async (user: IUser) => {
-        console.log(user._id)
+export const updateUser = async (user: IUser) => {
         try {
             const response: AxiosResponse = await axios.patch(`/auth/update/${user._id}`, user)
 
@@ -77,4 +75,23 @@ export const resetPassword = async (id: string, data: {password: string}, token:
             toast.error('Не вдалоя оновити дані');
             console.log(error);
         }
+}
+
+
+export const resetEmail = async (data: {email: string}) => {
+    try {
+        const response: AxiosResponse = await axios.post('/auth/reset-email', data);
+
+        if (response.status === 200) {
+            toast.success(response.data.message);
+            return true;
+        } else {
+            toast.error(response.data.message);
+            return false;
+        }
+
+    } catch(error) {
+        console.log(error);
+        toast.error('Неможливо оновити пошту')
     }
+}

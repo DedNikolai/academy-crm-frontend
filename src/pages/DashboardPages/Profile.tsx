@@ -105,7 +105,7 @@ const Profile: FC = () => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{bgcolor: green[300], width: '100px'}}
+                        sx={{bgcolor: green[300], width: '150px'}}
                         disabled={!isEdit}
                     >
                         Зберегти

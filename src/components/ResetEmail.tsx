@@ -2,7 +2,7 @@ import {FC, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import { green } from '@mui/material/colors';
+import { blue, green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
@@ -15,6 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
 import { Grid2 } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import EmailIcon from '@mui/icons-material/Email';
+import Avatar from '@mui/material/Avatar';
+import { resetEmail } from '../api/user';
 
 const schema = yup
   .object({
@@ -24,7 +28,9 @@ const schema = yup
 
 const ResetEmail: FC<{email: string}> = ({email}) => {
     const [isEdit, setIsEdid] = useState<boolean>(false);
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<{email: string}>({
+    const [isLoading, setIsloading] = useState<boolean>(false);
+    const [resetSuccess, setResetSuccess] = useState<boolean>(false);
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<{email: string, code?: string}>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {email}
@@ -32,17 +38,28 @@ const ResetEmail: FC<{email: string}> = ({email}) => {
 
     const onEdit = () => {
         setIsEdid(!isEdit);
+        setResetSuccess(false);
         reset();
     }
     
     const onSubmit: SubmitHandler<{email: string}> = (data) => {
-        console.log(data)
+        setIsloading(true);
+        resetEmail(data).then(res => {
+            if (res) {
+                setResetSuccess(true);
+            }
+        }).finally(() => setIsloading(false));
     };
 
     return (
         <Card sx={{marginTop: '20px'}}>
             <CardHeader
-
+                avatar={
+                    <Avatar sx={{ bgcolor: blue[500] }}>
+                        <EmailIcon />
+                    </Avatar>
+                }
+                title='Email власника'
                 action={
                     <IconButton aria-label="settings" onClick={onEdit}>
                       {!isEdit ? <EditIcon /> : <ClearIcon />}
@@ -50,48 +67,69 @@ const ResetEmail: FC<{email: string}> = ({email}) => {
                 }
             />
             <CardContent>
-            <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-                sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                gap: 2,
-                }}
-            >
-                <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
-                    {...register('email')}
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
-                    id="email"
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    required
-                    fullWidth
-                    variant="outlined"
-                    color={!!errors.email ? 'error' : 'primary'}
-                    sx={{ ariaLabel: 'email' }}
-                    disabled={!isEdit}
-                />
-                </FormControl>
-                <Grid2 sx={{textAlign: 'right'}}>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{bgcolor: green[300], width: '100px'}}
-                        disabled={!isEdit}
-                    >
-                        Зберегти
-                    </Button>
-                </Grid2>
-            </Box>
+                {
+                    isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+                    <Box
+                        component="form"
+                        onSubmit={handleSubmit(onSubmit)}
+                        noValidate
+                        sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%',
+                        gap: 2,
+                    }}
+                >
+                    <FormControl>
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                        <TextField
+                            {...register('email')}
+                            error={!!errors.email}
+                            helperText={errors.email?.message}
+                            id="email"
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            required
+                            fullWidth
+                            variant="outlined"
+                            color={!!errors.email ? 'error' : 'primary'}
+                            sx={{ ariaLabel: 'email' }}
+                            disabled={!isEdit}
+                        />
+                    </FormControl>
+                    {
+                        resetSuccess &&
+                        <FormControl>
+                        <FormLabel htmlFor="code">Код підтвердженя</FormLabel>
+                            <TextField
+                                {...register('code')}
+                                id="code"
+                                type="code"
+                                name="code"
+                                autoComplete="code"
+                                autoFocus
+                                required
+                                fullWidth
+                                variant="outlined"
+                                disabled={!isEdit}
+                            />
+                        </FormControl>
+                    }
+                    <Grid2 sx={{textAlign: 'right'}}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{bgcolor: green[300], width: '150px'}}
+                            disabled={!isEdit}
+                        >
+                            {!resetSuccess ? "Зберегти" : "Підтвердити"}
+                        </Button>
+                    </Grid2>
+                </Box>
+                }
             </CardContent>
         </Card>
     )
