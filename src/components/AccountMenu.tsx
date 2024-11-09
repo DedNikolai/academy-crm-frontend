@@ -9,11 +9,17 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
+// import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { AuthContext } from './AuthProvider';
+// import {removeCookie} from 'typescript-cookie';
+import { Roles } from '../types/roles';
+import {NavLink} from 'react-router-dom';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const authContext = React.useContext(AuthContext);
+  const isOwner = authContext?.user?.roles.some(role => role === Roles.OWNER)
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +27,14 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logOut = () => {
+    handleClose();
+    authContext?.setUser(null);
+    // removeCookie("auth-token", {path: '/', domain: 'http://localhost:3000'});
+    window.localStorage.removeItem("auth-token");
+  }
+
   return (
     <React.Fragment>
       <Box sx={{ 
@@ -81,30 +95,45 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        {
+          isOwner &&
+          <NavLink to='/dashboard/profile'>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Профіль
+            </MenuItem>
+          </NavLink> 
+        }
+        {
+          isOwner &&
+          <NavLink to='/dashboard/admins'>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Адміністратори
+            </MenuItem>
+          </NavLink>  
+        }
+        {
+          isOwner &&<Divider />
+        }
+        {
+          isOwner &&
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <PersonAdd fontSize="small" />
+              </ListItemIcon>
+              Додати Адміністратора
+            </MenuItem>
+        }
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        </MenuItem> */}
+        <MenuItem onClick={logOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          Вийти
         </MenuItem>
       </Menu>
     </React.Fragment>

@@ -15,9 +15,33 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import AccountMenu from './AccountMenu';
+import AdminRouter from '../routes/AdminRouter';
+import {NavLink} from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import PersonIcon from '@mui/icons-material/Person';
+
+const menuList = [
+  {
+    id: 1,
+    title: 'Головна',
+    link: '/dashboard/main',
+    icon: <HomeIcon />
+  },
+  {
+    id: 2,
+    title: 'Учні',
+    link: '/dashboard/students',
+    icon:  <SentimentSatisfiedAltIcon />
+  },
+  {
+    id: 3,
+    title: 'Вчителі',
+    link: '/dashboard/teachers',
+    icon: <PersonIcon />
+  }
+]
 
 const drawerWidth = 240;
 
@@ -105,7 +129,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,60 +168,66 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-              >
-                <ListItemIcon
+        <List className='nav' sx={{paddingTop: 0}}>
+          {menuList.map(item => (
+            <div key={item.id} >
+            <NavLink to={item.link} className={({ isActive }) => (isActive ? 'active' : '')}>
+              <ListItem disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: 'center',
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: 'initial',
                         }
                       : {
-                          mr: 'auto',
+                          justifyContent: 'center',
                         },
                   ]}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: 'center',
+                        color: 'inherit'
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: 'auto',
+                          },
+                    ]}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.title}
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+            <Divider />
+            </div>
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        
+      <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '80px', minHeight: '100vh', backgroundColor: '#eeeeee' }}>
+        <AdminRouter />
       </Box>
     </Box>
   );
