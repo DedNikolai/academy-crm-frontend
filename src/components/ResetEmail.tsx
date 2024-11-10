@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useContext, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -18,7 +18,8 @@ import { Grid2 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import EmailIcon from '@mui/icons-material/Email';
 import Avatar from '@mui/material/Avatar';
-import { resetEmail } from '../api/user';
+import { resetEmail, updateEmail } from '../api/user';
+import { AuthContext } from './AuthProvider';
 
 const schema = yup
   .object({
@@ -27,6 +28,7 @@ const schema = yup
   .required()
 
 const ResetEmail: FC<{email: string}> = ({email}) => {
+    const authContext = useContext(AuthContext);
     const [isEdit, setIsEdid] = useState<boolean>(false);
     const [isLoading, setIsloading] = useState<boolean>(false);
     const [resetSuccess, setResetSuccess] = useState<boolean>(false);
@@ -42,13 +44,24 @@ const ResetEmail: FC<{email: string}> = ({email}) => {
         reset();
     }
     
-    const onSubmit: SubmitHandler<{email: string}> = (data) => {
-        setIsloading(true);
-        resetEmail(data).then(res => {
-            if (res) {
-                setResetSuccess(true);
-            }
-        }).finally(() => setIsloading(false));
+    const onSubmit: SubmitHandler<{email: string, code?: string}> = (data) => {
+        if (!resetSuccess) {
+            setIsloading(true);
+            resetEmail(data).then(res => {
+                if (res) {
+                    setResetSuccess(true);
+                }
+            }).finally(() => setIsloading(false));
+        } else {
+            setIsloading(true);
+            updateEmail(data).then(res => {
+                if (res) {
+                    authContext?.setUser(res);
+                    setResetSuccess(false);
+                    setIsEdid(false);
+                }
+            }).finally(() => setIsloading(false))
+        }
     };
 
     return (

@@ -95,3 +95,21 @@ export const resetEmail = async (data: {email: string}) => {
         toast.error('Неможливо оновити пошту')
     }
 }
+
+export const updateEmail = async (data: {email: string,  code?: string}) => {
+    try {
+        const response: AxiosResponse = await axios.post('/auth/update-email', data);
+
+        if (response.status === 200) {
+            toast.success('Пошту оновлено');
+            return response.data;
+        } else {
+            toast.error(response.data.message);
+            return false;
+        }
+
+    } catch(error) {
+        console.log(error);
+        toast.error('Неможливо оновити пошту')
+    }
+}
