@@ -116,12 +116,14 @@ export default function AccountMenu() {
         }
         {
           isOwner &&
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <PersonAdd fontSize="small" />
-              </ListItemIcon>
-              Додати Адміністратора
-            </MenuItem>
+          <NavLink to='/dashboard/admins/create'>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                Додати Адміністратора
+              </MenuItem>
+            </NavLink>
         }
         {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>

@@ -1,7 +1,7 @@
 import { Roles } from "./roles";
 
 export interface IUser {
-    _id: string;
+    _id?: string;
     fullName: string;
     email: string;
     roles: Roles[];
