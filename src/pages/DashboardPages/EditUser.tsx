@@ -1,31 +1,31 @@
-import {FC, useContext, useState} from 'react';
+import {FC, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import { green, red } from '@mui/material/colors';
+import { green, } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import { AuthContext } from '../../components/AuthProvider';
 import {useForm, SubmitHandler, } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import IconButton from '@mui/material/IconButton';
-import Loader from '../../components/Loader';
-import ResetEmail from '../../components/ResetEmail';
 import EditIcon from '@mui/icons-material/Edit';
-import ClearIcon from '@mui/icons-material/Clear';
-import { updateUser } from '../../api/user';
 import { IUser } from '../../types/user';
-import { Grid2 } from '@mui/material';
+import { Grid2, CircularProgress } from '@mui/material';
 import { Roles } from '../../types/roles';
+import {useParams, Navigate} from 'react-router-dom';
+import useGetUser from '../../api/query/user/useGetUser';
 
 interface ICreateUser {
     fullName: string;
     email: string;
+}
+
+type Params = {
+    id: string;
 }
 
 const schema = yup
@@ -37,9 +37,12 @@ const schema = yup
   .required()
 
 const EditUser: FC = () => {
+    const params = useParams<Params>();
+    const {data, isLoading, isFetched} = useGetUser(params.id || '')
     const {register, handleSubmit, reset, formState: {errors}} = useForm<ICreateUser>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
+        defaultValues: {...data}
     })
     
     const onSubmit: SubmitHandler<ICreateUser> = (data) => {
@@ -50,6 +53,12 @@ const EditUser: FC = () => {
         console.log(newAdmin);
         reset();
     };
+
+    useEffect(() => {
+        reset(data);
+    }, [data])
+
+    if (!data && isFetched) return <Navigate to='/404' />
 
     return (
         <>
@@ -62,7 +71,8 @@ const EditUser: FC = () => {
                 }
                 title='Редагувати адміністратора'
             />
-            <CardContent>
+            {isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            <CardContent>   
             <Box
                 component="form"
                 onSubmit={handleSubmit(onSubmit)}
@@ -121,7 +131,8 @@ const EditUser: FC = () => {
                     </Button>
                 </Grid2>
             </Box>
-            </CardContent>           
+            </CardContent>
+            }           
         </Card>
         </>
     )

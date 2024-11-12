@@ -20,12 +20,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import { updateUser } from '../../api/user';
 import { IUser } from '../../types/user';
-import { Grid2 } from '@mui/material';
+import { CircularProgress, Grid2 } from '@mui/material';
 import { Roles } from '../../types/roles';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import useCreateUser from '../../api/query/user/useCreateUser';
 
 interface ICreateUser {
     fullName: string;
@@ -43,7 +44,9 @@ const schema = yup
   .required()
 
 const CreateUser: FC = () => {
-    const [showPassword, setShowPassword] = useState<boolean>(false)
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const mutation = useCreateUser();
+    const {mutate, isPending} = mutation
     const {register, handleSubmit, reset, formState: {errors}} = useForm<ICreateUser>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
@@ -56,9 +59,11 @@ const CreateUser: FC = () => {
             ...data,
             roles: [Roles.ADMIN]
         }
-        console.log(newAdmin);
+        mutate(newAdmin)
         reset();
     };
+
+    if (isPending) return <CircularProgress />
 
     return (
         <>

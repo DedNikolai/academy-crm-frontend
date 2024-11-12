@@ -5,6 +5,7 @@ export interface IUser {
     fullName: string;
     email: string;
     roles: Roles[];
+    verified?: boolean
 }
 
 export interface IAuth {
