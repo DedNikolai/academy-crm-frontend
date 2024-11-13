@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from '../../axios';
 import { toast } from "react-toastify";
 
-const fetchUser = async (id: string) => {
+const fetchUser = async (id?: string) => {
     try {
         const response = await axios.get(`/auth/users/${id}`);
         if (response.status === 200) {
@@ -18,7 +18,7 @@ const fetchUser = async (id: string) => {
 };
 
 
-const useGetUser = (userId: string) => {
+const useGetUser = (userId?: string) => {
     const {data, isLoading, isFetching, isFetched} = useQuery({
         queryKey: ['user', userId],
         queryFn: () => fetchUser(userId)

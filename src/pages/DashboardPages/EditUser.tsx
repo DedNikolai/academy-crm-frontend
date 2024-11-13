@@ -18,6 +18,7 @@ import { Grid2, CircularProgress } from '@mui/material';
 import { Roles } from '../../types/roles';
 import {useParams, Navigate} from 'react-router-dom';
 import useGetUser from '../../api/query/user/useGetUser';
+import useUpdateUser from '../../api/query/user/useUpdateUser';
 
 interface ICreateUser {
     fullName: string;
@@ -38,19 +39,19 @@ const schema = yup
 
 const EditUser: FC = () => {
     const params = useParams<Params>();
-    const {data, isLoading, isFetched} = useGetUser(params.id || '')
+    const {data, isLoading, isFetched} = useGetUser(params.id);
+    const mutation = useUpdateUser(params.id);
+    const {mutate, isPending} = mutation;
     const {register, handleSubmit, reset, formState: {errors}} = useForm<ICreateUser>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {...data}
     })
     
-    const onSubmit: SubmitHandler<ICreateUser> = (data) => {
-        const newAdmin: IUser = {
-            ...data,
-            roles: [Roles.ADMIN]
-        }
-        console.log(newAdmin);
+    const onSubmit: SubmitHandler<ICreateUser> = (user) => {
+        const updatedAdmin: IUser = {...data, ...user}
+        mutate(updatedAdmin);
+        // console.log(updatedAdmin);
         reset();
     };
 
@@ -71,7 +72,7 @@ const EditUser: FC = () => {
                 }
                 title='Редагувати адміністратора'
             />
-            {isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            {isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"

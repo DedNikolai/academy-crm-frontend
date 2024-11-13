@@ -16,14 +16,17 @@ import {NavLink} from "react-router-dom";
 import useUsers from "../../api/query/user/useGetUsers";
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
+import useDeleteUser from "../../api/query/user/useDeleteUser";
 
 const Admins: FC = () => {
     const {data, isLoading} = useUsers();
+    const mutation = useDeleteUser();
+    const {mutate, isPending} = mutation;
     
-    const deleteUser = (id?: string) => {
+    const deleteItem = (id?: string) => {
       const isAccept: boolean = window.confirm("Видалити адміністратора?");
-      if(isAccept) {
-      console.log(`Видалено ${id}`)
+      if(isAccept && id) {
+        mutate(id);
       }
     }
     
@@ -31,7 +34,7 @@ const Admins: FC = () => {
         <TableContainer component={Paper}>
         <Grid2 sx={{padding: '20px'}}><h2>Aдміністатори</h2></Grid2> 
         {
-          isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+          isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -60,7 +63,7 @@ const Admins: FC = () => {
                             <EditIcon />
                         </IconButton>
                       </NavLink>
-                      <IconButton aria-label="delete" onClick={() => deleteUser(user._id)}>
+                      <IconButton aria-label="delete" onClick={() => deleteItem(user._id)}>
                           <DeleteIcon />
                       </IconButton>
                   </TableCell>
@@ -69,7 +72,6 @@ const Admins: FC = () => {
             </TableBody>
           </Table>
         }   
-       
         <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
             <NavLink to='/dashboard/admins/create'>
                 <Button

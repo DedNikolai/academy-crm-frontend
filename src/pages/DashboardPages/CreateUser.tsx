@@ -63,7 +63,7 @@ const CreateUser: FC = () => {
         reset();
     };
 
-    if (isPending) return <CircularProgress />
+    if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
 
     return (
         <>

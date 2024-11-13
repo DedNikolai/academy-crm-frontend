@@ -113,3 +113,21 @@ export const updateEmail = async (data: {email: string,  code?: string}) => {
         toast.error('Неможливо оновити пошту')
     }
 }
+
+export const verifyEmail = async (id:string, token: string) => {
+    console.log(token)
+    try {
+        const response: AxiosResponse = await axios.get(`/auth/verify/${id}?token=${token}`);
+        if (response.status === 200) {
+            toast.success('Пошту успішно підтверджено')
+            return true;
+        } else {
+            toast.error('Помилка підтвердження пошти')
+            return false;
+        }
+
+    } catch(error) {
+        console.log(error);
+        toast.error("Cant accept email")
+    }
+}
