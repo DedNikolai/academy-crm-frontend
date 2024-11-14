@@ -1,3 +1,5 @@
+@use 'styles/variables';
+
 * {
   margin: 0;
   padding: 0;
@@ -23,11 +25,6 @@ a {
   text-decoration: none;
 }
 
-.link__decorated {
-  text-decoration: underline;
-  color: #1976d2;
-}
-
 .nav a.active {
-  color: #1976d2;
+  color: variables.$color-main;
 }

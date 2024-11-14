@@ -6,13 +6,10 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import { Container } from '@mui/material';
-import { Link, Navigate } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import CustomCard from '../components/CustomCard';
 import SignInContainer from '../components/SignInContainer';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -21,6 +18,8 @@ import * as yup from "yup";
 import { AuthContext } from '../components/AuthProvider';
 import Loader from '../components/Loader';
 import { forgotPassword } from '../api/user';
+import { useTheme } from '@mui/material/styles';
+import styles from '../styles/style.module.scss';
 
 const schema = yup
   .object({
@@ -28,7 +27,8 @@ const schema = yup
   })
   .required()
 
-export default function ForgotPassword(props: { disableCustomTheme?: boolean }) {
+export default function ForgotPassword() {
+  const theme = useTheme();
   const authContext = useContext(AuthContext);
   const {register, handleSubmit, reset, formState: {errors}} = useForm<{email: string}>({mode: 'onSubmit', resolver: yupResolver(schema)})
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,7 +49,7 @@ export default function ForgotPassword(props: { disableCustomTheme?: boolean }) 
       <SignInContainer direction="column" justifyContent="space-between">
         <CustomCard variant="outlined">
           <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <Avatar sx={{ my: 1, mb: 2, bgcolor: 'primary.main' }}>
+            <Avatar sx={{ my: 1, mb: 2, bgcolor: theme.palette.primary.main}}>
                 <VpnKeyIcon />
             </Avatar>
           </Box>  
@@ -93,13 +93,12 @@ export default function ForgotPassword(props: { disableCustomTheme?: boolean }) 
               type="submit"
               fullWidth
               variant="contained"
+              sx={{bgcolor: theme.palette.primary.main}}
             >
               Нідіслати
             </Button>
           </Box>
-          <Link to='/' className='link__decorated'>На головну</Link>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          </Box>
+          <NavLink to='/' className={styles.link__decorated}>На головну</NavLink>
         </CustomCard>
       </SignInContainer>
     </Container>

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Container } from '@mui/material';
-import {Link, Navigate, useParams, useSearchParams} from 'react-router-dom';
+import {NavLink, Navigate, useParams, useSearchParams} from 'react-router-dom';
 import { AuthContext } from '../components/AuthProvider';
 import SignInContainer from '../components/SignInContainer';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -20,6 +20,8 @@ import CustomCard from '../components/CustomCard';
 import Loader from "../components/Loader";
 import { UpdatePasswordTypes } from "../types/updatePasswordTypes";
 import { resetPassword } from "../api/user";
+import { useTheme } from '@mui/material/styles';
+import styles from '../styles/style.module.scss';
 
 type TypePassword = {
     password: string
@@ -36,6 +38,7 @@ const schema = yup
   .required()
 
 const ResetPassword: FC = () => {
+    const theme = useTheme();
     const authContext = useContext(AuthContext);
     const [searchParams] = useSearchParams();
     const [isPasswordUpdating, setIsPasswordUpdating] = useState<boolean>(false);
@@ -74,7 +77,7 @@ const ResetPassword: FC = () => {
             <SignInContainer direction="column" justifyContent="space-between">
                 <CustomCard variant="outlined">
                 <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                    <Avatar sx={{ my: 1, mb: 2, bgcolor: 'primary.main' }}>
+                    <Avatar sx={{ my: 1, mb: 2, bgcolor: theme.palette.primary.main }}>
                         <LockOutlinedIcon />
                     </Avatar>
                 </Box>  
@@ -92,11 +95,11 @@ const ResetPassword: FC = () => {
                         onSubmit={handleSubmit(onSubmit)}
                         noValidate
                         sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        gap: 2,
-                        }}
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '100%',
+                                gap: 2,
+                            }}
                     >                    
                     <FormControl>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -118,11 +121,12 @@ const ResetPassword: FC = () => {
                         />
                         </FormControl>
                         <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{bgcolor: theme.palette.primary.main}}
                         >
-                        Відправити
+                           Відправити
                         </Button>
                     </Box>
                 }
@@ -135,13 +139,12 @@ const ResetPassword: FC = () => {
                     <h2>Помилка при оновленні пароля</h2>
                 }
                 
-                <Link 
+                <NavLink 
                     to='/'
-                    className='link__decorated'
-                >На головну
-                </Link>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                </Box>
+                    className={styles.link__decorated}
+                >
+                    На головну
+                </NavLink>
                 </CustomCard>
             </SignInContainer>
         </Container>

@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import { green, } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
@@ -15,10 +14,10 @@ import * as yup from "yup"
 import EditIcon from '@mui/icons-material/Edit';
 import { IUser } from '../../types/user';
 import { Grid2, CircularProgress } from '@mui/material';
-import { Roles } from '../../types/roles';
 import {useParams, Navigate} from 'react-router-dom';
 import useGetUser from '../../api/query/user/useGetUser';
 import useUpdateUser from '../../api/query/user/useUpdateUser';
+import { useTheme } from '@mui/material/styles';
 
 interface ICreateUser {
     fullName: string;
@@ -38,6 +37,7 @@ const schema = yup
   .required()
 
 const EditUser: FC = () => {
+    const theme = useTheme();
     const params = useParams<Params>();
     const {data, isLoading, isFetched} = useGetUser(params.id);
     const mutation = useUpdateUser(params.id);
@@ -51,7 +51,6 @@ const EditUser: FC = () => {
     const onSubmit: SubmitHandler<ICreateUser> = (user) => {
         const updatedAdmin: IUser = {...data, ...user}
         mutate(updatedAdmin);
-        // console.log(updatedAdmin);
         reset();
     };
 
@@ -66,7 +65,7 @@ const EditUser: FC = () => {
         <Card sx={{}}>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: green[500] }}>
+                    <Avatar sx={{ bgcolor: theme.status.success }}>
                         <EditIcon />
                     </Avatar>
                 }
@@ -79,10 +78,10 @@ const EditUser: FC = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
                 sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                gap: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    gap: 2,
                 }}
             >
                 <FormControl>
@@ -126,7 +125,7 @@ const EditUser: FC = () => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{bgcolor: green[300], width: '150px'}}
+                        sx={{bgcolor: theme.status.success, width: theme.button.width}}
                     >
                         Зберегти
                     </Button>

@@ -1,0 +1,6 @@
+@use 'variables';
+
+.link__decorated {
+    text-decoration: underline;
+    color: variables.$color-main;
+  }

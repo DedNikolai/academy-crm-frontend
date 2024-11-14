@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Container } from '@mui/material';
-import {Link, Navigate} from 'react-router-dom';
+import {NavLink, Navigate} from 'react-router-dom';
 import { AuthContext } from '../components/AuthProvider';
 import SignInContainer from '../components/SignInContainer';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -19,6 +19,8 @@ import { IAuth } from '../types/user';
 import { logIn } from '../api/user';
 import Loader from '../components/Loader';
 import CustomCard from '../components/CustomCard';
+import { useTheme } from '@mui/material/styles';
+import styles from '../styles/style.module.scss';
 
 const schema = yup
   .object({
@@ -28,6 +30,7 @@ const schema = yup
   .required()
 
 export default function SignIn() {
+  const theme = useTheme();
   const authContext = useContext(AuthContext);
   const {register, handleSubmit, reset, formState: {errors}} = useForm<IAuth>({mode: 'onSubmit', resolver: yupResolver(schema)})
   
@@ -48,7 +51,7 @@ export default function SignIn() {
       <SignInContainer direction="column" justifyContent="space-between">
         <CustomCard variant="outlined">
           <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <Avatar sx={{ my: 1, mb: 2, bgcolor: 'primary.main' }}>
+            <Avatar sx={{ my: 1, mb: 2, bgcolor: theme.palette.primary.main }}>
                 <LockOutlinedIcon />
             </Avatar>
           </Box>  
@@ -111,17 +114,17 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
+              sx={{bgcolor: theme.palette.primary.main}}
             >
               Увійти
             </Button>
           </Box>
-          <Link 
+          <NavLink 
             to='/forgot-password'
-            className='link__decorated'
-          >Забули пароль ?
-          </Link>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          </Box>
+            className={styles.link__decorated}
+          >
+            Забули пароль ?
+          </NavLink>
         </CustomCard>
       </SignInContainer>
     </Container>

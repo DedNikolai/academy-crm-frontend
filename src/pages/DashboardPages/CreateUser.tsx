@@ -1,24 +1,17 @@
-import {FC, useContext, useState} from 'react';
+import {FC, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import { green, red } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import { AuthContext } from '../../components/AuthProvider';
 import {useForm, SubmitHandler, } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import IconButton from '@mui/material/IconButton';
-import Loader from '../../components/Loader';
-import ResetEmail from '../../components/ResetEmail';
-import EditIcon from '@mui/icons-material/Edit';
-import ClearIcon from '@mui/icons-material/Clear';
-import { updateUser } from '../../api/user';
 import { IUser } from '../../types/user';
 import { CircularProgress, Grid2 } from '@mui/material';
 import { Roles } from '../../types/roles';
@@ -27,6 +20,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import useCreateUser from '../../api/query/user/useCreateUser';
+import { useTheme } from '@mui/material/styles';
 
 interface ICreateUser {
     fullName: string;
@@ -44,6 +38,7 @@ const schema = yup
   .required()
 
 const CreateUser: FC = () => {
+  const theme = useTheme();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const mutation = useCreateUser();
     const {mutate, isPending} = mutation
@@ -70,7 +65,7 @@ const CreateUser: FC = () => {
         <Card sx={{}}>
             <CardHeader
                 avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" />
+                <Avatar sx={{ bgcolor: theme.status.error}} aria-label="recipe" />
                 }
                 title='Додати адміністратора'
             />
@@ -80,11 +75,11 @@ const CreateUser: FC = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
                 sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                gap: 2,
-                }}
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '100%',
+                      gap: 2,
+                    }}
             >
                 <FormControl>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -157,7 +152,7 @@ const CreateUser: FC = () => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{bgcolor: green[300], width: '150px'}}
+                        sx={{bgcolor: theme.status.success, width: theme.button.width}}
                     >
                         Зберегти
                     </Button>

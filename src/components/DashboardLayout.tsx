@@ -21,6 +21,10 @@ import {NavLink} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PersonIcon from '@mui/icons-material/Person';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
+import CastForEducationIcon from '@mui/icons-material/CastForEducation';
+import BookOnlineIcon from '@mui/icons-material/BookOnline';
 
 const menuList = [
   {
@@ -40,6 +44,30 @@ const menuList = [
     title: 'Вчителі',
     link: '/dashboard/teachers',
     icon: <PersonIcon />
+  },
+  {
+    id: 4,
+    title: 'Розклад',
+    link: '/dashboard/timetable',
+    icon: <ListAltIcon />
+  },
+  {
+    id: 5,
+    title: 'Журнал',
+    link: '/dashboard/journal',
+    icon: <FeaturedPlayListIcon />
+  },
+  {
+    id: 6,
+    title: 'Заняття',
+    link: '/dashboard/lessons',
+    icon: <CastForEducationIcon />
+  },
+  {
+    id: 7,
+    title: 'Абонементи',
+    link: '/dashboard/abonements',
+    icon: <BookOnlineIcon />
   }
 ]
 

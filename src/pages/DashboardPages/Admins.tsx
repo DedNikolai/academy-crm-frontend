@@ -17,8 +17,10 @@ import useUsers from "../../api/query/user/useGetUsers";
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import useDeleteUser from "../../api/query/user/useDeleteUser";
+import { useTheme } from '@mui/material/styles';
 
 const Admins: FC = () => {
+    const theme = useTheme();
     const {data, isLoading} = useUsers();
     const mutation = useDeleteUser();
     const {mutate, isPending} = mutation;
@@ -78,7 +80,7 @@ const Admins: FC = () => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{bgcolor: green[300], width: '150px'}}
+                    sx={{bgcolor: theme.status.success, width: theme.button.width}}
                 >
                     Додати
                 </Button>
