@@ -20,6 +20,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import Avatar from '@mui/material/Avatar';
 import { resetEmail, updateEmail } from '../api/user';
 import { AuthContext } from './AuthProvider';
+import { useTheme } from '@mui/material/styles';
 
 const schema = yup
   .object({
@@ -28,6 +29,7 @@ const schema = yup
   .required()
 
 const ResetEmail: FC<{email: string}> = ({email}) => {
+    const theme = useTheme();
     const authContext = useContext(AuthContext);
     const [isEdit, setIsEdid] = useState<boolean>(false);
     const [isLoading, setIsloading] = useState<boolean>(false);
@@ -68,7 +70,7 @@ const ResetEmail: FC<{email: string}> = ({email}) => {
         <Card sx={{marginTop: '20px'}}>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: blue[500] }}>
+                    <Avatar sx={{bgcolor: theme.palette.primary.main}}>
                         <EmailIcon />
                     </Avatar>
                 }

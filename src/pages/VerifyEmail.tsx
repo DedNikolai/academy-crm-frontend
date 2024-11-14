@@ -5,18 +5,21 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Container } from '@mui/material';
-import {Link, Navigate, useParams, useSearchParams} from 'react-router-dom';
+import {NavLink, Navigate, useParams, useSearchParams} from 'react-router-dom';
 import { AuthContext } from '../components/AuthProvider';
 import SignInContainer from '../components/SignInContainer';
 import Loader from '../components/Loader';
 import CustomCard from '../components/CustomCard';
 import { verifyEmail } from '../api/user';
+import { useTheme } from '@mui/material/styles';
+import styles from '../styles/style.module.scss';
 
 type Params = {
     id: string;
 }
 
 export default function VerifyEmail() {
+  const theme = useTheme();
   const [confirmed, setConfirmed] = useState<boolean>(false);
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')  
@@ -45,7 +48,7 @@ export default function VerifyEmail() {
       <SignInContainer direction="column" justifyContent="space-between">
         <CustomCard variant="outlined">
           <Box sx={{display: 'flex', justifyContent: 'center'}}>
-            <Avatar sx={{ my: 1, mb: 2, bgcolor: 'primary.main' }}>
+            <Avatar sx={{ my: 1, mb: 2, bgcolor: theme.palette.primary.main }}>
                 <LockOutlinedIcon />
             </Avatar>
           </Box>  
@@ -58,15 +61,13 @@ export default function VerifyEmail() {
           </Typography>
           {
             confirmed && 
-            <Link 
+            <NavLink 
                 to='/'
-                className='link__decorated'
+                className={styles.link__decorated }
             >
                 Вхід
-            </Link>
+            </NavLink>
           }
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          </Box>
         </CustomCard>
       </SignInContainer>
     </Container>

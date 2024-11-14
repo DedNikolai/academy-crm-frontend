@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import { green, red } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
@@ -21,6 +20,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { updateUser } from '../../api/user';
 import { IUser } from '../../types/user';
 import { Grid2 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const schema = yup
   .object({
@@ -30,6 +30,7 @@ const schema = yup
 
 const Profile: FC = () => {
     const [isEdit, setIsEdid] = useState<boolean>(false);
+    const theme = useTheme();
     const authContext = useContext(AuthContext);
     const {register, handleSubmit, reset, formState: {errors}} = useForm<{fullName: string}>({
         mode: 'onSubmit', 
@@ -59,7 +60,7 @@ const Profile: FC = () => {
         <Card sx={{}}>
             <CardHeader
                 avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" />
+                <Avatar sx={{ bgcolor: theme.status.error }} aria-label="recipe" />
                 }
                 title={authContext?.user?.fullName}
                 subheader="Власник компанії"
@@ -75,10 +76,10 @@ const Profile: FC = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
                 sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                gap: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    gap: 2,
                 }}
             >
                 <FormControl>
@@ -105,7 +106,7 @@ const Profile: FC = () => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{bgcolor: green[300], width: '150px'}}
+                        sx={{bgcolor: theme.status.success, width: theme.button.width}}
                         disabled={!isEdit}
                     >
                         Зберегти
