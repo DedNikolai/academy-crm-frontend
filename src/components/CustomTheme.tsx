@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red, blue, green } from '@mui/material/colors';
 
 declare module '@mui/material/styles' {
