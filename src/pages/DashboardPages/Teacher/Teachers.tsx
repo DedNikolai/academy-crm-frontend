@@ -19,6 +19,7 @@ import { ITeacher } from "../../../types/teacher";
 const Teachers: FC = () => {
     const theme = useTheme();
     const {data, isLoading} = useTeachers();
+
     // const mutation = useDeleteUser();
     // const {mutate, isPending} = mutation;
     const isPending = false;
@@ -54,7 +55,7 @@ const Teachers: FC = () => {
                   </TableCell>
                   <TableCell align="center">{teacher.phone}</TableCell>
                   <TableCell align="center">{teacher.email}</TableCell>
-                  <TableCell align="center">{teacher.subjects.map(item => item.value).join(', ')}</TableCell>
+                  <TableCell align="center">{teacher.subjects.join(', ')}</TableCell>
                   <TableCell align="right">
                     <NavLink to={`/dashboard/teachers/edit/${teacher._id}`}>
                       <IconButton aria-label="edit">

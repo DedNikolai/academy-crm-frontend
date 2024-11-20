@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import {useForm, SubmitHandler, } from 'react-hook-form';
+import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import EditIcon from '@mui/icons-material/Edit';
@@ -24,8 +24,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { Subjects } from '../../../types/subjects';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -38,33 +43,23 @@ const MenuProps = {
   },
 };
 
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
-  
+
 
 type Params = {
     id: string;
 }
+
+
 
 const schema = yup
   .object({
     fullName: yup.string().min(3, 'Мінімум 3 символи').required('Email is required'),
     email: yup.string().email('Не валідний Email').required('Обовязкове поле'),
     phone: yup.string().required('Обовязкове поле'),
-    subjects: yup.array().required('Обовязкове поле'),
-    age: yup.number().required('Обовязкове поле'),
+    subjects: yup.array().min(1, 'Необхідно вибрати хоча б одне значення').required('Обовязкове поле'),
+    age: yup.number().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
     education: yup.string().optional(),
-    birthday: yup.date().optional(),
+    birthday: yup.date().optional().nullable(),
     worktimes: yup.array().optional()
   })
   .required()
@@ -75,28 +70,17 @@ const EditTeacher: FC = () => {
     // const {data, isLoading, isFetched} = useGetUser(params.id);
     // const mutation = useUpdateUser(params.id);
     // const {mutate, isPending} = mutation;
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<ITeacher>({
+    const {register, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        // defaultValues: {...data}
+        defaultValues: {subjects: []}
     })
     
-    const onSubmit: SubmitHandler<ITeacher> = (user) => {
+    const onSubmit: SubmitHandler<ITeacher> = (data) => {
         // const updatedAdmin: IUser = {...data, ...user}
         // mutate(updatedAdmin);
+        console.log(data)
         reset();
-    };
-
-    const [personName, setPersonName] = useState<string[]>([]);
-
-    const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-      const {
-        target: { value },
-      } = event;
-      setPersonName(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-      );
     };
 
     // useEffect(() => {
@@ -134,7 +118,7 @@ const EditTeacher: FC = () => {
                     <Grid size={4}>
                         <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="fullName">Ім'я</FormLabel>
+                                <FormLabel htmlFor="fullName">Ім'я *</FormLabel>
                             </Box>
                             <TextField
                                 {...register('fullName')}
@@ -163,7 +147,6 @@ const EditTeacher: FC = () => {
                                     name="age"
                                     autoComplete="age"
                                     autoFocus
-                                    required
                                     fullWidth
                                     variant="outlined"
                                     color={!!errors.age ? 'error' : 'primary'}
@@ -172,29 +155,26 @@ const EditTeacher: FC = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={4}>
-                        <FormControl fullWidth={true}>
-                            <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
-                                <TextField
-                                    {...register('birthday')}
-                                    error={!!errors.birthday}
-                                    helperText={errors.email?.message}
-                                    id="birthday"
-                                    type="date"
-                                    name="birthday"
-                                    autoComplete="birthday"
-                                    autoFocus
-                                    required
-                                    fullWidth
-                                    variant="outlined"
-                                    color={!!errors.birthday ? 'error' : 'primary'}
-                                    sx={{ ariaLabel: 'birthday' }}
-                                />
-                        </FormControl>
+                    <Controller
+                            name='birthday'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true}>
+                                    <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            value={value ? dayjs(value) : null}
+                                            onChange={onChange}
+                                        />
+                                    </LocalizationProvider>
+                                </FormControl>
+                            )}
+                    />        
                     </Grid>
                     <Grid size={6}>
                         <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="phone">Телефон</FormLabel>
+                                <FormLabel htmlFor="phone">Телефон *</FormLabel>
                             </Box>
                             <TextField
                                 {...register('phone')}
@@ -213,7 +193,7 @@ const EditTeacher: FC = () => {
                     </Grid>
                     <Grid size={6}>
                         <FormControl fullWidth={true}>
-                            <FormLabel htmlFor="email">Email</FormLabel>
+                            <FormLabel htmlFor="email">Email *</FormLabel>
                                 <TextField
                                     {...register('email')}
                                     error={!!errors.email}
@@ -232,27 +212,35 @@ const EditTeacher: FC = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={12}>
-                        <FormControl fullWidth={true}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="education">Предмети</FormLabel>
-                            </Box>
-                            <Select
-                                {...register('subjects')}
-                                id="subjects"
-                                multiple
-                                value={personName}
-                                onChange={handleChange}
-                                renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
-                            >
-                                {names.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                        <Checkbox checked={personName.includes(name)} />
-                                        <ListItemText primary={name} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        <Controller
+                            name='subjects'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <FormLabel htmlFor="education">Предмети *</FormLabel>
+                                </Box>
+                                <Select
+                                    id="subjects"
+                                    error={!!errors.subjects}
+                                    // helperText={errors.age?.message}
+                                    multiple
+                                    value={value}
+                                    onChange={onChange}
+                                    renderValue={(selected) => selected.join(', ')}
+                                    MenuProps={MenuProps}
+                                    color={!!errors.subjects ? 'error' : 'primary'}
+                                >
+                                    {Object.values(Subjects).map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox checked={value.includes(name)} />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            )}
+                        />
                     </Grid>
                     <Grid size={12}>    
                         <FormControl fullWidth={true}>
@@ -267,31 +255,12 @@ const EditTeacher: FC = () => {
                                 type="text"
                                 id="education"
                                 autoFocus
-                                required
                                 fullWidth
                                 variant="outlined"
                                 color={!!errors.education ? 'error' : 'primary'}
                             />
                         </FormControl>
                     </Grid>
-                {/* <FormControl>
-                    <FormLabel htmlFor="email">Предмети</FormLabel>
-                        <TextField
-                            {...register('subjects')}
-                            error={!!errors.subjects}
-                            helperText={errors.subjects?.message}
-                            id="subjects"
-                            type="text"
-                            name="subjects"
-                            autoComplete="subjects"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={!!errors.subjects ? 'error' : 'primary'}
-                            sx={{ ariaLabel: 'email' }}
-                        />
-                </FormControl> */}
                 </Grid>
                 <Grid2 sx={{textAlign: 'right'}}>
                     <Button

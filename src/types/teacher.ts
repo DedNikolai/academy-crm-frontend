@@ -1,16 +1,16 @@
 import { Days } from "./days"
-import { Subjects } from "react-hook-form"
+import dayjs, { Dayjs } from 'dayjs';
 
 export interface ITeacher {
     _id?: string,
     fullName: string,
     phone: string,
     email: string,
-    age: number,
-    birthday?: Date,
+    age?: number | null,
+    birthday?: Date | null,
     education?: string,
     worktimes?: IWorktime[],
-    subjects: ISubjects[]
+    subjects: String[]
 }
 
 export interface IWorktime {
