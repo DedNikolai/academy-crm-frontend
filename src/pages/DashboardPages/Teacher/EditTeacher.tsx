@@ -9,6 +9,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
+import FormHelperText from '@mui/material/FormHelperText';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import EditIcon from '@mui/icons-material/Edit';
@@ -116,7 +117,7 @@ const EditTeacher: FC = () => {
             >
                 <Grid container spacing={2}>
                     <Grid size={4}>
-                        <FormControl fullWidth={true}>
+                        <FormControl fullWidth={true}  error={!!errors.fullName}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <FormLabel htmlFor="fullName">Ім'я *</FormLabel>
                             </Box>
@@ -136,7 +137,7 @@ const EditTeacher: FC = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={4}>
-                        <FormControl fullWidth={true}>
+                        <FormControl fullWidth={true} error={!!errors.age}>
                             <FormLabel htmlFor="age">Вік</FormLabel>
                                 <TextField
                                     {...register('age')}
@@ -172,7 +173,7 @@ const EditTeacher: FC = () => {
                     />        
                     </Grid>
                     <Grid size={6}>
-                        <FormControl fullWidth={true}>
+                        <FormControl fullWidth={true} error={!!errors.phone}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <FormLabel htmlFor="phone">Телефон *</FormLabel>
                             </Box>
@@ -192,7 +193,7 @@ const EditTeacher: FC = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={6}>
-                        <FormControl fullWidth={true}>
+                        <FormControl fullWidth={true} error={!!errors.email}>
                             <FormLabel htmlFor="email">Email *</FormLabel>
                                 <TextField
                                     {...register('email')}
@@ -216,13 +217,12 @@ const EditTeacher: FC = () => {
                             name='subjects'
                             control={control}
                             render={({field: { onChange, value }}) => (
-                                <FormControl fullWidth={true}>
+                                <FormControl fullWidth={true} error={!!errors.subjects}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <FormLabel htmlFor="education">Предмети *</FormLabel>
                                 </Box>
                                 <Select
                                     id="subjects"
-                                    error={!!errors.subjects}
                                     // helperText={errors.age?.message}
                                     multiple
                                     value={value}
@@ -238,6 +238,7 @@ const EditTeacher: FC = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                <FormHelperText>{errors.subjects?.message}</FormHelperText>
                             </FormControl>
                             )}
                         />
