@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -13,16 +13,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import EditIcon from '@mui/icons-material/Edit';
-// import { IUser } from '../../types/user';
 import { Grid2, CircularProgress } from '@mui/material';
 import {useParams, Navigate} from 'react-router-dom';
-// import useGetUser from '../../api/query/user/useGetUser';
-// import useUpdateUser from '../../api/query/user/useUpdateUser';
+import useTeacher from '../../../api/query/teacher/useGetTaecher';
+import useUpdateTeacher from '../../../api/query/teacher/useUpdateTeacher';
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from '../../../types/teacher';
 import Grid from '@mui/material/Grid2';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
@@ -32,6 +29,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/uk';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -68,27 +66,28 @@ const schema = yup
 const EditTeacher: FC = () => {
     const theme = useTheme();
     const params = useParams<Params>();
-    // const {data, isLoading, isFetched} = useGetUser(params.id);
-    // const mutation = useUpdateUser(params.id);
-    // const {mutate, isPending} = mutation;
+    const {data, isLoading, isFetched, isFetching} = useTeacher(params.id);
+    const mutation = useUpdateTeacher(params.id);
+    const {mutate, isPending} = mutation;
     const {register, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {subjects: []}
+        defaultValues: {...data}
     })
-    
+
     const onSubmit: SubmitHandler<ITeacher> = (data) => {
-        // const updatedAdmin: IUser = {...data, ...user}
-        // mutate(updatedAdmin);
-        console.log(data)
+        const updatedTeacher: ITeacher = {...data}
+        mutate(updatedTeacher);
         reset();
     };
 
-    // useEffect(() => {
-    //     reset(data);
-    // }, [data])
+    useEffect(() => {
+        if (data) {
+            reset(data);
+        }
+    }, [data])
 
-    // if (!data && isFetched) return <Navigate to='/404' />
+    if (!data && isFetched) return <Navigate to='/404' />
 
     return (
         <>
@@ -99,10 +98,10 @@ const EditTeacher: FC = () => {
                         <EditIcon />
                     </Avatar>
                 }
-                title='Редагувати дані вчителя'
+                title={`Редагувати дані вчителя ${data?.fullName}`}
             />
             {
-            // isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -162,7 +161,11 @@ const EditTeacher: FC = () => {
                             render={({field: { onChange, value }}) => (
                                 <FormControl fullWidth={true}>
                                     <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <LocalizationProvider 
+                                        dateAdapter={AdapterDayjs} 
+                                        adapterLocale='uk'
+                                    >
+
                                         <DatePicker
                                             value={value ? dayjs(value) : null}
                                             onChange={onChange}
@@ -223,9 +226,8 @@ const EditTeacher: FC = () => {
                                 </Box>
                                 <Select
                                     id="subjects"
-                                    // helperText={errors.age?.message}
                                     multiple
-                                    value={value}
+                                    value={value || []}
                                     onChange={onChange}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
@@ -233,7 +235,7 @@ const EditTeacher: FC = () => {
                                 >
                                     {Object.values(Subjects).map((name) => (
                                         <MenuItem key={name} value={name}>
-                                            <Checkbox checked={value.includes(name)} />
+                                            <Checkbox checked={value && value.includes(name)} />
                                             <ListItemText primary={name} />
                                         </MenuItem>
                                     ))}

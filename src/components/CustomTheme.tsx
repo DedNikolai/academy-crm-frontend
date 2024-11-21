@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red, blue, green } from '@mui/material/colors';
+import { ukUA } from '@mui/x-date-pickers/locales';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -42,7 +43,7 @@ const theme = createTheme({
   button: {
     width: '150px'
   }
-});
+}, ukUA);
 
 interface IThemeProps {
     children: React.ReactNode
