@@ -14,6 +14,7 @@ export interface ITeacher {
 }
 
 export interface IWorktime {
+    _id: string,
     day: Days,
     startTime: Date,
     endTime: Date,

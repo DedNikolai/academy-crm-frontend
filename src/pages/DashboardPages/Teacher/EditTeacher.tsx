@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -14,8 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import EditIcon from '@mui/icons-material/Edit';
 import { Grid2, CircularProgress } from '@mui/material';
-import {useParams, Navigate} from 'react-router-dom';
-import useTeacher from '../../../api/query/teacher/useGetTaecher';
+import {useParams } from 'react-router-dom';
 import useUpdateTeacher from '../../../api/query/teacher/useUpdateTeacher';
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from '../../../types/teacher';
@@ -42,13 +41,14 @@ const MenuProps = {
   },
 };
 
+interface ITeacherItem {
+    teacher: ITeacher
+}
 
 
 type Params = {
     id: string;
 }
-
-
 
 const schema = yup
   .object({
@@ -63,16 +63,15 @@ const schema = yup
   })
   .required()
 
-const EditTeacher: FC = () => {
+const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
     const theme = useTheme();
     const params = useParams<Params>();
-    const {data, isLoading, isFetched, isFetching} = useTeacher(params.id);
     const mutation = useUpdateTeacher(params.id);
     const {mutate, isPending} = mutation;
     const {register, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {...data}
+        defaultValues: {...teacher}
     })
 
     const onSubmit: SubmitHandler<ITeacher> = (data) => {
@@ -80,14 +79,6 @@ const EditTeacher: FC = () => {
         mutate(updatedTeacher);
         reset();
     };
-
-    useEffect(() => {
-        if (data) {
-            reset(data);
-        }
-    }, [data])
-
-    if (!data && isFetched) return <Navigate to='/404' />
 
     return (
         <>
@@ -98,10 +89,10 @@ const EditTeacher: FC = () => {
                         <EditIcon />
                     </Avatar>
                 }
-                title={`Редагувати дані вчителя ${data?.fullName}`}
+                title={`Редагувати дані вчителя ${teacher?.fullName}`}
             />
             {
-            isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"

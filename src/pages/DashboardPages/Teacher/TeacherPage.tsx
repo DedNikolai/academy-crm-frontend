@@ -5,6 +5,10 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import {useParams, Navigate} from 'react-router-dom';
 import EditTeacher from './EditTeacher';
+import TeacherWorkTimes from './TeacherWorkTimes';
+import useTeacher from '../../../api/query/teacher/useGetTaecher';
+import { CircularProgress } from '@mui/material';
+import { ITeacher, IWorktime } from '../../../types/teacher';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,13 +46,17 @@ function a11yProps(index: number) {
 export default function TeacherPage() {
   const params = useParams<Params>();
   const [value, setValue] = React.useState(0);
+  const {data, isLoading, isFetched, isFetching} = useTeacher(params.id);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  if (!data && isFetched) return <Navigate to='/404' />
+
   return (
     <Card sx={{}}>
+      {isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
         <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -58,15 +66,16 @@ export default function TeacherPage() {
             </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-            <EditTeacher />
+            <EditTeacher teacher={data}/>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-            Item Two
+           <TeacherWorkTimes teacher={data}/>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
             Item Three
         </CustomTabPanel>
         </Box>
+        }
     </Card>
   );
 }
