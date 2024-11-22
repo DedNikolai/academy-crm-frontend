@@ -14,11 +14,11 @@ export interface ITeacher {
 }
 
 export interface IWorktime {
-    _id: string,
+    _id?: string,
     day: Days,
     startTime: Date,
     endTime: Date,
-    teacher: ITeacher
+    teacher?: ITeacher
 }
 
 export interface ISubjects {

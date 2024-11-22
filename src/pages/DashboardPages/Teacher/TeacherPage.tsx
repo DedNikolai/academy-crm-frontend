@@ -8,7 +8,6 @@ import EditTeacher from './EditTeacher';
 import TeacherWorkTimes from './TeacherWorkTimes';
 import useTeacher from '../../../api/query/teacher/useGetTaecher';
 import { CircularProgress } from '@mui/material';
-import { ITeacher, IWorktime } from '../../../types/teacher';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -31,7 +30,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 0}}>{children}</Box>}
     </div>
   );
 }
@@ -58,22 +57,22 @@ export default function TeacherPage() {
     <Card sx={{}}>
       {isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
         <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Особисті дані" {...a11yProps(0)} />
-            <Tab label="Графік роботи" {...a11yProps(1)} />
-            <Tab label="учні" {...a11yProps(2)} />
-            </Tabs>
-        </Box>
-        <CustomTabPanel value={value} index={0}>
-            <EditTeacher teacher={data}/>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-           <TeacherWorkTimes teacher={data}/>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
-            Item Three
-        </CustomTabPanel>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Особисті дані" {...a11yProps(0)} />
+              <Tab label="Графік роботи" {...a11yProps(1)} />
+              <Tab label="учні" {...a11yProps(2)} />
+              </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+              <EditTeacher teacher={data}/>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <TeacherWorkTimes teacher={data}/>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+              Item Three
+          </CustomTabPanel>
         </Box>
         }
     </Card>
