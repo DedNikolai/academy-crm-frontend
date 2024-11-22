@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import WorkTimeItem from './WorktimeItem';
 import { Divider, Typography } from '@mui/material';
 import {Grid2, Button} from '@mui/material';
+import CreateWorkTime from './CretaeWorkTime';
 
 interface ITeacherItem {
     teacher: ITeacher
@@ -16,6 +17,7 @@ interface ITeacherItem {
 
 const TeacherWorkTimes: FC<ITeacherItem> = ({teacher}) => {
     const theme = useTheme();
+    const [addIsOpen, setAddIsOpen] = useState<boolean>(false); 
 
     return (
         <Card sx={{boxShadow: 'none'}}>
@@ -38,11 +40,15 @@ const TeacherWorkTimes: FC<ITeacherItem> = ({teacher}) => {
                 {
                     teacher.worktimes?.map(item => <WorkTimeItem key={item._id} data={item}/>)
                 }
+                {
+                    addIsOpen &&
+                    <CreateWorkTime closeForm={setAddIsOpen}/>
+                }
                 <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
+                        onClick={() => setAddIsOpen(true)}
                         sx={{bgcolor: theme.status.success, width: theme.button.width}}
                     >
                         Додати
