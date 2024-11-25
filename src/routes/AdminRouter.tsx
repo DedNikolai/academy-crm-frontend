@@ -13,12 +13,14 @@ import Journal from "../pages/DashboardPages/Journal";
 import Lessons from "../pages/DashboardPages/Lessons";
 import Abonements from "../pages/DashboardPages/Abonements";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
+import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
 
 const AdminRouter: FC = () => {
     return (
         <Routes>
             <Route path="/main" element={<Home />} />
             <Route path="/teachers" element={<Teachers />} />
+            <Route path="/teachers/create" element={<CreateTeacher />} />
             <Route path="/teachers/edit/:id" element={<TeacherPage />} />
             <Route path="/students" element={<Students />} />
             <Route path="/admins" element={<Admins />} />

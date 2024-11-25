@@ -12,21 +12,20 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {NavLink} from "react-router-dom";
 import useTeachers from "../../../api/query/teacher/useGetTeachers";
-import useDeleteUser from "../../../api/query/user/useDeleteUser";
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from "../../../types/teacher";
+import useDeleteTeacher from "../../../api/query/teacher/useDeleteTeacher";
 
 const Teachers: FC = () => {
     const theme = useTheme();
     const {data, isLoading} = useTeachers();
+    const mutation = useDeleteTeacher();
+    const {mutate, isPending} = mutation;
 
-    // const mutation = useDeleteUser();
-    // const {mutate, isPending} = mutation;
-    const isPending = false;
     const deleteItem = (id?: string) => {
       const isAccept: boolean = window.confirm("Видалити Вчителя?");
       if(isAccept && id) {
-        // mutate(id);
+        mutate(id);
       }
     }
     return (
