@@ -42,7 +42,7 @@ const TeacherWorkTimes: FC<ITeacherItem> = ({teacher}) => {
                 }
                 {
                     addIsOpen &&
-                    <CreateWorkTime closeForm={setAddIsOpen}/>
+                    <CreateWorkTime closeForm={setAddIsOpen} teacher={teacher}/>
                 }
                 <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
                     <Button

@@ -23,11 +23,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import Divider from '@mui/material/Divider';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Subjects } from "../../../types/subjects";
 import { Days } from "../../../types/days";
-import { TimeField } from '@mui/x-date-pickers/TimeField';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/uk';
 import utc from 'dayjs/plugin/utc';
@@ -35,13 +33,14 @@ import timezone from 'dayjs/plugin/timezone';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import useUpdateWorktime from "../../../api/query/worktime/useUpdateWorktime";
+import useCreateWorktime from "../../../api/query/worktime/useCreasteWorkTimer";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 interface ICreateWorktime {
-    closeForm: Function
+    closeForm: Function,
+    teacher: ITeacher
 }
 
 const schema = yup
@@ -49,22 +48,27 @@ const schema = yup
     day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
     startTime: yup.date().required('Обовязкове поле'),
     endTime: yup.date().required('Обовязкове поле'),
-    teacher: yup.mixed<ITeacher>()
+    teacher: yup.mixed<ITeacher>().optional()
   })
   .required()
 
-const CreateWorkTime: FC<ICreateWorktime> = ({closeForm}) => {
-    const mutation = useUpdateWorktime();
+const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
+    const mutation = useCreateWorktime(closeForm);
     const {mutate, isPending} = mutation;
     const {register, handleSubmit, reset, control, formState: {errors}} = useForm<IWorktime>({
         mode: 'onSubmit', 
-        // resolver: yupResolver(schema),
+        resolver: yupResolver(schema),
+        defaultValues: {
+            startTime: new Date('1970-01-01T00:00:00'),
+            endTime: new Date('1970-01-01T00:00:00'),
+            teacher
+        }
     })
 
     const onSubmit: SubmitHandler<IWorktime> = (data) => {
-        console.log(new Date(data.startTime))
-        // const updatedWorktime: IWorktime = {...data};
-        // mutate(updatedWorktime);    
+        const worktime: IWorktime = {...data, teacher};
+        mutate(worktime);
+        reset();
     };
 
     if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>

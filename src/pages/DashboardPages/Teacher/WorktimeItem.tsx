@@ -25,6 +25,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import useUpdateWorktime from "../../../api/query/worktime/useUpdateWorktime";
+import useDeleteWorktime from "../../../api/query/worktime/useDeleteWorktime copy";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -45,6 +46,7 @@ const schema = yup
 const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const mutation = useUpdateWorktime();
+    const deleteMutation = useDeleteWorktime();
     const {mutate, isPending} = mutation;
     const {handleSubmit, reset, control, formState: {errors}} = useForm<IWorktime>({
         mode: 'onSubmit', 
@@ -53,10 +55,18 @@ const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
     })
 
     const onSubmit: SubmitHandler<IWorktime> = (data) => {
-        console.log(data)
         const updatedWorktime: IWorktime = {...data};
         mutate(updatedWorktime);    
     };
+
+    const deleteItem = () => {
+        const isAccept: boolean = window.confirm("Видалити час?");
+        if (isAccept) {
+            if (data._id) {
+                deleteMutation.mutate(data._id)
+            }
+        }
+    }
 
     if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
 
@@ -187,7 +197,7 @@ const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
                     }
                     {
                         !isEdit &&
-                        <IconButton aria-label="delete" onClick={() => {}}>
+                        <IconButton aria-label="delete" onClick={deleteItem}>
                             <DeleteIcon />
                         </IconButton>
                     }

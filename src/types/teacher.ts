@@ -25,3 +25,11 @@ export interface ISubjects {
     id?: string,
     value: string
 }
+
+export interface IWorktimeItem {
+    _id?: string,
+    day: Days,
+    startTime: Date,
+    endTime: Date,
+    teacher: string
+}
