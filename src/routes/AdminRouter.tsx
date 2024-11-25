@@ -1,7 +1,7 @@
 import { FC } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Home from "../pages/DashboardPages/Home";
-import Teachers from "../pages/DashboardPages/Teachers";
+import Teachers from "../pages/DashboardPages/Teacher/Teachers";
 import Students from "../pages/DashboardPages/Students";
 import Admins from "../pages/DashboardPages/Admins";
 import Profile from "../pages/DashboardPages/Profile";
@@ -12,12 +12,16 @@ import TimeTable from "../pages/DashboardPages/TimeTable";
 import Journal from "../pages/DashboardPages/Journal";
 import Lessons from "../pages/DashboardPages/Lessons";
 import Abonements from "../pages/DashboardPages/Abonements";
+import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
+import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
 
 const AdminRouter: FC = () => {
     return (
         <Routes>
             <Route path="/main" element={<Home />} />
             <Route path="/teachers" element={<Teachers />} />
+            <Route path="/teachers/create" element={<CreateTeacher />} />
+            <Route path="/teachers/edit/:id" element={<TeacherPage />} />
             <Route path="/students" element={<Students />} />
             <Route path="/admins" element={<Admins />} />
             <Route path="/admins/create" element={<CreateUser />} /> 

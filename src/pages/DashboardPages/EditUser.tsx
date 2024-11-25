@@ -19,6 +19,7 @@ import useGetUser from '../../api/query/user/useGetUser';
 import useUpdateUser from '../../api/query/user/useUpdateUser';
 import { useTheme } from '@mui/material/styles';
 
+
 interface ICreateUser {
     fullName: string;
     email: string;
@@ -36,7 +37,7 @@ const schema = yup
   })
   .required()
 
-const EditUser: FC = () => {
+const TeacherWorkTimes: FC = () => {
     const theme = useTheme();
     const params = useParams<Params>();
     const {data, isLoading, isFetched} = useGetUser(params.id);
@@ -61,7 +62,6 @@ const EditUser: FC = () => {
     if (!data && isFetched) return <Navigate to='/404' />
 
     return (
-        <>
         <Card sx={{}}>
             <CardHeader
                 avatar={
@@ -134,8 +134,7 @@ const EditUser: FC = () => {
             </CardContent>
             }           
         </Card>
-        </>
     )
 };
 
-export default EditUser;
+export default TeacherWorkTimes;

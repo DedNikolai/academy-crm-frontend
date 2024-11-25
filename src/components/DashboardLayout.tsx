@@ -34,16 +34,16 @@ const menuList = [
     icon: <HomeIcon />
   },
   {
-    id: 2,
-    title: 'Учні',
-    link: '/dashboard/students',
-    icon:  <SentimentSatisfiedAltIcon />
-  },
-  {
     id: 3,
     title: 'Вчителі',
     link: '/dashboard/teachers',
     icon: <PersonIcon />
+  },
+  {
+    id: 2,
+    title: 'Учні',
+    link: '/dashboard/students',
+    icon:  <SentimentSatisfiedAltIcon />
   },
   {
     id: 4,
