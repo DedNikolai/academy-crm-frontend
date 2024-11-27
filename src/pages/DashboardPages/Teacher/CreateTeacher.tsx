@@ -57,11 +57,14 @@ const CreateTeacher: FC = () => {
     const theme = useTheme();
     const mutation = useCreateTeacher();
     const {mutate, isPending} = mutation;
-    const {register, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
+    const {register, handleSubmit, reset, watch, formState: {errors}, control} = useForm<ITeacher>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {subjects: []}
     })
+
+    const watchBirthday = watch('birthday', null)
+    const age = watchBirthday ? new Date().getFullYear() - new Date(watchBirthday).getFullYear() : '';
 
     const onSubmit: SubmitHandler<ITeacher> = (data) => {
         const newTeacher: ITeacher = {...data}
@@ -116,26 +119,7 @@ const CreateTeacher: FC = () => {
                         </FormControl>
                     </Grid>
                     <Grid size={4}>
-                        <FormControl fullWidth={true} error={!!errors.age}>
-                            <FormLabel htmlFor="age">Вік</FormLabel>
-                                <TextField
-                                    {...register('age')}
-                                    error={!!errors.age}
-                                    helperText={errors.age?.message}
-                                    id="age"
-                                    type="number"
-                                    name="age"
-                                    autoComplete="age"
-                                    autoFocus
-                                    fullWidth
-                                    variant="outlined"
-                                    color={!!errors.age ? 'error' : 'primary'}
-                                    sx={{ ariaLabel: 'age' }}
-                                />
-                        </FormControl>
-                    </Grid>
-                    <Grid size={4}>
-                    <Controller
+                        <Controller
                             name='birthday'
                             control={control}
                             render={({field: { onChange, value }}) => (
@@ -153,7 +137,24 @@ const CreateTeacher: FC = () => {
                                     </LocalizationProvider>
                                 </FormControl>
                             )}
-                    />        
+                        />        
+                    </Grid>
+                    <Grid size={4}>
+                        <FormControl fullWidth={true} error={!!errors.age}>
+                            <FormLabel htmlFor="age">Вік</FormLabel>
+                                <TextField
+                                    id="age"
+                                    type="number"
+                                    name="age"
+                                    autoComplete="age"
+                                    autoFocus
+                                    fullWidth
+                                    value={age}
+                                    variant="outlined"
+                                    sx={{ ariaLabel: 'age' }}
+                                    disabled
+                                />
+                        </FormControl>
                     </Grid>
                     <Grid size={6}>
                         <FormControl fullWidth={true} error={!!errors.phone}>

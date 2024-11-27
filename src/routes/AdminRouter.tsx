@@ -2,7 +2,7 @@ import { FC } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Home from "../pages/DashboardPages/Home";
 import Teachers from "../pages/DashboardPages/Teacher/Teachers";
-import Students from "../pages/DashboardPages/Students";
+import Students from "../pages/DashboardPages/Student/Students";
 import Admins from "../pages/DashboardPages/Admins";
 import Profile from "../pages/DashboardPages/Profile";
 import CreateUser from "../pages/DashboardPages/CreateUser";
