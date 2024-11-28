@@ -16,24 +16,18 @@ import {NavLink} from "react-router-dom";
 import { Box, Button, CircularProgress, Grid2 } from "@mui/material";
 import useGetStudents from '../../../api/query/student/useGetStudents';
 import { IStudent } from '../../../types/student';
-import columns from './columns/cplumns';
-import MenuIcon from '@mui/icons-material/Menu';
+import columns from './columns/columns';
 import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export default function Students() {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(1);
-  const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, '')  
+  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+  const [params, setParams] = React.useState<string>('')
+  const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params)  
 //   const mutation = useDeleteTeacher();
 //   const {mutate, isPending} = mutation;
 
@@ -41,6 +35,10 @@ export default function Students() {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
+
+  const onChangeParams = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParams(e.target.value)
+  }
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
@@ -61,6 +59,8 @@ export default function Students() {
                 sx={{width: 300}}
                 size='small'
                 type={'text'}
+                value={params}
+                onChange={onChangeParams}
                 endAdornment={
                         <InputAdornment position="end">
                             <IconButton
@@ -71,7 +71,7 @@ export default function Students() {
                         </InputAdornment>
                     }
             />
-            <IconButton>
+            <IconButton onClick={() => setParams('')}>
                 <HighlightOffIcon sx={{color: theme.status.error}}/>
             </IconButton>
          </Grid2>
@@ -136,7 +136,7 @@ export default function Students() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[1, 2, 100]}
+        rowsPerPageOptions={[2, 25, 100]}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

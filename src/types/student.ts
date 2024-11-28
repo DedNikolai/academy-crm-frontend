@@ -10,5 +10,7 @@ export interface IStudent {
     isActive: boolean,
     email?: string,
     gender: 'Чоловіча' | 'Жіноча'
-    actions?: null
+    actions?: null,
+    birthday?: Date | null,
+    parents?: string
 }
