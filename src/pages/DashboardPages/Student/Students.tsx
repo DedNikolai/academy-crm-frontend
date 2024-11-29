@@ -21,6 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 
 export default function Students() {
   const theme = useTheme();
@@ -28,10 +29,9 @@ export default function Students() {
   const [rowsPerPage, setRowsPerPage] = React.useState(2);
   const [params, setParams] = React.useState<string>('')
   const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params)  
-//   const mutation = useDeleteTeacher();
-//   const {mutate, isPending} = mutation;
+  const mutation = useDeleteStudent()
+  const {mutate, isPending} = mutation;
 
-  const isPending = false;
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -46,7 +46,10 @@ export default function Students() {
   };
 
   const deleteItem = (id: string) => {
-
+    const isAccept: boolean = window.confirm("Видалити Вчителя?");
+      if(isAccept && id) {
+        mutate(id);
+      }
   }
 
   return (

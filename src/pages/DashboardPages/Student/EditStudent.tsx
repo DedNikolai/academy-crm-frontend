@@ -330,7 +330,7 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                             render={({field: { onChange, value }}) => (
                                 <FormControlLabel control={
                                     <Checkbox 
-                                        checked={!!value}
+                                        checked={value}
                                         onChange={onChange}
                                     />
                                     } 
