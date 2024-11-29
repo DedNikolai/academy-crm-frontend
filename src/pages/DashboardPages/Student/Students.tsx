@@ -147,7 +147,7 @@ export default function Students() {
       </>
      }
         <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
-            <NavLink to='/dashboard/teachers/create'>
+            <NavLink to='/dashboard/students/create'>
                 <Button
                     type="submit"
                     fullWidth

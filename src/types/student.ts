@@ -9,7 +9,21 @@ export interface IStudent {
     teachers: ITeacher[];
     isActive: boolean,
     email?: string,
-    gender: 'Чоловіча' | 'Жіноча'
+    gender: 'Чоловіча' | 'Жіноча' | ''
+    actions?: null,
+    birthday?: Date | null,
+    parents?: string
+}
+
+export interface IFormStudent {
+    _id?: string  
+    fullName: string;
+    phone: string;
+    subjects: string[];
+    teachers: string[];
+    isActive: boolean,
+    email?: string,
+    gender: 'Чоловіча' | 'Жіноча' | ''
     actions?: null,
     birthday?: Date | null,
     parents?: string

@@ -12,9 +12,7 @@ import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import FormHelperText from '@mui/material/FormHelperText';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import EditIcon from '@mui/icons-material/Edit';
 import { Grid2, CircularProgress } from '@mui/material';
-import {useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from '../../../types/teacher';
 import Grid from '@mui/material/Grid2';
@@ -31,6 +29,9 @@ import 'dayjs/locale/uk';
 import { IFormStudent, IStudent } from '../../../types/student';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import useUpdateStudent from '../../../api/query/student/useUpdateStudent';
+import useTeachers from '../../../api/query/teacher/useGetTeachers';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import useCreateStudent from '../../../api/query/student/useCreateStudent';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -42,16 +43,6 @@ const MenuProps = {
     },
   },
 };
-
-interface IStudentItem {
-    student: IStudent,
-    allTeachers: ITeacher[]
-}
-
-
-type Params = {
-    id: string;
-}
 
 const schema = yup
   .object({
@@ -67,24 +58,23 @@ const schema = yup
   })
   .required()
 
-const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
+const CreateStudent: FC = () => {
     const theme = useTheme();
-    const params = useParams<Params>();
-    const mutation = useUpdateStudent(params.id);
+    const mutation = useCreateStudent();
     const {mutate, isPending} = mutation;
-
+    const teachersData = useTeachers()
     const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<IFormStudent>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {...student, teachers: student.teachers.map(item => item._id)}
+        defaultValues: {isActive: true, gender: '', subjects: [], teachers: []}
     })
-
+    const allTeachers = teachersData.data || [];
     const watchBirthday = watch('birthday')
     const age = watchBirthday ? new Date().getFullYear() - new Date(watchBirthday).getFullYear() : '';
 
     const onSubmit: SubmitHandler<IFormStudent> = (data) => {
-        const updatedStudent: IFormStudent = {...data}
-        mutate(updatedStudent);
+        const student: IFormStudent = {...data}
+        mutate(student);
     };
 
     return (
@@ -93,13 +83,13 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: theme.status.success }}>
-                        <EditIcon />
+                        <AddCircleIcon />
                     </Avatar>
                 }
-                title={`Редагувати дані учня ${student?.fullName}`}
+                title={`Створити Учня`}
             />
             {
-            isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -185,7 +175,7 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                                     value={value}
                                     onChange={onChange}
                                     MenuProps={MenuProps}
-                                    renderValue={value => value}
+                                    renderValue={value => value || ''}
                                     color={!!errors.gender ? 'error' : 'primary'}
                                 >
                                     {['Чоловіча', 'Жіноча'].map((name) => (
@@ -195,7 +185,7 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                <FormHelperText>{errors.gender?.message}</FormHelperText>
+                                <FormHelperText>{errors.subjects?.message}</FormHelperText>
                             </FormControl>
                             )}
                         />
@@ -304,12 +294,12 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                                     value={value || []}
                                     onChange={onChange}
                                     renderValue={
-                                        (selected) => selected.map(item => allTeachers.find(teacher => teacher._id == item)?.fullName).join(', ')
+                                        (selected) => selected.map(item => allTeachers.find((teacher:ITeacher) => teacher._id == item)?.fullName).join(', ')
                                     }
                                     MenuProps={MenuProps}
                                     color={!!errors.teachers ? 'error' : 'primary'}
                                 >
-                                    {allTeachers.map((teacher) => (
+                                    {allTeachers.map((teacher: ITeacher) => (
                                         <MenuItem key={teacher._id} value={teacher._id}>
                                             <Checkbox checked={
                                                 !!value.length && !!teacher._id && value.includes(teacher._id)}
@@ -358,4 +348,4 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
     )
 };
 
-export default EditStudent;
+export default CreateStudent;

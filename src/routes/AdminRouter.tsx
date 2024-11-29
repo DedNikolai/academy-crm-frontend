@@ -15,6 +15,7 @@ import Abonements from "../pages/DashboardPages/Abonements";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
 import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
 import StudentPage from "../pages/DashboardPages/Student/StudentPade";
+import CreateStudent from "../pages/DashboardPages/Student/CreateStudent";
 
 const AdminRouter: FC = () => {
     return (
@@ -24,6 +25,7 @@ const AdminRouter: FC = () => {
             <Route path="/teachers/create" element={<CreateTeacher />} />
             <Route path="/teachers/edit/:id" element={<TeacherPage />} />
             <Route path="/students" element={<Students />} />
+            <Route path="/students/create" element={<CreateStudent />} />
             <Route path="/students/edit/:id" element={<StudentPage />} />
             <Route path="/admins" element={<Admins />} />
             <Route path="/admins/create" element={<CreateUser />} /> 

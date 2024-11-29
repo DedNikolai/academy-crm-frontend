@@ -46,7 +46,7 @@ export default function StudentPage() {
   const params = useParams<Params>();
   const [value, setValue] = React.useState(0);
   const {data, isLoading, isFetched} = useStudent(params.id);
-  const teachersData = useTeachers()
+  const teachersData = useTeachers();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
