@@ -8,6 +8,7 @@ import EditTeacher from './EditTeacher';
 import TeacherWorkTimes from './TeacherWorkTimes';
 import useTeacher from '../../../api/query/teacher/useGetTaecher';
 import { CircularProgress } from '@mui/material';
+import TeacherStudents from './TeacherStudents';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -71,7 +72,7 @@ export default function TeacherPage() {
             <TeacherWorkTimes teacher={data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-              Item Three
+              <TeacherStudents teacher={data} />
           </CustomTabPanel>
         </Box>
         }
