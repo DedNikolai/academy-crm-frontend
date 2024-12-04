@@ -20,6 +20,7 @@ import columns from './columns/students-columns';
 import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 import { ITeacher } from '../../../types/teacher';
 import useGetTeacherStudents from '../../../api/query/student/useGetTeacherStudents';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface ITeacherItem {
     teacher: ITeacher
@@ -46,6 +47,7 @@ const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
     const isAccept: boolean = window.confirm("Видалити Учня?");
       if(isAccept && id) {
         mutate(id);
+        setPage(0);
       }
   }
 
@@ -82,9 +84,12 @@ const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
                       const value = row[column.id];
                       if (column.id === 'isActive') {
                         return (
-                            <TableCell key={column.id} align={column.align}>
-                                <CheckBoxIcon sx={{color: theme.status.success}} />
-                            </TableCell>
+                          <TableCell key={column.id} align={column.align}>
+                            {
+                              row.isActive ? <CheckBoxIcon sx={{color: theme.status.success}} />
+                              : <CancelIcon sx={{color: theme.status.error}} />
+                            }      
+                        </TableCell>
                         )
                       }
                       if (column.id === 'actions') {

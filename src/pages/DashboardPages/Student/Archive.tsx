@@ -24,12 +24,12 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function Students() {
+export default function Archive() {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(2);
   const [params, setParams] = React.useState<string>('')
-  const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params)  
+  const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params, false)  
   const mutation = useDeleteStudent()
   const {mutate, isPending} = mutation;
 
@@ -110,10 +110,10 @@ export default function Students() {
                       if (column.id === 'isActive') {
                         return (
                             <TableCell key={column.id} align={column.align}>
-                              {
-                                row.isActive ? <CheckBoxIcon sx={{color: theme.status.success}} />
-                                : <CancelIcon sx={{color: theme.status.error}} />
-                              }      
+                                {
+                                    row.isActive ? <CheckBoxIcon sx={{color: theme.status.success}} />
+                                    : <CancelIcon sx={{color: theme.status.error}} />
+                                }      
                             </TableCell>
                         )
                       }
