@@ -4,11 +4,10 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import {useParams, Navigate} from 'react-router-dom';
-import EditTeacher from './EditTeacher';
-import TeacherWorkTimes from './TeacherWorkTimes';
-import useTeacher from '../../../api/query/teacher/useGetTaecher';
 import { CircularProgress } from '@mui/material';
-import TeacherStudents from './TeacherStudents';
+import useStudent from '../../../api/query/student/useGetStudent';
+import EditStudent from './EditStudent';
+import useTeachers from '../../../api/query/teacher/useGetTeachers';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,10 +42,11 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TeacherPage() {
+export default function StudentPage() {
   const params = useParams<Params>();
   const [value, setValue] = React.useState(0);
-  const {data, isLoading, isFetched, isFetching} = useTeacher(params.id);
+  const {data, isLoading, isFetched} = useStudent(params.id);
+  const teachersData = useTeachers();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -56,23 +56,23 @@ export default function TeacherPage() {
 
   return (
     <Card sx={{}}>
-      {isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+      {isLoading || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="Особисті дані" {...a11yProps(0)} />
-              <Tab label="Графік роботи" {...a11yProps(1)} />
+              <Tab label="Графік відвідувань" {...a11yProps(1)} />
               <Tab label="учні" {...a11yProps(2)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-              <EditTeacher teacher={data}/>
+              <EditStudent student={data} allTeachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <TeacherWorkTimes teacher={data}/>
+            Item Two
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-              <TeacherStudents teacher={data} />
+              Item Three
           </CustomTabPanel>
         </Box>
         }

@@ -64,7 +64,7 @@ const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
             teacher
         }
     })
-
+    
     const onSubmit: SubmitHandler<IWorktime> = (data) => {
         const worktime: IWorktime = {...data, teacher};
         mutate(worktime);

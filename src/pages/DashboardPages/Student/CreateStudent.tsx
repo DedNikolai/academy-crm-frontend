@@ -12,7 +12,6 @@ import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import FormHelperText from '@mui/material/FormHelperText';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import EditIcon from '@mui/icons-material/Edit';
 import { Grid2, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from '../../../types/teacher';
@@ -27,7 +26,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
-import useCreateTeacher from '../../../api/query/teacher/useCreateTeacher';
+import { IFormStudent, IStudent } from '../../../types/student';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import useUpdateStudent from '../../../api/query/student/useUpdateStudent';
+import useTeachers from '../../../api/query/teacher/useGetTeachers';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import useCreateStudent from '../../../api/query/student/useCreateStudent';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -42,34 +46,35 @@ const MenuProps = {
 
 const schema = yup
   .object({
-    fullName: yup.string().min(3, 'Мінімум 3 символи').required('Email is required'),
-    email: yup.string().email('Не валідний Email').required('Обовязкове поле'),
+    fullName: yup.string().min(3, 'Мінімум 3 символи').required('Обовязкове поле'),
+    email: yup.string().email('Не валідний Email').optional(),
     phone: yup.string().required('Обовязкове поле'),
     subjects: yup.array().min(1, 'Необхідно вибрати хоча б одне значення').required('Обовязкове поле'),
-    age: yup.number().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
-    education: yup.string().optional(),
+    parents: yup.string().optional(),
     birthday: yup.date().optional().nullable(),
-    worktimes: yup.array().optional()
+    isActive: yup.boolean().required('Обовязкове поле'),
+    gender: yup.string().oneOf(['Чоловіча', 'Жіноча', '']).required('Обовязкове поле'),
+    teachers: yup.array().min(1, 'Необхідно вибрати хоча б одне значення').required('Обовязкове поле')
   })
   .required()
 
-const CreateTeacher: FC = () => {
+const CreateStudent: FC = () => {
     const theme = useTheme();
-    const mutation = useCreateTeacher();
+    const mutation = useCreateStudent();
     const {mutate, isPending} = mutation;
-    const {register, handleSubmit, reset, watch, formState: {errors}, control} = useForm<ITeacher>({
+    const teachersData = useTeachers()
+    const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<IFormStudent>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {subjects: []}
+        defaultValues: {isActive: true, gender: '', subjects: [], teachers: []}
     })
-
-    const watchBirthday = watch('birthday', null)
+    const allTeachers = teachersData.data || [];
+    const watchBirthday = watch('birthday')
     const age = watchBirthday ? new Date().getFullYear() - new Date(watchBirthday).getFullYear() : '';
 
-    const onSubmit: SubmitHandler<ITeacher> = (data) => {
-        const newTeacher: ITeacher = {...data}
-        mutate(newTeacher);
-        reset();
+    const onSubmit: SubmitHandler<IFormStudent> = (data) => {
+        const student: IFormStudent = {...data}
+        mutate(student);
     };
 
     return (
@@ -78,13 +83,13 @@ const CreateTeacher: FC = () => {
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: theme.status.success }}>
-                        <EditIcon />
+                        <AddCircleIcon />
                     </Avatar>
                 }
-                title={`Додати нового вчителя`}
+                title={`Створити Учня`}
             />
             {
-            isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -98,7 +103,7 @@ const CreateTeacher: FC = () => {
                 }}
             >
                 <Grid container spacing={2}>
-                    <Grid size={4}>
+                    <Grid size={3}>
                         <FormControl fullWidth={true}  error={!!errors.fullName}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <FormLabel htmlFor="fullName">Ім'я *</FormLabel>
@@ -118,29 +123,29 @@ const CreateTeacher: FC = () => {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid size={4}>
+                    <Grid size={3}>
                         <Controller
-                            name='birthday'
-                            control={control}
-                            render={({field: { onChange, value }}) => (
-                                <FormControl fullWidth={true}>
-                                    <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
-                                    <LocalizationProvider 
-                                        dateAdapter={AdapterDayjs} 
-                                        adapterLocale='uk'
-                                    >
+                                name='birthday'
+                                control={control}
+                                render={({field: { onChange, value }}) => (
+                                    <FormControl fullWidth={true}>
+                                        <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
+                                        <LocalizationProvider 
+                                            dateAdapter={AdapterDayjs} 
+                                            adapterLocale='uk'
+                                        >
 
-                                        <DatePicker
-                                            value={value ? dayjs(value) : null}
-                                            onChange={onChange}
-                                        />
-                                    </LocalizationProvider>
-                                </FormControl>
-                            )}
+                                            <DatePicker
+                                                value={value ? dayjs(value) : null}
+                                                onChange={onChange}
+                                            />
+                                        </LocalizationProvider>
+                                    </FormControl>
+                                )}
                         />        
                     </Grid>
-                    <Grid size={4}>
-                        <FormControl fullWidth={true} error={!!errors.age}>
+                    <Grid size={3}>
+                        <FormControl fullWidth={true}>
                             <FormLabel htmlFor="age">Вік</FormLabel>
                                 <TextField
                                     id="age"
@@ -154,6 +159,54 @@ const CreateTeacher: FC = () => {
                                     sx={{ ariaLabel: 'age' }}
                                     disabled
                                 />
+                        </FormControl>
+                    </Grid>
+                    <Grid size={3}>
+                        <Controller
+                            name='gender'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true} error={!!errors.gender}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <FormLabel htmlFor="education">Стать *</FormLabel>
+                                </Box>
+                                <Select
+                                    id="gender"
+                                    value={value}
+                                    onChange={onChange}
+                                    MenuProps={MenuProps}
+                                    renderValue={value => value || ''}
+                                    color={!!errors.gender ? 'error' : 'primary'}
+                                >
+                                    {['Чоловіча', 'Жіноча'].map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox checked={!!value && value.includes(name)} />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{errors.subjects?.message}</FormHelperText>
+                            </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid size={12}>    
+                        <FormControl fullWidth={true}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <FormLabel htmlFor="education">Інформація про батьків</FormLabel>
+                            </Box>
+                            <TextField
+                                {...register('parents')}
+                                error={!!errors.parents}
+                                helperText={errors.parents?.message}
+                                name="parents"
+                                type="text"
+                                id="parents"
+                                autoFocus
+                                fullWidth
+                                variant="outlined"
+                                color={!!errors.parents ? 'error' : 'primary'}
+                            />
                         </FormControl>
                     </Grid>
                     <Grid size={6}>
@@ -196,7 +249,7 @@ const CreateTeacher: FC = () => {
                                 />
                         </FormControl>
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={5}>
                         <Controller
                             name='subjects'
                             control={control}
@@ -208,7 +261,7 @@ const CreateTeacher: FC = () => {
                                 <Select
                                     id="subjects"
                                     multiple
-                                    value={value}
+                                    value={value || []}
                                     onChange={onChange}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
@@ -226,25 +279,56 @@ const CreateTeacher: FC = () => {
                             )}
                         />
                     </Grid>
-                    <Grid size={12}>    
-                        <FormControl fullWidth={true}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="education">Освіта</FormLabel>
-                            </Box>
-                            <TextField
-                                {...register('education')}
-                                error={!!errors.education}
-                                helperText={errors.education?.message}
-                                name="education"
-                                type="text"
-                                id="education"
-                                autoFocus
-                                fullWidth
-                                variant="outlined"
-                                color={!!errors.education ? 'error' : 'primary'}
-                            />
-                        </FormControl>
+                    <Grid size={5}>
+                        <Controller
+                            name='teachers'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true} error={!!errors.teachers}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <FormLabel htmlFor="education">Вчителі *</FormLabel>
+                                </Box>
+                                <Select
+                                    id="teachers"
+                                    multiple
+                                    value={value || []}
+                                    onChange={onChange}
+                                    renderValue={
+                                        (selected) => selected.map(item => allTeachers.find((teacher:ITeacher) => teacher._id == item)?.fullName).join(', ')
+                                    }
+                                    MenuProps={MenuProps}
+                                    color={!!errors.teachers ? 'error' : 'primary'}
+                                >
+                                    {allTeachers.map((teacher: ITeacher) => (
+                                        <MenuItem key={teacher._id} value={teacher._id}>
+                                            <Checkbox checked={
+                                                !!value.length && !!teacher._id && value.includes(teacher._id)}
+                                             />
+                                            <ListItemText primary={teacher.fullName} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{errors.teachers?.message}</FormHelperText>
+                            </FormControl>
+                            )}
+                        />
                     </Grid>
+                    <Grid2 size={2} display='flex' alignItems='center'>
+                        <Controller
+                            name='isActive'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControlLabel control={
+                                    <Checkbox 
+                                        checked={!!value}
+                                        onChange={onChange}
+                                    />
+                                    } 
+                                    label="Активний" 
+                                />
+                            )}
+                        />
+                    </Grid2>
                 </Grid>
                 <Grid2 sx={{textAlign: 'right'}}>
                     <Button
@@ -264,4 +348,4 @@ const CreateTeacher: FC = () => {
     )
 };
 
-export default CreateTeacher;
+export default CreateStudent;

@@ -10,7 +10,7 @@ export interface ITeacher {
     birthday?: Date | null,
     education?: string,
     worktimes?: IWorktime[],
-    subjects: String[]
+    subjects: string[]
 }
 
 export interface IWorktime {

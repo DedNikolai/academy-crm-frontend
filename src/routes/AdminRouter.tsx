@@ -2,7 +2,7 @@ import { FC } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Home from "../pages/DashboardPages/Home";
 import Teachers from "../pages/DashboardPages/Teacher/Teachers";
-import Students from "../pages/DashboardPages/Students";
+import Students from "../pages/DashboardPages/Student/Students";
 import Admins from "../pages/DashboardPages/Admins";
 import Profile from "../pages/DashboardPages/Profile";
 import CreateUser from "../pages/DashboardPages/CreateUser";
@@ -14,6 +14,9 @@ import Lessons from "../pages/DashboardPages/Lessons";
 import Abonements from "../pages/DashboardPages/Abonements";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
 import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
+import StudentPage from "../pages/DashboardPages/Student/StudentPade";
+import CreateStudent from "../pages/DashboardPages/Student/CreateStudent";
+import Archive from "../pages/DashboardPages/Student/Archive";
 
 const AdminRouter: FC = () => {
     return (
@@ -23,6 +26,9 @@ const AdminRouter: FC = () => {
             <Route path="/teachers/create" element={<CreateTeacher />} />
             <Route path="/teachers/edit/:id" element={<TeacherPage />} />
             <Route path="/students" element={<Students />} />
+            <Route path="/archive" element={<Archive />} />
+            <Route path="/students/create" element={<CreateStudent />} />
+            <Route path="/students/edit/:id" element={<StudentPage />} />
             <Route path="/admins" element={<Admins />} />
             <Route path="/admins/create" element={<CreateUser />} /> 
             <Route path="/admins/edit/:id" element={<EditUser />} /> 

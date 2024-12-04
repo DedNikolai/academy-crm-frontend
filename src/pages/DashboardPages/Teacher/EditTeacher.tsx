@@ -68,11 +68,14 @@ const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
     const params = useParams<Params>();
     const mutation = useUpdateTeacher(params.id);
     const {mutate, isPending} = mutation;
-    const {register, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
+    const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {...teacher}
     })
+
+    const watchBirthday = watch('birthday')
+    const age = watchBirthday ? new Date().getFullYear() - new Date(watchBirthday).getFullYear() : '';
 
     const onSubmit: SubmitHandler<ITeacher> = (data) => {
         const updatedTeacher: ITeacher = {...data}
@@ -127,44 +130,42 @@ const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
                         </FormControl>
                     </Grid>
                     <Grid size={4}>
+                        <Controller
+                                name='birthday'
+                                control={control}
+                                render={({field: { onChange, value }}) => (
+                                    <FormControl fullWidth={true}>
+                                        <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
+                                        <LocalizationProvider 
+                                            dateAdapter={AdapterDayjs} 
+                                            adapterLocale='uk'
+                                        >
+
+                                            <DatePicker
+                                                value={value ? dayjs(value) : null}
+                                                onChange={onChange}
+                                            />
+                                        </LocalizationProvider>
+                                    </FormControl>
+                                )}
+                        />        
+                    </Grid>
+                    <Grid size={4}>
                         <FormControl fullWidth={true} error={!!errors.age}>
                             <FormLabel htmlFor="age">Вік</FormLabel>
                                 <TextField
-                                    {...register('age')}
-                                    error={!!errors.age}
-                                    helperText={errors.age?.message}
                                     id="age"
                                     type="number"
                                     name="age"
                                     autoComplete="age"
                                     autoFocus
                                     fullWidth
+                                    value={age}
                                     variant="outlined"
-                                    color={!!errors.age ? 'error' : 'primary'}
                                     sx={{ ariaLabel: 'age' }}
+                                    disabled
                                 />
                         </FormControl>
-                    </Grid>
-                    <Grid size={4}>
-                    <Controller
-                            name='birthday'
-                            control={control}
-                            render={({field: { onChange, value }}) => (
-                                <FormControl fullWidth={true}>
-                                    <FormLabel htmlFor="birthday">Дата Народження</FormLabel>
-                                    <LocalizationProvider 
-                                        dateAdapter={AdapterDayjs} 
-                                        adapterLocale='uk'
-                                    >
-
-                                        <DatePicker
-                                            value={value ? dayjs(value) : null}
-                                            onChange={onChange}
-                                        />
-                                    </LocalizationProvider>
-                                </FormControl>
-                            )}
-                    />        
                     </Grid>
                     <Grid size={6}>
                         <FormControl fullWidth={true} error={!!errors.phone}>

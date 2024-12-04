@@ -25,6 +25,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 const menuList = [
   {
@@ -68,6 +69,12 @@ const menuList = [
     title: 'Абонементи',
     link: '/dashboard/abonements',
     icon: <BookOnlineIcon />
+  },
+  {
+    id: 8,
+    title: 'Архів учнів',
+    link: '/dashboard/archive',
+    icon: <ArchiveIcon />
   }
 ]
 
