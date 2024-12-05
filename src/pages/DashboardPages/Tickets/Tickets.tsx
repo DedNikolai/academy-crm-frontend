@@ -1,9 +1,9 @@
 import {FC} from 'react';
 
-const Abonements: FC = () => {
+const Ticketts: FC = () => {
     return (
         <h2>Абонементи</h2>
     )
 }
 
-export default Abonements;
+export default Ticketts;

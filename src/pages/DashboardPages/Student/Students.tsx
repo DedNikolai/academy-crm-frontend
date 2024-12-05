@@ -27,7 +27,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 export default function Students() {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [params, setParams] = React.useState<string>('')
   const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params)  
   const mutation = useDeleteStudent()
@@ -85,7 +85,7 @@ export default function Students() {
         isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -144,7 +144,7 @@ export default function Students() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[2, 25, 100]}
+        rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

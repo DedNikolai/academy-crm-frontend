@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 import useStudent from '../../../api/query/student/useGetStudent';
 import EditStudent from './EditStudent';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
+import SellTicket from './SellTicket';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,7 +63,7 @@ export default function StudentPage() {
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="Особисті дані" {...a11yProps(0)} />
               <Tab label="Графік відвідувань" {...a11yProps(1)} />
-              <Tab label="учні" {...a11yProps(2)} />
+              <Tab label="Продати абонемент" {...a11yProps(2)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
@@ -72,7 +73,7 @@ export default function StudentPage() {
             Item Two
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-              Item Three
+              <SellTicket student={data}/>
           </CustomTabPanel>
         </Box>
         }

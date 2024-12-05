@@ -67,7 +67,7 @@ const menuList = [
   {
     id: 7,
     title: 'Абонементи',
-    link: '/dashboard/abonements',
+    link: '/dashboard/tickets',
     icon: <BookOnlineIcon />
   },
   {

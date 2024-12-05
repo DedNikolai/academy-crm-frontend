@@ -33,7 +33,7 @@ const Teachers: FC = () => {
         <Grid2 sx={{padding: '20px'}}><h2>Вчителі</h2></Grid2> 
         {
           isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Повне Ім'я</TableCell>

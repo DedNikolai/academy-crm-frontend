@@ -29,7 +29,7 @@ interface ITeacherItem {
 const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {data = {docs: []}, isLoading} = useGetTeacherStudents(teacher?._id, page, rowsPerPage)  
   const mutation = useDeleteStudent()
   const {mutate, isPending} = mutation;
@@ -60,7 +60,7 @@ const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
         isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -119,7 +119,7 @@ const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[2, 25, 100]}
+        rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}
