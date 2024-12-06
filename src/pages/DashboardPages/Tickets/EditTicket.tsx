@@ -56,7 +56,7 @@ const schema = yup
     endDate: yup.date().required('Обовязкове поле'),
     price: yup.number().required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
-    remainAmount: yup.number().required('Обовязкове поле'),
+    usedAmount: yup.number().required('Обовязкове поле'),
     transferred: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле')
   })
@@ -276,22 +276,22 @@ const EditTicket: FC = () => {
                         />
                     </Grid>
                     <Grid size={3}>    
-                        <FormControl fullWidth={true}  error={!!errors.remainAmount}>
+                        <FormControl fullWidth={true}  error={!!errors.usedAmount}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="remainAmount">Кількість використаних занять *</FormLabel>
+                                <FormLabel htmlFor="usedAmount">Кількість використаних занять *</FormLabel>
                             </Box>
                             <TextField
-                                {...register('remainAmount')}
-                                error={!!errors.remainAmount}
-                                helperText={errors.remainAmount?.message}
-                                name="remainAmount"
+                                {...register('usedAmount')}
+                                error={!!errors.usedAmount}
+                                helperText={errors.usedAmount?.message}
+                                name="usedAmount"
                                 type="number"
-                                id="remainAmount"
+                                id="usedAmount"
                                 autoFocus
                                 required
                                 fullWidth
                                 variant="outlined"
-                                color={!!errors.remainAmount ? 'error' : 'primary'}
+                                color={!!errors.usedAmount ? 'error' : 'primary'}
                             />
                         </FormControl>
                     </Grid>

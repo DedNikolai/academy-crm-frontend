@@ -61,19 +61,23 @@ export default function StudentPage() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Особисті дані" {...a11yProps(0)} />
-              <Tab label="Графік відвідувань" {...a11yProps(1)} />
-              <Tab label="Продати абонемент" {...a11yProps(2)} />
+                <Tab label="Особисті дані" {...a11yProps(0)} />
+                <Tab label="Графік відвідувань" {...a11yProps(1)} />
+                <Tab label="Продати абонемент" {...a11yProps(2)} />
+                <Tab label="Всі  абонементи" {...a11yProps(3)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
               <EditStudent student={data} allTeachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Item Two
+            Графік
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
               <SellTicket student={data}/>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+              Всі абонементи
           </CustomTabPanel>
         </Box>
         }

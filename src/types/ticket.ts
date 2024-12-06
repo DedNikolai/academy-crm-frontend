@@ -21,7 +21,7 @@ export interface ITicket {
     price: number,
     subject: string,
     generalAmount: number,
-    remainAmount: number,
+    usedAmount: number,
     transferred: number
 }
 
@@ -33,7 +33,7 @@ export interface IEditTicket {
     price: number,
     subject: string,
     generalAmount: number,
-    remainAmount: number,
+    usedAmount: number,
     transferred: number
 }
 

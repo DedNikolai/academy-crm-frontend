@@ -69,7 +69,7 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
     const allTeachers = teachersData.data || [];
 
     const onSubmit: SubmitHandler<IFormDataTicket> = (data) => {
-        const ticket: ITicket = {...data, remainAmount: 0, transferred: 0, student: student._id || ''}
+        const ticket: ITicket = {...data, usedAmount: 0, transferred: 0, student: student._id || ''}
         mutate(ticket);
     };
 
