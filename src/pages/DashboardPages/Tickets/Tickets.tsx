@@ -43,7 +43,7 @@ export default function Tickets() {
         setPage(0);
       }
   }
-  console.log(data.docs)
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Grid2 container spacing={3} sx={{padding: '20px'}} alignItems='center'>

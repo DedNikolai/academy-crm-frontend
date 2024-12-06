@@ -28,7 +28,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { IEditTicket, ITicket } from '../../../types/ticket';
+import { IEditTicket, ITicket, ITicketFromServer } from '../../../types/ticket';
 import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
 import {useParams, Navigate} from 'react-router-dom';
 import useTicket from '../../../api/query/ticket/useGetTicket';
@@ -62,30 +62,22 @@ const schema = yup
   })
   .required()
 
-const EditTicket: FC = () => {
+const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({ticket, teachers}) => {
     const theme = useTheme();
     const mutation = useUpdateTicket();
-    const params = useParams<Params>();
-    const {data, isLoading, isFetched} = useTicket(params.id);
+
     const {mutate, isPending} = mutation;
-    const teachersData = useTeachers()
+    const allTeachers = ticket.student.teachers || []
     const {register, handleSubmit, reset, formState: {errors}, control} = useForm<IEditTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {subject: '', teacher: ''}
+        defaultValues: {...ticket, student: ticket.student._id, teacher: ticket.teacher._id}
     })
-    const allTeachers = teachersData.data || [];
-    const loading = isLoading || isPending || teachersData.isLoading
+
     const onSubmit: SubmitHandler<IEditTicket> = (value) => {
-        const ticket: ITicket = {...value, _id: data._id, student: data.student}
-        mutate(ticket);
+        const updated: ITicket = {...value, _id: ticket._id, student: ticket.student._id}
+        mutate(updated);
     };
-
-    useEffect(() => {
-        reset(data);
-    }, [data])
-
-    if (!data && isFetched) return <Navigate to='/404' />
 
     return (
         <>
@@ -96,10 +88,10 @@ const EditTicket: FC = () => {
                         <AddCircleIcon />
                     </Avatar>
                 }
-                title={`абонемент ${data?.student.fullName}`}
+                title={`абонемент ${ticket.student.fullName}`}
             />
             {
-            loading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -231,7 +223,7 @@ const EditTicket: FC = () => {
                                     MenuProps={MenuProps}
                                     color={!!errors.subject ? 'error' : 'primary'}
                                 >
-                                    {data.student.subjects.map((name: string) => (
+                                    {ticket.student.subjects.map((name: string) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value == name} />
                                             <ListItemText primary={name} />
@@ -254,14 +246,14 @@ const EditTicket: FC = () => {
                                 </Box>
                                 <Select
                                     id="teacher"
-                                    value={value}
+                                    value={value || ''}
                                     onChange={onChange}
                                     renderValue={
-                                        (selected) => allTeachers.find((teacher:ITeacher) => teacher._id == selected).fullName}
+                                        (selected) => teachers.find((teacher:ITeacher) => teacher._id == selected)?.fullName}
                                     MenuProps={MenuProps}
                                     color={!!errors.teacher ? 'error' : 'primary'}
                                 >
-                                    {data.student.teachers.map((teacher: ITeacher) => (
+                                    {ticket.student.teachers.map((teacher: ITeacher) => (
                                         <MenuItem key={teacher._id} value={teacher._id}>
                                             <Checkbox checked={
                                                 !!value && teacher._id == value}

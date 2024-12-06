@@ -26,6 +26,7 @@ export interface ITicket {
 }
 
 export interface IEditTicket {
+    _id?: string,
     title: string,
     startDate: Date,
     endDate: Date,
@@ -34,6 +35,20 @@ export interface IEditTicket {
     subject: string,
     generalAmount: number,
     usedAmount: number,
-    transferred: number
+    transferred: number,
+    student?: string
 }
 
+export interface ITicketFromServer {
+    _id: string,
+    title: string,
+    startDate: Date,
+    endDate: Date,
+    student: IStudent,
+    teacher: ITeacher,
+    price: number,
+    subject: string,
+    generalAmount: number,
+    usedAmount: number,
+    transferred: number
+}
