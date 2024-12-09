@@ -13,17 +13,18 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {NavLink} from "react-router-dom";
 import { Box, Button, CircularProgress, Grid2 } from "@mui/material";
-import columns from './columns/columns';
+import columns from './columns/ticket-columns';
 import useGetTickets from '../../../api/query/ticket/useGetTickets';
 import { ITicket } from '../../../types/ticket';
 import useDeleteTicket from '../../../api/query/ticket/useDeleteTicket';
+import { IStudent } from '../../../types/student';
+import useGetTicketsByStudent from '../../../api/query/ticket/useGetTicketsByStudents';
 
-export default function Tickets() {
+const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-//   const [params, setParams] = React.useState<string>('')
-  const {data = {docs: []}, isLoading} = useGetTickets(page, rowsPerPage)  
+  const {data = {docs: []}, isLoading} = useGetTicketsByStudent(student._id, page, rowsPerPage)  
   const mutation = useDeleteTicket()
   const {mutate, isPending} = mutation;
 
@@ -47,7 +48,7 @@ export default function Tickets() {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Grid2 container spacing={3} sx={{padding: '20px'}} alignItems='center'>
-        <Grid2 size={4} sx={{}}><h2>Абонементи</h2></Grid2>
+        <Grid2 size={4} sx={{}}><h2>{`Абонементи ${student.fullName}`}</h2></Grid2>
          <Grid2 size={8} sx={{display: 'flex', justifyContent: 'right'}}>
          </Grid2>
       </Grid2>  
@@ -129,3 +130,5 @@ export default function Tickets() {
     </Paper>
   );
 }
+
+export default StudentTickets;

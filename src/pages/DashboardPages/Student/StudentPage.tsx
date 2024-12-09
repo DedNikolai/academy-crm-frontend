@@ -9,6 +9,7 @@ import useStudent from '../../../api/query/student/useGetStudent';
 import EditStudent from './EditStudent';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import SellTicket from './SellTicket';
+import StudentTickets from './StudentTickets';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -77,7 +78,7 @@ export default function StudentPage() {
               <SellTicket student={data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-              Всі абонементи
+              <StudentTickets student={data}/>
           </CustomTabPanel>
         </Box>
         }

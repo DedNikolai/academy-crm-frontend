@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -61,12 +61,22 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
     const mutation = useCreateTicket();
     const {mutate, isPending} = mutation;
     const teachersData = useTeachers()
-    const {register, handleSubmit, formState: {errors}, control} = useForm<IFormDataTicket>({
+    const {register, setValue, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {teacher: '', subject: ''}
     })
     const allTeachers = teachersData.data || [];
+    const watchStart = watch('startDate');
+
+    useEffect(() => {
+        const weeks = 5
+        const start = new Date(watchStart);
+        if (watchStart) {
+            const end = start.setDate(start.getDate() + weeks * 7)
+            setValue('endDate', new Date(end))
+        }
+    }, [watchStart])
 
     const onSubmit: SubmitHandler<IFormDataTicket> = (data) => {
         const ticket: ITicket = {...data, usedAmount: 0, transferred: 0, student: student._id || ''}
