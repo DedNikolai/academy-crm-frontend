@@ -2,7 +2,7 @@ import { ITeacher } from "./teacher";
 
 
 export interface IStudent {
-    _id?: string  
+    _id: string  
     fullName: string;
     phone: string;
     subjects: string[];

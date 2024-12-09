@@ -11,12 +11,14 @@ import NotFound from "../pages/NotFound";
 import TimeTable from "../pages/DashboardPages/TimeTable";
 import Journal from "../pages/DashboardPages/Journal";
 import Lessons from "../pages/DashboardPages/Lessons";
-import Abonements from "../pages/DashboardPages/Abonements";
+import Tickets from "../pages/DashboardPages/Tickets/Tickets";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
 import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
-import StudentPage from "../pages/DashboardPages/Student/StudentPade";
+import StudentPage from "../pages/DashboardPages/Student/StudentPage";
 import CreateStudent from "../pages/DashboardPages/Student/CreateStudent";
 import Archive from "../pages/DashboardPages/Student/Archive";
+import EditTicket from "../pages/DashboardPages/Tickets/EditTicket";
+import TicketPage from "../pages/DashboardPages/Tickets/TicketPage";
 
 const AdminRouter: FC = () => {
     return (
@@ -36,7 +38,9 @@ const AdminRouter: FC = () => {
             <Route path="/timetable" element={<TimeTable />} /> 
             <Route path="/journal" element={<Journal />} /> 
             <Route path="/lessons" element={<Lessons />} /> 
-            <Route path="/abonements" element={<Abonements />} /> 
+            <Route path="/tickets" element={<Tickets />} />
+            <Route path="/tickets/edit/:id" element={<TicketPage />} />
+            <Route path="/abonements" element={<Tickets />} />  
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />     
         </Routes>

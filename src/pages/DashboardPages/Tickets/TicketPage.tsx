@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import {useParams, Navigate} from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import useStudent from '../../../api/query/student/useGetStudent';
-import EditStudent from './EditStudent';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
+import EditTicket from './EditTicket';
+import useTicket from '../../../api/query/ticket/useGetTicket';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,11 +42,12 @@ function a11yProps(index: number) {
   };
 }
 
-export default function StudentPage() {
+export default function TicketPage() {
   const params = useParams<Params>();
   const [value, setValue] = React.useState(0);
-  const {data, isLoading, isFetched} = useStudent(params.id);
-  const teachersData = useTeachers();
+  const {data, isLoading, isFetched} = useTicket(params.id);
+  const teachersData = useTeachers()
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -60,19 +61,15 @@ export default function StudentPage() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Особисті дані" {...a11yProps(0)} />
-              <Tab label="Графік відвідувань" {...a11yProps(1)} />
-              <Tab label="учні" {...a11yProps(2)} />
+                <Tab label="Дані по абонемнету" {...a11yProps(0)} />
+                <Tab label="Заняття по абонементу" {...a11yProps(1)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-              <EditStudent student={data} allTeachers={teachersData.data}/>
+              <EditTicket ticket={data} teachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Item Two
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-              Item Three
+            Заняття
           </CustomTabPanel>
         </Box>
         }
