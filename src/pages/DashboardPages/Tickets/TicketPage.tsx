@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import EditTicket from './EditTicket';
 import useTicket from '../../../api/query/ticket/useGetTicket';
+import TicketLessons from './TicketsLessons';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -69,7 +70,7 @@ export default function TicketPage() {
               <EditTicket ticket={data} teachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Заняття
+            <TicketLessons ticket={data} />
           </CustomTabPanel>
         </Box>
         }

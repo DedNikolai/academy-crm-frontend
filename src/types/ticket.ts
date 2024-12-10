@@ -1,4 +1,5 @@
 import { IStudent } from "./student";
+import { Subjects } from "./subjects";
 import { ITeacher } from "./teacher";
 
 export interface IFormDataTicket {
@@ -47,7 +48,7 @@ export interface ITicketFromServer {
     student: IStudent,
     teacher: ITeacher,
     price: number,
-    subject: string,
+    subject: Subjects,
     generalAmount: number,
     usedAmount: number,
     transferred: number
