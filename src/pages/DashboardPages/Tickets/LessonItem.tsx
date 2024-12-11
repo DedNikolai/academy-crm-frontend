@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
@@ -24,10 +24,12 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { IFormDataLesson, ILesson } from "../../../types/lesson";
 import { Status } from "../../../types/lesson-status";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import FormLabel from '@mui/material/FormLabel';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
+import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
+import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson copy';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -44,7 +46,9 @@ const MenuProps = {
 };
 
 interface ILessonItem {
-    lesson: ILesson
+    lesson: ILesson,
+    copy: Function,
+    addNew: Function,
 }
 
 const schema = yup
@@ -53,39 +57,54 @@ const schema = yup
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
-    status: yup.mixed<Status>().oneOf(Object.values(Status)),
     time: yup.date().required('Обовязкове поле'),
   })
   .required()
 
-const LessonItem: FC<ILessonItem> = ({lesson}) => {
+const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
-    // const mutation = useUpdateWorktime();
-    // const deleteMutation = useDeleteWorktime();
-    // const {mutate, isPending} = mutation;
-    const isPending = false;
-    const {handleSubmit, reset, control, formState: {errors}} = useForm<IFormDataLesson>({
+    const mutation = useUpdateLesson();
+    const deleteMutation = useDeleteLesson();
+    const {mutate, isPending} = mutation;
+    const {handleSubmit, watch, setValue, control, formState: {errors}} = useForm<IFormDataLesson>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {...lesson}
-    })
+        defaultValues: {...lesson, time: lesson.date}
+    });
+
+    const copyLesson = () => {
+        const current = new Date(lesson.date);
+        const dateAfterWeek = new Date(current.setDate(current.getDate() + 7));
+        const {_id, ...rest} = lesson;
+        const copyAfterWeek: ILesson = {...rest, date: dateAfterWeek};
+        copy(copyAfterWeek);
+        addNew(true);
+    }
 
     const onSubmit: SubmitHandler<IFormDataLesson> = (data) => {
-        const updatedLesson: ILesson = {...lesson, ...data};
-        console.log(updatedLesson)
-        // mutate(updatedWorktime);    
+        const updatedLesson: ILesson = {...lesson, ...data, date: data.time};
+        mutate(updatedLesson);    
     };
+
+    const watchDate = watch('date');
+
+    useEffect(() => {
+        if (watchDate) {
+            setValue('time', new Date(watchDate))
+            setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
+        }
+    }, [watchDate])
 
     const deleteItem = () => {
         const isAccept: boolean = window.confirm("Видалити урок?");
         if (isAccept) {
             if (lesson._id) {
-                // deleteMutation.mutate(data._id)
+                deleteMutation.mutate(lesson._id)
             }
         }
     }
 
-    if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
+    if (isPending || deleteMutation.isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
 
     return (
         <Box
@@ -102,22 +121,29 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
             }}
         >
             <Grid2 container spacing={2} alignItems='flex-end'>
-                <Grid2 size={2}>
+            <Grid2 size={2}>
                     <Controller
                         name='date'
                         control={control}
                         render={({field: { onChange, value }}) => (
-                                <FormControl fullWidth={true} error={!!errors.date} size="small">
-                                    <FormLabel htmlFor="date">Дата *</FormLabel>
+                                <FormControl fullWidth={true} error={!!errors.date} size='small' >
                                      <LocalizationProvider 
                                         dateAdapter={AdapterDayjs} 
                                         adapterLocale='uk'
                                     >
                                         <DatePicker
+                                            disabled={!isEdit}
                                             value={value ? dayjs(value) : null}
                                             onChange={onChange}
+                                            slotProps={{ 
+                                                textField: { 
+                                                    size: 'small',
+                                                    error: !!errors.date 
+                                                } 
+                                            }}
                                         />
                                     </LocalizationProvider>
+                                    <FormHelperText>{errors.date?.message}</FormHelperText>   
                                 </FormControl>
                                 )}
                     />        
@@ -129,16 +155,17 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                         render={({field: { onChange, value }}) => (
                             <FormControl fullWidth={true} error={!!errors.day} size="small">
                                 <Select
-                                    disabled={!isEdit}
                                     id="day"
-                                    value={value}
+                                    value={value || ''}
                                     onChange={onChange}
                                     renderValue={(selected) => selected}
+                                    disabled
                                 >
                                     {Object.values(Days).map((name) => (
                                         <MenuItem key={name} value={name}>{name}</MenuItem>
                                         ))}
                                 </Select>
+                                <FormHelperText>{errors.time?.message}</FormHelperText>
                             </FormControl>
                             )}
                     />
@@ -148,7 +175,7 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                         name='time'
                         control={control}
                         render={({field: { onChange, value }}) => (
-                            <FormControl size="small">
+                            <FormControl size="small" error={!!errors.time}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='uk'>
                                     <TimePicker
                                         disabled={!isEdit}
@@ -158,7 +185,10 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                                         timeSteps={{hours: 1, minutes: 30}}
                                         timezone={'Europe/Kyiv'}
                                         slotProps={{
-                                            textField: { size: 'small' },
+                                            textField: { 
+                                                size: 'small',
+                                                error: !!errors.time 
+                                            },
                                             layout: {
                                             sx: {
                                                 ul: {
@@ -171,6 +201,7 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                                         }}
                                     />
                                 </LocalizationProvider>
+                                <FormHelperText>{errors.time?.message}</FormHelperText>   
                             </FormControl>
                             )}
                     />
@@ -180,13 +211,11 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                         name='durationMinutes'
                         control={control}
                         render={({field: { onChange, value }}) => (
-                            <FormControl fullWidth={true} error={!!errors.durationMinutes} size="small">
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <FormLabel htmlFor="durationMinutes">Тривалість *</FormLabel>
-                                </Box>
+                            <FormControl fullWidth={true} error={!!errors.durationMinutes} size='small'>
                                 <Select
+                                    disabled={!isEdit}
                                     id="durationMinutes"
-                                    value={value}
+                                    value={value || ''}
                                     onChange={onChange}
                                     renderValue={(selected) => selected}
                                     MenuProps={MenuProps}
@@ -209,13 +238,11 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                         name='room'
                         control={control}
                         render={({field: { onChange, value }}) => (
-                            <FormControl fullWidth={true} error={!!errors.room} size="small">
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <FormLabel htmlFor="room">Кабінет *</FormLabel>
-                                </Box>
+                            <FormControl fullWidth={true} error={!!errors.room} size='small'>
                                 <Select
+                                    disabled={!isEdit}
                                     id="durationMinutes"
-                                    value={value}
+                                    value={value || ''}
                                     onChange={onChange}
                                     renderValue={(selected) => selected}
                                     MenuProps={MenuProps}
@@ -238,10 +265,7 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                         name='status'
                         control={control}
                         render={({field: { onChange, value }}) => (
-                            <FormControl fullWidth={true} error={!!errors.status} size="small">
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="education">Предмети *</FormLabel>
-                            </Box>
+                            <FormControl fullWidth={true} error={!!errors.status} size='small'>
                             <Select
                                 id="status"
                                 value={value || ''}
@@ -249,13 +273,15 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                                 renderValue={(selected) => selected}
                                 MenuProps={MenuProps}
                                 color={!!errors.status ? 'error' : 'primary'}
+                                disabled={!isEdit}
                             >
                                 {Object.values(Status).map((name) => (
                                    <MenuItem key={name} value={name}>
                                         <Checkbox checked={!!value && value.includes(name)} />
-                                           <ListItemText primary={name} />
+                                        <ListItemText primary={name} />
                                    </MenuItem>
                                 ))}
+                                    <MenuItem value={''}>Очистити</MenuItem>                    
                             </Select>
                            <FormHelperText>{errors.status?.message}</FormHelperText>
                         </FormControl>
@@ -275,10 +301,15 @@ const LessonItem: FC<ILessonItem> = ({lesson}) => {
                                 aria-label="cancel" 
                                 onClick={() => {
                                     setIsEdit(false);
-                                    reset();
                                 }}
                             >
                                 <CancelIcon />
+                            </IconButton>
+                        }
+                        {
+                            !isEdit &&
+                            <IconButton aria-label="copy" onClick={copyLesson}>
+                                <ContentCopyIcon />
                             </IconButton>
                         }
                         {

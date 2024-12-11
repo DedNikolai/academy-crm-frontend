@@ -18,10 +18,10 @@ interface ITicketItem {
 }
 
 const TicketLessons: FC<ITicketItem> = ({ticket}) => {
+    const [copy, setCopy] = useState<ILesson | null>(null)
     const theme = useTheme();
     const [addIsOpen, setAddIsOpen] = useState<boolean>(false); 
-    const {data = [], isFetching, isLoading, isFetched} = useGetLessonsByTicket(ticket._id);
-    const isPending = false;
+    const {data = [], isLoading} = useGetLessonsByTicket(ticket._id);
 
     return (
         <Card sx={{boxShadow: 'none'}}>
@@ -56,12 +56,12 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                 </Grid2>
                 <Divider sx={{marginBottom: '15px'}}/>   
                 {
-                    isLoading || isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
-                     data.map((item: ILesson) => <LessonItem key={item._id} lesson={item}/>)
+                    isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+                     data.map((item: ILesson) => <LessonItem key={item._id} lesson={item} copy={setCopy} addNew={setAddIsOpen}/>)
                 }
                 {
                     addIsOpen &&
-                    <CreateLesson closeForm={setAddIsOpen} ticket={ticket}/>
+                    <CreateLesson closeForm={setAddIsOpen} ticket={ticket} lesson={copy}/>
                 }
                 <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
                     <Button

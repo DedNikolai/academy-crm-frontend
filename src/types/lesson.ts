@@ -15,7 +15,7 @@ export interface ILesson {
     student: IStudent | string,
     subject: Subjects,
     ticket: ITicket | string,
-    status?: Status,
+    status?: Status | '',
     time: Date
 }
 
@@ -24,6 +24,6 @@ export interface IFormDataLesson {
     date: Date,
     durationMinutes: number,
     room: number,
-    status?: Status,
+    status?: Status | '',
     time: Date
 }

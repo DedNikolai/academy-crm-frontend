@@ -33,7 +33,8 @@ dayjs.extend(timezone);
 
 interface ICreateLesson {
     closeForm: Function,
-    ticket: ITicketFromServer
+    ticket: ITicketFromServer,
+    lesson: ILesson | null
 }
 
 const ITEM_HEIGHT = 48;
@@ -53,18 +54,17 @@ const schema = yup
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
-    status: yup.mixed<Status>().oneOf(Object.values(Status)),
     time: yup.date().required('Обовязкове поле'),
   })
   .required()
 
-const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket}) => {
+const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson}) => {
     const mutation = useCreateLesson(closeForm);
     const {mutate, isPending} = mutation;
     const {setValue, watch, handleSubmit, reset, control, formState: {errors}} = useForm<IFormDataLesson>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {}
+        defaultValues: lesson|| {}
     })
 
     const watchDate = watch('date');
@@ -78,7 +78,8 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket}) => {
     
     const onSubmit: SubmitHandler<IFormDataLesson> = (data) => {
         const newLesson: ILesson = {
-            ...data, 
+            ...data,
+            date: data.time, 
             student: ticket.student._id, 
             teacher: ticket.teacher._id || '', 
             ticket: ticket._id,
@@ -248,7 +249,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket}) => {
                             <FormControl fullWidth={true} error={!!errors.status} size='small'>
                             <Select
                                 id="status"
-                                value={value || Status.NONE}
+                                value={value || ''}
                                 onChange={onChange}
                                 renderValue={(selected) => selected}
                                 MenuProps={MenuProps}
