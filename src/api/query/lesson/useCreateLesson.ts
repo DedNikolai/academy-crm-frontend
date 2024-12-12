@@ -17,9 +17,9 @@ const createLesson = async (data: ILesson) => {
 
         }
 
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Помилка при створенні уроку')
+        toast.error(error.response.data.message)
     }
 }
 

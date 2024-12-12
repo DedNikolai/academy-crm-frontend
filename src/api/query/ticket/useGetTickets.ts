@@ -12,7 +12,7 @@ const fetchTickets = async (page: number, size: number) => {
             toast.error('Cant get tickets')
             return []
         }
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
         toast.error('Cant get tickets')
     }

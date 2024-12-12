@@ -34,7 +34,8 @@ dayjs.extend(timezone);
 interface ICreateLesson {
     closeForm: Function,
     ticket: ITicketFromServer,
-    lesson: ILesson | null
+    lesson: ILesson | null,
+    setCopy: Function
 }
 
 const ITEM_HEIGHT = 48;
@@ -58,7 +59,7 @@ const schema = yup
   })
   .required()
 
-const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson}) => {
+const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) => {
     const mutation = useCreateLesson(closeForm);
     const {mutate, isPending} = mutation;
     const {setValue, watch, handleSubmit, reset, control, formState: {errors}} = useForm<IFormDataLesson>({
@@ -74,6 +75,8 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson}) => {
             setValue('time', new Date(watchDate))
             setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
         }
+
+
     }, [watchDate])
     
     const onSubmit: SubmitHandler<IFormDataLesson> = (data) => {
@@ -272,7 +275,10 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson}) => {
                 <IconButton aria-label="save" type="submit">
                         <SaveIcon />
                     </IconButton>
-                    <IconButton aria-label="cancel" onClick={() =>closeForm(false)}>
+                    <IconButton aria-label="cancel" onClick={() =>{
+                            closeForm(false);
+                            setCopy(null);
+                        }}>
                         <CancelIcon />
                     </IconButton>
                 </Grid2>

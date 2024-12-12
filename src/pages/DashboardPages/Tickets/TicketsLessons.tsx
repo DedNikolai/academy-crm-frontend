@@ -34,9 +34,9 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                 title={
                     <>
                         <Typography>{ticket.title}</Typography>
-                        <Typography>{ticket.student.fullName}</Typography>
-                        <Typography>{ticket.teacher.fullName}</Typography>
-                        <Typography>{ticket.subject}</Typography>
+                        <Typography>{`Учень: ${ticket.student.fullName}`}</Typography>
+                        <Typography>{`Вчитель: ${ticket.teacher.fullName}`}</Typography>
+                        <Typography>{`Предмет: ${ticket.subject}`}</Typography>
                     </>
                 }
                 subheader={
@@ -61,7 +61,7 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                 }
                 {
                     addIsOpen &&
-                    <CreateLesson closeForm={setAddIsOpen} ticket={ticket} lesson={copy}/>
+                    <CreateLesson setCopy={setCopy} closeForm={setAddIsOpen} ticket={ticket} lesson={copy}/>
                 }
                 <Grid2 sx={{padding: '20px', textAlign: 'right'}}>
                     <Button

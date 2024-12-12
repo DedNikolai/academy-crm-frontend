@@ -18,9 +18,9 @@ const createTicket = async (data: ITicket) => {
 
         }
 
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Помилка при створенні Абонемента')
+        toast.error(error.response.data.message)
     }
 }
 

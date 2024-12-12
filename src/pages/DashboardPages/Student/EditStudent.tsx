@@ -73,7 +73,7 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
     const mutation = useUpdateStudent(params.id);
     const {mutate, isPending} = mutation;
 
-    const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<IFormStudent>({
+    const {register, watch, handleSubmit, formState: {errors}, control} = useForm<IFormStudent>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {...student, teachers: student.teachers.map(item => item._id)}
