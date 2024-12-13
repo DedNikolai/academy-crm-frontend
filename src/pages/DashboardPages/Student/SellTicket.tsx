@@ -78,7 +78,7 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
     }, [watchStart])
 
     const onSubmit: SubmitHandler<IFormDataTicket> = (data) => {
-        const ticket: ITicket = {...data, usedAmount: 0, transferred: 0, student: student._id || ''}
+        const ticket: ITicket = {...data, student: student._id || ''}
         mutate(ticket);
     };
 

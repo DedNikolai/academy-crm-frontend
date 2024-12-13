@@ -56,9 +56,16 @@ export default function TicketPage() {
 
   if (!data && isFetched) return <Navigate to='/404' />
 
+  if (isLoading || teachersData.isLoading ) {
+    return (
+      <Card>
+         <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
+      </Card>
+    )
+  }
+
   return (
     <Card sx={{}}>
-      {isLoading || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -73,7 +80,6 @@ export default function TicketPage() {
             <TicketLessons ticket={data} />
           </CustomTabPanel>
         </Box>
-        }
     </Card>
   );
 }

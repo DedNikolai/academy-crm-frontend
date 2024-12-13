@@ -63,19 +63,18 @@ const schema = yup
 
 const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
-    const mutation = useUpdateLesson();
     const deleteMutation = useDeleteLesson();
-    const {mutate, isPending} = mutation;
-    const {handleSubmit, watch, setValue, control, formState: {errors}} = useForm<IFormDataLesson>({
+    const {handleSubmit, reset, watch, setValue, control, formState: {errors}} = useForm<IFormDataLesson>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {...lesson, time: lesson.date}
     });
-
+    const mutation = useUpdateLesson(reset);
+    const {mutate, isPending} = mutation;
     const copyLesson = () => {
         const current = new Date(lesson.date);
         const dateAfterWeek = new Date(current.setDate(current.getDate() + 7));
-        const {_id, ...rest} = lesson;
+        const {_id, status,...rest} = lesson;
         const copyAfterWeek: ILesson = {...rest, date: dateAfterWeek};
         copy(copyAfterWeek);
         addNew(true);
@@ -83,7 +82,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
 
     const onSubmit: SubmitHandler<IFormDataLesson> = (data) => {
         const updatedLesson: ILesson = {...lesson, ...data, date: data.time};
-        mutate(updatedLesson);    
+        mutate(updatedLesson);   
     };
 
     const watchDate = watch('date');

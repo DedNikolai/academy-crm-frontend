@@ -15,13 +15,13 @@ export const updateLesson = async (data: ILesson) => {
         } else {
             toast.error(response.data.message)
         }
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Помилка при оновлені уроку');
+        toast.error(error.response.data.message);
     }
 }
 
-const useUpdateLesson = () => {
+const useUpdateLesson = (reset: Function) => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationKey: ['lesson update'],
@@ -29,6 +29,10 @@ const useUpdateLesson = () => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['lessons']});
             queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket._id]});
+            queryClient.invalidateQueries({queryKey: ['ticket',  data.ticket]});
+        },
+        onError: () => {
+            reset();
         }
     })
 

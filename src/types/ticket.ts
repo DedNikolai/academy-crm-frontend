@@ -1,3 +1,4 @@
+import { ILesson } from "./lesson";
 import { IStudent } from "./student";
 import { Subjects } from "./subjects";
 import { ITeacher } from "./teacher";
@@ -22,8 +23,9 @@ export interface ITicket {
     price: number,
     subject: string,
     generalAmount: number,
-    usedAmount: number,
-    transferred: number
+    usedAmount?: number,
+    transferred?: number,
+    lessons?: ILesson[]
 }
 
 export interface IEditTicket {
@@ -35,9 +37,8 @@ export interface IEditTicket {
     price: number,
     subject: string,
     generalAmount: number,
-    usedAmount: number,
-    transferred: number,
-    student?: string
+    student?: string,
+    lessons?: ILesson[]
 }
 
 export interface ITicketFromServer {
@@ -50,6 +51,5 @@ export interface ITicketFromServer {
     price: number,
     subject: Subjects,
     generalAmount: number,
-    usedAmount: number,
-    transferred: number
+    lessons?: ILesson[],    
 }

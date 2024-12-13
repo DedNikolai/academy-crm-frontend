@@ -25,5 +25,5 @@ export interface IFormDataLesson {
     durationMinutes: number,
     room: number,
     status?: Status | '',
-    time: Date
+    time: Date,
 }

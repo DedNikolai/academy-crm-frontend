@@ -5,13 +5,15 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from '@mui/material/styles';
-import { Divider, Typography } from '@mui/material';
+import { Divider } from '@mui/material';
 import {Grid2, Button, CircularProgress, Box} from '@mui/material';
 import { ITicketFromServer } from '../../../types/ticket';
 import LessonItem from './LessonItem';
 import { ILesson } from '../../../types/lesson';
 import CreateLesson from './CreateLesson';
 import useGetLessonsByTicket from '../../../api/query/lesson/useGetLessonsByTicket';
+import { Status } from '../../../types/lesson-status';
+import dayjs from 'dayjs';
 
 interface ITicketItem {
     ticket: ITicketFromServer
@@ -32,16 +34,25 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                     </Avatar>
                 }
                 title={
-                    <>
-                        <Typography>{ticket.title}</Typography>
-                        <Typography>{`Учень: ${ticket.student.fullName}`}</Typography>
-                        <Typography>{`Вчитель: ${ticket.teacher.fullName}`}</Typography>
-                        <Typography>{`Предмет: ${ticket.subject}`}</Typography>
-                    </>
+                    <Grid2 container spacing={2}>
+                        <Grid2 size={3}>{ticket.title}</Grid2>
+                        <Grid2 size={3}>{`Учень: ${ticket.student.fullName}`}</Grid2>
+                        <Grid2 size={3}>{`Вчитель: ${ticket.teacher.fullName}`}</Grid2>
+                        <Grid2 size={3}>{`Предмет: ${ticket.subject}`}</Grid2>
+                    </Grid2>
                 }
                 subheader={
-                    `використано / скасовано / перенесено: 
-                    ${ticket.generalAmount} / ${ticket.usedAmount} / ${ticket.transferred}`
+                    <Grid2 container sx={{marginTop: '10px'}}>
+                        <Grid2 size={6}>
+                            {`використано / скасовано / перенесено: 
+                                ${ticket.generalAmount} / 
+                                ${ticket.lessons?.filter(lesson => lesson.status === Status.SUCCESS).length} / 
+                                ${ticket.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}`
+                            }
+                        </Grid2>
+                        <Grid2 size={3}>{`Початок: ${dayjs(ticket.startDate).format('DD/MM/YYYY')}`}</Grid2>
+                        <Grid2 size={3}>{`Кінець: ${dayjs(ticket.endDate).format('DD/MM/YYYY')}`}</Grid2>
+                    </Grid2>
                 }   
             />
             <CardContent sx={{padding: '0'}}>

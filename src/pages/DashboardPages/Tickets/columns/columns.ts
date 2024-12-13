@@ -1,5 +1,4 @@
 import { IStudent } from '../../../../types/student';
-import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 
 interface Column {
@@ -36,7 +35,11 @@ interface Column {
     { id: 'price', label: "Вартість", minWidth: 50, align: 'center'},
     { id: 'subject', label: "Предмет", minWidth: 50, align: 'center'},
     { id: 'generalAmount', label: "Всього", minWidth: 50, align: 'center'},
-    { id: 'usedAmount', label: "Використані", minWidth: 50, align: 'center'},
+    { id: 'usedAmount', 
+      label: "Використані", 
+      minWidth: 50, 
+      align: 'center'
+    },
     { id: 'transferred', label: "Пееренесені", minWidth: 50, align: 'center'},
     {
       id: 'actions',
