@@ -16,7 +16,8 @@ export interface ILesson {
     subject: Subjects,
     ticket: ITicket | string,
     status?: Status | '',
-    time: Date
+    time: Date,
+    actions?: null
 }
 
 export interface IFormDataLesson {

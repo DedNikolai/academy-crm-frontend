@@ -9,16 +9,15 @@ import CreateUser from "../pages/DashboardPages/CreateUser";
 import EditUser from "../pages/DashboardPages/EditUser";
 import NotFound from "../pages/NotFound";
 import TimeTable from "../pages/DashboardPages/TimeTable";
-import Journal from "../pages/DashboardPages/Journal";
-import Lessons from "../pages/DashboardPages/Lessons";
+import Journal from "../pages/DashboardPages/Jornals/Journal";
 import Tickets from "../pages/DashboardPages/Tickets/Tickets";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
 import CreateTeacher from "../pages/DashboardPages/Teacher/CreateTeacher";
 import StudentPage from "../pages/DashboardPages/Student/StudentPage";
 import CreateStudent from "../pages/DashboardPages/Student/CreateStudent";
 import Archive from "../pages/DashboardPages/Student/Archive";
-import EditTicket from "../pages/DashboardPages/Tickets/EditTicket";
 import TicketPage from "../pages/DashboardPages/Tickets/TicketPage";
+import Lessons from "../pages/DashboardPages/Lessons/Lessons";
 
 const AdminRouter: FC = () => {
     return (
