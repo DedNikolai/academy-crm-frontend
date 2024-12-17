@@ -24,7 +24,7 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
     const theme = useTheme();
     const [addIsOpen, setAddIsOpen] = useState<boolean>(false); 
     const {data = [], isLoading} = useGetLessonsByTicket(ticket._id);
-
+    
     return (
         <Card sx={{boxShadow: 'none'}}>
             <CardHeader

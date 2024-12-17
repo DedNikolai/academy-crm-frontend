@@ -265,23 +265,23 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                         control={control}
                         render={({field: { onChange, value }}) => (
                             <FormControl fullWidth={true} error={!!errors.status} size='small'>
-                            <Select
-                                id="status"
-                                value={value || ''}
-                                onChange={onChange}
-                                renderValue={(selected) => selected}
-                                MenuProps={MenuProps}
-                                color={!!errors.status ? 'error' : 'primary'}
-                                disabled={!isEdit}
-                            >
-                                {Object.values(Status).map((name) => (
-                                   <MenuItem key={name} value={name}>
-                                        <Checkbox checked={!!value && value.includes(name)} />
-                                        <ListItemText primary={name} />
-                                   </MenuItem>
-                                ))}
-                                    <MenuItem value={''}>Очистити</MenuItem>                    
-                            </Select>
+                                <Select
+                                    id="status"
+                                    value={value || ''}
+                                    onChange={onChange}
+                                    renderValue={(selected) => selected}
+                                    MenuProps={MenuProps}
+                                    color={!!errors.status ? 'error' : 'primary'}
+                                    disabled={!isEdit}
+                                >
+                                    {Object.values(Status).map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                            <Checkbox checked={!!value && value.includes(name)} />
+                                            <ListItemText primary={name} />
+                                    </MenuItem>
+                                    ))}
+                                        <MenuItem value={''}>Очистити</MenuItem>                    
+                                </Select>
                            <FormHelperText>{errors.status?.message}</FormHelperText>
                         </FormControl>
                         )}

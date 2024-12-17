@@ -1,7 +1,7 @@
 import { Days } from "./days";
 import { IStudent } from "./student";
 import { ITeacher } from "./teacher";
-import { ITicket } from "./ticket";
+import { ITicket, ITicketFromServer } from "./ticket";
 import { Status } from "./lesson-status";
 import { Subjects } from "./subjects";
 
@@ -27,4 +27,24 @@ export interface IFormDataLesson {
     room: number,
     status?: Status | '',
     time: Date,
+}
+
+export interface ILessonFromServer {
+    _id: string,
+    day: Days,
+    date: Date,
+    durationMinutes: number,
+    room: number,
+    teacher: ITeacher,
+    student: IStudent,
+    subject: Subjects,
+    ticket: ITicketFromServer,
+    status: Status | '',
+    time: Date,
+    actions?: null
+}
+
+export interface ILessonStatus {
+    _id: string,
+    status: Status
 }

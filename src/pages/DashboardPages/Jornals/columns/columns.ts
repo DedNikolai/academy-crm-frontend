@@ -1,7 +1,7 @@
 import { IStudent } from '../../../../types/student';
 import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
-import { ITicket } from '../../../../types/ticket';
+import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
 
 interface Column {
@@ -15,20 +15,20 @@ interface Column {
   
   const columns: readonly Column[] = [
     { id: 'date', 
-      label: "час", 
-      minWidth: 50,
-      format: (value: Date) => dayjs(value).format('DD/MM/YYYY')
+      label: "Час", 
+      align: 'center',
+      format: (value: Date) => dayjs(value).format('HH-mm')
     },
-    { id: 'durationMinutes', label: 'Тривалість', minWidth: 50, align: 'left' },
+    { id: 'durationMinutes', label: 'Тривалість', align: 'center' },
     {
       id: 'room',
       label: 'Кабінет',
-      align: 'left',
+      align: 'center',
     },
     {
       id: 'teacher',
-      label: 'Вчител',
-      align: 'left',
+      label: 'Вчитель',
+      align: 'center',
       format: (value: ITeacher) => value.fullName,
     },
     {
@@ -49,15 +49,15 @@ interface Column {
     },
     {
       id: 'ticket',
-      label: 'Статус',
+      label: 'Заняття',
       align: 'center',
-      format: (value: ITicket) => {
-        return value.lessons?.filter(lesson => lesson.status !== Status.TRANSFERED).length + `/` + value.generalAmount
+      format: (value: ITicketFromServer) => {
+        return value.lessons?.filter(lesson => lesson.status && lesson.status !== Status.TRANSFERED).length + `/` + value.generalAmount
       }
     },
     {
       id: 'actions',
-      label: 'Дії',
+      label: 'Абонемент',
       align: 'center',
     },
   ];
