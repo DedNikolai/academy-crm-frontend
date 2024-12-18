@@ -24,7 +24,7 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
     const theme = useTheme();
     const [addIsOpen, setAddIsOpen] = useState<boolean>(false); 
     const {data = [], isLoading} = useGetLessonsByTicket(ticket._id);
-    
+
     return (
         <Card sx={{boxShadow: 'none'}}>
             <CardHeader
@@ -57,13 +57,13 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
             />
             <CardContent sx={{padding: '0'}}>
                 <Grid2 container spacing={2} alignItems='flex-end' sx={{padding: '0 20px'}}>
-                    <Grid2 size={2}>Дата</Grid2>
-                    <Grid2 size={2}>День</Grid2>
-                    <Grid2 size={2}>час</Grid2>
-                    <Grid2 size={1}>Тривалість</Grid2>
-                    <Grid2 size={1}>Кабінет</Grid2>
-                    <Grid2 size={2}>Статус</Grid2>
-                    <Grid2 size={2} sx={{textAlign: 'right'}}>Дії</Grid2>
+                    <Grid2 size={2} sx={{textAlign: 'center'}}>Дата</Grid2>
+                    <Grid2 size={2} sx={{textAlign: 'center'}}>День</Grid2>
+                    <Grid2 size={2} sx={{textAlign: 'center'}}>Час</Grid2>
+                    <Grid2 size={1} sx={{textAlign: 'center'}}>Тривалість</Grid2>
+                    <Grid2 size={1} sx={{textAlign: 'center'}}>Кабінет</Grid2>
+                    <Grid2 size={2} sx={{textAlign: 'center'}}>Статус</Grid2>
+                    <Grid2 size={2} sx={{textAlign: 'center'}}>Дії</Grid2>
                 </Grid2>
                 <Divider sx={{marginBottom: '15px'}}/>   
                 {

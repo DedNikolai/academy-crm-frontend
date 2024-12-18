@@ -12,32 +12,28 @@ interface Column {
   }
   
   const columns: readonly Column[] = [
-    { id: 'title', label: "Назва", minWidth: 50},
+    { id: 'title', label: "Назва"},
     { id: 'startDate', 
       label: 'Початок', 
-      minWidth: 50, 
       align: 'center',
       format: (value: Date) => dayjs(value).format('DD/MM/YYYY')
     },
     { id: 'endDate', 
       label: 'Кінець', 
-      minWidth: 50, 
       align: 'center',
       format: (value: Date) => dayjs(value).format('DD/MM/YYYY')
     },
     {
       id: 'student',
       label: 'Студент',
-      minWidth: 50,
       align: 'center',
       format: (value: IStudent) => value.fullName
     },
-    { id: 'price', label: "Вартість", minWidth: 50, align: 'center'},
-    { id: 'subject', label: "Предмет", minWidth: 50, align: 'center'},
-    { id: 'generalAmount', label: "Всього", minWidth: 50, align: 'center'},
+    { id: 'price', label: "Вартість", align: 'center'},
+    { id: 'subject', label: "Предмет", align: 'center'},
+    { id: 'generalAmount', label: "Всього", align: 'center'},
     { id: 'usedAmount', 
       label: "Використані", 
-      minWidth: 50, 
       align: 'center'
     },
     { id: 'transferred', label: "Пееренесені", minWidth: 50, align: 'center'},

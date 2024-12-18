@@ -27,7 +27,6 @@ const useUpdateLessonStatus = (func: Function) => {
         mutationKey: ['lesson update status'],
         mutationFn: updateLesson,
         onSuccess: (data) => {
-            console.log(data.ticket)
             queryClient.invalidateQueries({queryKey: ['lessons']});
             queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket]});
             queryClient.invalidateQueries({queryKey: ['ticket',  data.ticket]});

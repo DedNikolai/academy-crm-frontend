@@ -88,6 +88,10 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     const watchDate = watch('date');
 
     useEffect(() => {
+        reset(lesson)
+    }, [lesson])
+
+    useEffect(() => {
         if (watchDate) {
             setValue('time', new Date(watchDate))
             setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
