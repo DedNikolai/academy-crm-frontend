@@ -70,7 +70,7 @@ export const LessonItem: FC<ILessonItemType> = ({lesson}) => {
                                 renderValue={(selected) => selected}
                                 MenuProps={MenuProps}
                                 size="small"
-                                sx={{minWidth: 100}}
+                                sx={{minWidth: 150}}
                             >
                                 {Object.values(Status).map((name) => (
                                     <MenuItem key={name} value={name}>

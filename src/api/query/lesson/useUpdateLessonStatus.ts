@@ -30,6 +30,7 @@ const useUpdateLessonStatus = (func: Function) => {
             queryClient.invalidateQueries({queryKey: ['lessons']});
             queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket]});
             queryClient.invalidateQueries({queryKey: ['ticket',  data.ticket]});
+            queryClient.invalidateQueries({queryKey: ['lessons', data.student]});
             func(data.status)
         },
 

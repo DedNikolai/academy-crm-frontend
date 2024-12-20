@@ -19,8 +19,6 @@ const StudentLessons: React.FC<{student: IStudent}> = ({student}) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {data = {docs: []}, isLoading} = useGetLessonsByStudent(page, rowsPerPage, student._id)  
 
-  const isPending = false;
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -36,7 +34,7 @@ const StudentLessons: React.FC<{student: IStudent}> = ({student}) => {
         <Grid2 size={4} sx={{}}><Typography>{`Розклад ${student.fullName}`}</Typography></Grid2>
       </Grid2>  
       {
-        isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
+        isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table" size="small">

@@ -21,7 +21,7 @@ const fetchLessons = async (page: number, size: number, studentId: string) => {
 
 const useGetLessonsByStudent = (page: number = 0, size: number = 10, studentId: string) => {
     const {data, isFetching, isLoading, isFetched} = useQuery({
-        queryKey: ['lessons', studentId, page, size],
+        queryKey: ['lessons', studentId],
         queryFn: () => fetchLessons(page, size, studentId),
         
     })

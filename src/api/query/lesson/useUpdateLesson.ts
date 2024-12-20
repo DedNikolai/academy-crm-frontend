@@ -28,8 +28,9 @@ const useUpdateLesson = (reset: Function) => {
         mutationFn: updateLesson,
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['lessons']});
-            queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket._id]});
+            queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket]});
             queryClient.invalidateQueries({queryKey: ['ticket',  data.ticket]});
+            queryClient.invalidateQueries({queryKey: ['lessons', data.student]});
         },
         onError: () => {
             reset();

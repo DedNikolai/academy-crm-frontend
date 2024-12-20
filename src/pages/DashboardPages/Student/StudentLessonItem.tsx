@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { useTheme } from '@mui/material/styles';
@@ -46,6 +46,10 @@ export const StudentLessonItem: FC<ILessonItemType> = ({lesson}) => {
         mutate(updatedLesson);
     }
 
+    useEffect(() => {
+        setStatus(lesson.status)
+    }, [lesson])
+
     return (
         <TableRow hover role="checkbox" tabIndex={-1}>
             {columns.map((column) => {
@@ -78,7 +82,7 @@ export const StudentLessonItem: FC<ILessonItemType> = ({lesson}) => {
                                 renderValue={(selected) => selected}
                                 MenuProps={MenuProps}
                                 size="small"
-                                sx={{minWidth: 100}}
+                                sx={{minWidth: 150}}
                             >
                                 {Object.values(Status).map((name) => (
                                     <MenuItem key={name} value={name}>
