@@ -89,7 +89,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
             subject: ticket.subject
         };
         mutate(newLesson);
-        reset();
+        // reset();
     };
 
     if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
@@ -271,7 +271,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                         )}
                     />
                 </Grid2>
-                <Grid2 size={2} sx={{textAlign: 'right'}}>
+                <Grid2 size={2} sx={{textAlign: 'center'}}>
                 <IconButton aria-label="save" type="submit">
                         <SaveIcon />
                     </IconButton>

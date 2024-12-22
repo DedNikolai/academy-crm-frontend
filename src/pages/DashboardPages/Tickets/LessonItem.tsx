@@ -291,10 +291,10 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                         )}
                     />
                 </Grid2>
-                <Grid2 size={2} sx={{textAlign: 'right'}}>
+                <Grid2 size={2} sx={{textAlign: 'center'}}>
                     {
                         isEdit &&
-                    <IconButton aria-label="save" type="submit">
+                            <IconButton aria-label="save" type="submit">
                                 <SaveIcon />
                             </IconButton>
                         }
