@@ -1,5 +1,5 @@
 
-import {FC, useEffect, useMemo} from 'react';
+import {FC} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -26,16 +26,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
-import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IEditTicket, ITicket, ITicketFromServer } from '../../../types/ticket';
 import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
-import {useParams, Navigate} from 'react-router-dom';
-import useTicket from '../../../api/query/ticket/useGetTicket';
-
-type Params = {
-    id: string;
-}
+import { Status } from '../../../types/lesson-status';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -56,8 +50,6 @@ const schema = yup
     endDate: yup.date().required('Обовязкове поле'),
     price: yup.number().required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
-    usedAmount: yup.number().required('Обовязкове поле'),
-    transferred: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле')
   })
   .required()
@@ -67,8 +59,7 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
     const mutation = useUpdateTicket();
 
     const {mutate, isPending} = mutation;
-    const allTeachers = ticket.student.teachers || []
-    const {register, handleSubmit, reset, formState: {errors}, control} = useForm<IEditTicket>({
+    const {register, reset, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {...ticket, student: ticket.student._id, teacher: ticket.teacher._id}
@@ -268,14 +259,11 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                         />
                     </Grid>
                     <Grid size={3}>    
-                        <FormControl fullWidth={true}  error={!!errors.usedAmount}>
+                        <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="usedAmount">Кількість використаних занять *</FormLabel>
+                                <FormLabel htmlFor="usedAmount">Використані заняття *</FormLabel>
                             </Box>
                             <TextField
-                                {...register('usedAmount')}
-                                error={!!errors.usedAmount}
-                                helperText={errors.usedAmount?.message}
                                 name="usedAmount"
                                 type="number"
                                 id="usedAmount"
@@ -283,19 +271,17 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                 required
                                 fullWidth
                                 variant="outlined"
-                                color={!!errors.usedAmount ? 'error' : 'primary'}
+                                disabled
+                                value={ticket.lessons?.filter(lesson => lesson.status === Status.SUCCESS).length}
                             />
                         </FormControl>
                     </Grid>
                     <Grid size={3}>    
-                        <FormControl fullWidth={true}  error={!!errors.transferred}>
+                        <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="transferred">Кількість перенесених занять *</FormLabel>
+                                <FormLabel htmlFor="transferred">Перенесених занять *</FormLabel>
                             </Box>
                             <TextField
-                                {...register('transferred')}
-                                error={!!errors.transferred}
-                                helperText={errors.transferred?.message}
                                 name="transferred"
                                 type="number"
                                 id="transferred"
@@ -303,7 +289,8 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                 required
                                 fullWidth
                                 variant="outlined"
-                                color={!!errors.transferred ? 'error' : 'primary'}
+                                disabled
+                                value={ticket.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}
                             />
                         </FormControl>
                     </Grid>

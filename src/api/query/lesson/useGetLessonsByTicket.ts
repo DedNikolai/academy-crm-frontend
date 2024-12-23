@@ -3,29 +3,30 @@ import axios from '../../axios';
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 
-const fetchTickets = async (page: number, size: number) => {
+const fetchLessonsByTicket = async (ticketId: string) => {
     try {
-        const response: AxiosResponse = await axios.get(`/ticket?&page=${page}&limit=${size}`);
+        const response: AxiosResponse = await axios.get(`/lesson/ticket/${ticketId}`);
         if (response.status === 200) {
             return response.data;
         } else {
             toast.error('Cant get tickets')
             return []
         }
-    } catch(error: any) {
+    } catch(error) {
         console.log(error);
         toast.error('Cant get tickets')
+        return []
     }
 }
 
-const useGetTickets = (page: number = 0, size: number = 10) => {
-    const {data, isFetching, isLoading, isFetched} = useQuery({
-        queryKey: ['tickets', page, size],
-        queryFn: () => fetchTickets(page, size),
+const useGetLessonsByTicket = (ticketId: string) => {
+    const {data = [], isFetching, isLoading, isFetched} = useQuery({
+        queryKey: ['lessons', 'ticket',  ticketId],
+        queryFn: () => fetchLessonsByTicket(ticketId),
         
     })
 
     return {data, isFetching, isLoading, isFetched}
 };
 
-export default useGetTickets;
+export default useGetLessonsByTicket;

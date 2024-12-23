@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import EditTicket from './EditTicket';
 import useTicket from '../../../api/query/ticket/useGetTicket';
+import TicketLessons from './TicketsLessons';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,9 +56,16 @@ export default function TicketPage() {
 
   if (!data && isFetched) return <Navigate to='/404' />
 
+  if (isLoading || teachersData.isLoading ) {
+    return (
+      <Card>
+         <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
+      </Card>
+    )
+  }
+
   return (
     <Card sx={{}}>
-      {isLoading || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -69,10 +77,9 @@ export default function TicketPage() {
               <EditTicket ticket={data} teachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Заняття
+            <TicketLessons ticket={data} />
           </CustomTabPanel>
         </Box>
-        }
     </Card>
   );
 }

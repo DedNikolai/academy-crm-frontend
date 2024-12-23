@@ -15,9 +15,9 @@ const deleteTeacher = async (id: string) => {
             return false;
         }
 
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Не вдалося видалити вчителя')
+        toast.error(error.response.data.message)
     }
 };
 

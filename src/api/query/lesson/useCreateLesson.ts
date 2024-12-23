@@ -2,15 +2,14 @@ import { useQueryClient, useMutation } from "@tanstack/react-query"
 import axios from "../../axios";
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
-import { ITicket } from "../../../types/ticket";
+import { ILesson } from "../../../types/lesson";
 
-const createTicket = async (data: ITicket) => {
+const createLesson = async (data: ILesson) => {
     try {
-        const response: AxiosResponse = await axios.post('/ticket', data);
+        const response: AxiosResponse = await axios.post('/lesson', data);
 
         if (response.status === 200) {
-            toast.success('Абонемент створено')
+            toast.success('Урок створено')
             return response.data;
         } else {
             toast.error(response.data.message);
@@ -24,21 +23,19 @@ const createTicket = async (data: ITicket) => {
     }
 }
 
-const useCreateTicket = () => {
+const useCreateLesson= (func: Function) => {
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const mutation = useMutation({
-        mutationKey: ['ticket create'],
-        mutationFn: createTicket,
+        mutationKey: ['lesson create'],
+        mutationFn: createLesson,
         onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['tickets']});
-            if (data._id) {
-                navigate(`/dashboard/tickets/edit/${data._id}`)
-            }
+            queryClient.invalidateQueries({queryKey: ['lessons']});
+            queryClient.invalidateQueries({queryKey: ['lessons', 'ticket', data.ticket._id]});
+            func();
         }
     })
 
     return mutation;
 }
 
-export default useCreateTicket;
+export default useCreateLesson;

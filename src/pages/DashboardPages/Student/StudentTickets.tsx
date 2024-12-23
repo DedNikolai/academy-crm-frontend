@@ -12,16 +12,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {NavLink} from "react-router-dom";
-import { Box, Button, CircularProgress, Grid2 } from "@mui/material";
+import { Box, CircularProgress, Grid2 } from "@mui/material";
 import columns from './columns/ticket-columns';
-import useGetTickets from '../../../api/query/ticket/useGetTickets';
 import { ITicket } from '../../../types/ticket';
 import useDeleteTicket from '../../../api/query/ticket/useDeleteTicket';
 import { IStudent } from '../../../types/student';
 import useGetTicketsByStudent from '../../../api/query/ticket/useGetTicketsByStudents';
+import { Status } from '../../../types/lesson-status';
 
 const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
-  const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {data = {docs: []}, isLoading} = useGetTicketsByStudent(student._id, page, rowsPerPage)  
@@ -78,6 +77,20 @@ const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = row[column.id];
+                      if (column.id === 'usedAmount') {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {row.lessons?.filter(lesson => lesson.status && lesson.status !== Status.TRANSFERED).length}
+                          </TableCell>
+                        )
+                      }
+                      if (column.id === 'transferred') {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {row.lessons?.filter(lesson =>lesson.status == Status.TRANSFERED).length}
+                          </TableCell>
+                        )
+                      }
                       if (column.id === 'actions') {
                         return (
                             <TableCell key={column.id} align={column.align}>

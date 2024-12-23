@@ -13,9 +13,9 @@ const fetchTicketById = async (id?: string) => {
             toast.error(response.data.messge)
             return null
         }
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Cant get ticket with this id')
+        toast.error(error.response.data.message)
     }
 }
 

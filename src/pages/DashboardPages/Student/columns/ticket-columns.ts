@@ -36,7 +36,10 @@ interface Column {
     { id: 'price', label: "Вартість", minWidth: 50, align: 'center'},
     { id: 'subject', label: "Предмет", minWidth: 50, align: 'center'},
     { id: 'generalAmount', label: "Всього", minWidth: 50, align: 'center'},
-    { id: 'usedAmount', label: "Використані", minWidth: 50, align: 'center'},
+    { id: 'usedAmount', 
+      label: "Використані", 
+      align: 'center'},
+      
     { id: 'transferred', label: "Пееренесені", minWidth: 50, align: 'center'},
     {
       id: 'actions',

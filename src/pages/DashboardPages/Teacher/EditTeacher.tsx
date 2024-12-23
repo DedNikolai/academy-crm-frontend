@@ -27,8 +27,9 @@ import { Subjects } from '../../../types/subjects';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -59,7 +60,8 @@ const schema = yup
     age: yup.number().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
     education: yup.string().optional(),
     birthday: yup.date().optional().nullable(),
-    worktimes: yup.array().optional()
+    worktimes: yup.array().optional(),
+    isActive: yup.boolean().required('Обовязкове поле')
   })
   .required()
 
@@ -80,7 +82,6 @@ const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
     const onSubmit: SubmitHandler<ITeacher> = (data) => {
         const updatedTeacher: ITeacher = {...data}
         mutate(updatedTeacher);
-        reset();
     };
 
     return (
@@ -237,7 +238,7 @@ const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
                             )}
                         />
                     </Grid>
-                    <Grid size={12}>    
+                    <Grid size={10}>    
                         <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <FormLabel htmlFor="education">Освіта</FormLabel>
@@ -256,6 +257,22 @@ const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
                             />
                         </FormControl>
                     </Grid>
+                    <Grid2 size={2} display='flex' alignItems='center'>
+                        <Controller
+                            name='isActive'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControlLabel control={
+                                    <Checkbox 
+                                        checked={value}
+                                        onChange={onChange}
+                                    />
+                                    } 
+                                    label="Активний" 
+                                />
+                            )}
+                        />
+                    </Grid2>
                 </Grid>
                 <Grid2 sx={{textAlign: 'right'}}>
                     <Button

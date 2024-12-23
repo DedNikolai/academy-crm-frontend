@@ -15,6 +15,8 @@ import useTeachers from "../../../api/query/teacher/useGetTeachers";
 import { useTheme } from '@mui/material/styles';
 import { ITeacher } from "../../../types/teacher";
 import useDeleteTeacher from "../../../api/query/teacher/useDeleteTeacher";
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const Teachers: FC = () => {
     const theme = useTheme();
@@ -40,6 +42,7 @@ const Teachers: FC = () => {
                 <TableCell align="center">Номер Телефону</TableCell>
                 <TableCell align="center">Пошта</TableCell>
                 <TableCell align="center">Предмети</TableCell>
+                <TableCell align="center">Активний</TableCell>
                 <TableCell align="right">Дії</TableCell>
               </TableRow>
             </TableHead>
@@ -55,6 +58,12 @@ const Teachers: FC = () => {
                   <TableCell align="center">{teacher.phone}</TableCell>
                   <TableCell align="center">{teacher.email}</TableCell>
                   <TableCell align="center">{teacher.subjects.join(', ')}</TableCell>
+                  <TableCell align="center">
+                          {
+                            teacher.isActive ? <CheckBoxIcon sx={{color: theme.status.success}} />
+                            : <CancelIcon sx={{color: theme.status.error}} />
+                          }   
+                  </TableCell>
                   <TableCell align="right">
                     <NavLink to={`/dashboard/teachers/edit/${teacher._id}`}>
                       <IconButton aria-label="edit">

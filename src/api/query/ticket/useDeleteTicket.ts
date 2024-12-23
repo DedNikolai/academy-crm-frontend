@@ -15,9 +15,9 @@ const deleteTicket = async (id: string) => {
             return false;
         }
 
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Не вдалося видалити абонемент')
+        toast.error(error.response.data.message)
     }
 };
 

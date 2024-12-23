@@ -10,6 +10,7 @@ import EditStudent from './EditStudent';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import SellTicket from './SellTicket';
 import StudentTickets from './StudentTickets';
+import StudentLessons from './StudentLessons';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -72,7 +73,7 @@ export default function StudentPage() {
               <EditStudent student={data} allTeachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Графік
+            <StudentLessons student={data} />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
               <SellTicket student={data}/>

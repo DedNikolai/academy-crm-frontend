@@ -15,9 +15,9 @@ const deleteStudent = async (id: string) => {
             return false;
         }
 
-    } catch(error) {
+    } catch(error: any) {
         console.log(error);
-        toast.error('Не вдалося видалити учня')
+        toast.error(error.response.data.message)
     }
 };
 
