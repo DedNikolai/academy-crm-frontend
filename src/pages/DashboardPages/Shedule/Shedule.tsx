@@ -99,10 +99,10 @@ export default function Journal() {
         <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead>
             <TableRow>
-                <TableCell sx={{width: 40, border: 1, borderBottom: 'none'}}/>
+                <TableCell sx={{width: 40, borderRight: 1, borderTop: 1}} />
                 {
                     weekDays.map(item => <TableCell 
-                                            sx={{width: 120, border: 1}}
+                                            sx={{width: 120, borderRight: 1, borderTop: 1}}
                                             colSpan={4} 
                                             align='center'
                                             key={item.toString()}>
@@ -111,15 +111,15 @@ export default function Journal() {
                 }
             </TableRow> 
             <TableRow>
-                <TableCell sx={{borderLeft: 1}} style={{ top: 38}}/>
+                <TableCell sx={{borderRight: 1}} style={{ top: 38}}/>
                 {
                     weekDays.map((item, index) => {
                         return (
                             <React.Fragment key={item.toString() + index}>
-                                <TableCell style={{ top: 38}} sx={{width: 30, border: 1}} align='center'>1</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, border: 1}} align='center'>2</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, border: 1}} align='center'>3</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, border: 1}} align='center'>4</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>1</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>2</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>3</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>4</TableCell>
                             </React.Fragment>
                         )
                     })
@@ -131,10 +131,10 @@ export default function Journal() {
                     times.map(item => {
                         return (
                             <TableRow key={item.toString()}>
-                                <TableCell sx={{border: 1}}>{dayjs(item).format('HH:mm')}</TableCell>
+                                <TableCell sx={{borderRight: 1, borderTop: 1}}>{dayjs(item).format('HH:mm')}</TableCell>
                                 {
                                     emptyArray().map(num => <TableCell 
-                                                                sx={{width: 30, border: 1}} align='center'
+                                                                sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'
                                                                 key={item.toString() + num}
                                                              />)
                                 }
