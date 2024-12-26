@@ -5,65 +5,26 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Box, CircularProgress, Grid2, Typography } from "@mui/material";
-// import columns from './columns/columns';
-import useGetLessons from '../../../api/query/lesson/useGetLessons';
+import { Grid2, Typography, Box, CircularProgress, Divider } from "@mui/material";
 import dayjs, {Dayjs} from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { ILessonFromServer } from '../../../types/lesson';
 import localeData from 'dayjs/plugin/localeData';
+import useGetWeekLessons from '../../../api/query/lesson/useGetWeekLessons';
+import { selectWeek } from '../../../utils/selectWeek';
+import { timesArray, emptyArray} from '../../../utils/timesArray';
+import { isLesson } from '../../../utils/isLesson';
+
 
 dayjs.extend(localeData)
-// import LessonItem from './LessonItem';
-function selectWeek(date: Dayjs | null) {
-    return Array(7).fill(date?.toDate()).map((el, idx) =>
-      new Date(el.setDate(el.getDate() - el.getDay() + idx + 1)))
-}
 
-function timesArray() {
-    let array = [];
-    const date = new Date();
-    date.setHours(9, 0, 0, 0);
-
-    while (date.getHours() < 22) {
-        const temp = new Date(date)
-        array.push(temp);
-        date.setMinutes(date.getMinutes() + 30)
-    }
-    return array;
-}
-
-function emptyArray() {
-    let arr = [];
-    for (let i = 0; i < 28; i++) {
-        arr.push(i);
-    }
-
-    return arr
-}
-
-export default function Journal() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default function Shedule() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs().startOf('day'));
   const weekDays = selectWeek(date);
   const times = timesArray();
-//   const {data = {docs: []}, isLoading} = useGetLessons(page, rowsPerPage, date)  
-
-//   const isPending = false;
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const {data = {docs: []}, isLoading} = useGetWeekLessons(date)  
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', height: '100%' }}>
@@ -93,7 +54,7 @@ export default function Journal() {
          </Grid2>
       </Grid2>  
       {
-        // isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
+        isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{height: '100vh'}}>
         <Table stickyHeader aria-label="sticky table" size="small">
@@ -133,10 +94,31 @@ export default function Journal() {
                             <TableRow key={item.toString()}>
                                 <TableCell sx={{borderRight: 1, borderTop: 1}}>{dayjs(item).format('HH:mm')}</TableCell>
                                 {
-                                    emptyArray().map(num => <TableCell 
-                                                                sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'
-                                                                key={item.toString() + num}
-                                                             />)
+                                    emptyArray().map((num, index) => {
+                                        return (
+                                            <TableCell 
+                                                sx={{
+                                                    width: 30, 
+                                                    borderRight: 1, 
+                                                    borderTop: 1,
+                                                    bgcolor: isLesson(item, index, data).isLesson ? isLesson(item, index, data).color : 'inherit'
+                                                    }} 
+                                                rowSpan={isLesson(item, index, data).isLesson ? 2 : 1}
+                                                align='center'
+                                                key={item.toString() + num}                                                              
+                                            >
+                                                {
+                                                    isLesson(item, index, data).isLesson ?
+                                                    (
+                                                        <>
+                                                            <Typography fontSize={10}>{isLesson(item, index, data).student}</Typography>
+                                                            <Typography fontSize={10}>{isLesson(item, index, data).teacher}</Typography>
+                                                        </>
+                                                    ) : ''
+                                                }
+                                            </TableCell>
+                                        )
+                                    })
                                 }
                             </TableRow>
                         )
