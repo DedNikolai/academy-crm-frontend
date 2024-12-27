@@ -16,6 +16,8 @@ import useGetWeekLessons from '../../../api/query/lesson/useGetWeekLessons';
 import { selectWeek } from '../../../utils/selectWeek';
 import { timesArray, emptyArray} from '../../../utils/timesArray';
 import { isLesson } from '../../../utils/isLesson';
+import Brightness1Icon from '@mui/icons-material/Brightness1';
+import { Colors } from '../../../types/colors';
 
 
 dayjs.extend(localeData)
@@ -52,15 +54,22 @@ export default function Shedule() {
                 />
             </LocalizationProvider>
          </Grid2>
+         <Grid2 size={2} display='flex'>Вокал - <Brightness1Icon sx={{color: '#00e5ff'}}/></Grid2>
+         <Grid2 size={2} display='flex'>Фортепіано - <Brightness1Icon sx={{color: '#ffef62'}}/></Grid2>
+         <Grid2 size={2} display='flex'>Гітара - <Brightness1Icon sx={{color: '#ffa733'}}/></Grid2>
+         <Grid2 size={2} display='flex'>Ударні - <Brightness1Icon sx={{color: '#91ff35'}}/></Grid2>
       </Grid2>  
       {
         isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
-      <TableContainer sx={{height: '100vh'}}>
-        <Table stickyHeader aria-label="sticky table" size="small">
+      <TableContainer sx={{height: '100vh', width: '100%'}} className='shedule'>
+        <Table stickyHeader aria-label="sticky table" size="small" >
           <TableHead>
             <TableRow>
-                <TableCell sx={{width: 40, borderRight: 1, borderTop: 1}} />
+                <TableCell 
+                    sx={{width: 40, borderRight: 1, borderTop: 1}}
+                    style={{ position: 'sticky', left: 0, backgroundColor: '#fff' }} 
+                />
                 {
                     weekDays.map(item => <TableCell 
                                             sx={{width: 120, borderRight: 1, borderTop: 1}}
@@ -72,7 +81,10 @@ export default function Shedule() {
                 }
             </TableRow> 
             <TableRow>
-                <TableCell sx={{borderRight: 1}} style={{ top: 38}}/>
+                <TableCell 
+                    sx={{borderRight: 1}} 
+                    style={{ top: 38, position: 'sticky', left: 0, backgroundColor: '#fff' }}
+                />
                 {
                     weekDays.map((item, index) => {
                         return (
@@ -92,7 +104,12 @@ export default function Shedule() {
                     times.map(item => {
                         return (
                             <TableRow key={item.toString()}>
-                                <TableCell sx={{borderRight: 1, borderTop: 1}}>{dayjs(item).format('HH:mm')}</TableCell>
+                                <TableCell 
+                                    sx={{borderRight: 1, borderTop: 1}}
+                                    style={{ position: 'sticky', left: 0, backgroundColor: '#fff' }} 
+                                >
+                                    {dayjs(item).format('HH:mm')}
+                                </TableCell>
                                 {
                                     emptyArray().map((num, index) => {
                                         return (
@@ -103,7 +120,7 @@ export default function Shedule() {
                                                     borderTop: 1,
                                                     bgcolor: isLesson(item, index, data).isLesson ? isLesson(item, index, data).color : 'inherit'
                                                     }} 
-                                                rowSpan={isLesson(item, index, data).isLesson ? 2 : 1}
+                                                rowSpan={isLesson(item, index, data).isLesson && isLesson(item, index, data).duration === 60 ? 2 : 1}
                                                 align='center'
                                                 key={item.toString() + num}                                                              
                                             >

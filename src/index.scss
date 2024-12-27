@@ -28,3 +28,9 @@ a {
 .nav a.active {
   color: variables.$color-main;
 }
+
+.shedule {
+  td {
+    padding: 5px;
+  }
+}
