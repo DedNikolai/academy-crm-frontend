@@ -8,7 +8,7 @@ import Profile from "../pages/DashboardPages/Profile";
 import CreateUser from "../pages/DashboardPages/CreateUser";
 import EditUser from "../pages/DashboardPages/EditUser";
 import NotFound from "../pages/NotFound";
-import TimeTable from "../pages/DashboardPages/TimeTable";
+import Shedule from "../pages/DashboardPages/Shedule/Shedule";
 import Journal from "../pages/DashboardPages/Jornals/Journal";
 import Tickets from "../pages/DashboardPages/Tickets/Tickets";
 import TeacherPage from "../pages/DashboardPages/Teacher/TeacherPage";
@@ -34,7 +34,7 @@ const AdminRouter: FC = () => {
             <Route path="/admins/create" element={<CreateUser />} /> 
             <Route path="/admins/edit/:id" element={<EditUser />} /> 
             <Route path="/profile" element={<Profile />} /> 
-            <Route path="/timetable" element={<TimeTable />} /> 
+            <Route path="/timetable" element={<Shedule />} /> 
             <Route path="/journal" element={<Journal />} /> 
             <Route path="/lessons" element={<Lessons />} /> 
             <Route path="/tickets" element={<Tickets />} />
