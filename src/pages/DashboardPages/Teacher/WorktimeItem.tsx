@@ -7,7 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { ITeacher } from '../../../types/teacher';
 import { Grid2, CircularProgress } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';

@@ -1,5 +1,6 @@
 import { ILessonFromServer } from '../types/lesson';
 import { Colors } from '../types/colors';
+import { shedule } from '../constants/app';
 
 export function isLesson(row: Date, cell: number, lessons: ILessonFromServer[]) {
     let result = {isLesson: false, color: '', teacher: '', student: '', duration: 0};
@@ -9,7 +10,7 @@ export function isLesson(row: Date, cell: number, lessons: ILessonFromServer[]) 
         return rowTime === lessonTime;
     }).forEach(lesson => {
         const lesssonDay = new Date(lesson.date).getDay() - 1;
-        if (lesssonDay*4 + lesson.room - 1 === cell) {
+        if (lesssonDay*shedule.roomsCount + lesson.room - 1 === cell) {
             result.isLesson = true
             result.color = Colors[lesson.subject];
             result.teacher = lesson.teacher.fullName;

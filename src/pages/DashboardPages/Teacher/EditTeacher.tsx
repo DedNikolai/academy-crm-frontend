@@ -30,26 +30,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-interface ITeacherItem {
-    teacher: ITeacher
-}
-
-
-type Params = {
-    id: string;
-}
+import MenuProps from '../../../utils/MenuProps';
 
 const schema = yup
   .object({
@@ -65,9 +46,9 @@ const schema = yup
   })
   .required()
 
-const EditTeacher: FC<ITeacherItem> = ({teacher}) => {
+const EditTeacher: FC<{teacher: ITeacher}> = ({teacher}) => {
     const theme = useTheme();
-    const params = useParams<Params>();
+    const params = useParams<{id: string;}>();
     const mutation = useUpdateTeacher(params.id);
     const {mutate, isPending} = mutation;
     const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<ITeacher>({

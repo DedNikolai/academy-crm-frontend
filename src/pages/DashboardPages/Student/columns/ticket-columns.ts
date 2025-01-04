@@ -1,4 +1,3 @@
-import { IStudent } from '../../../../types/student';
 import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 

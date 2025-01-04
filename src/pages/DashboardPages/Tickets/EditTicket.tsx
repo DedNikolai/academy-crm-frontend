@@ -30,17 +30,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IEditTicket, ITicket, ITicketFromServer } from '../../../types/ticket';
 import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
 import { Status } from '../../../types/lesson-status';
+import MenuProps from '../../../utils/MenuProps';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const schema = yup
   .object({

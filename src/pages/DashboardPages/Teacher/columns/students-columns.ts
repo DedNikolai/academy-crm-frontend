@@ -14,27 +14,23 @@ interface Column {
     {
       id: 'subjects',
       label: 'Предменти',
-      // minWidth: 170,
       align: 'left',
       format: (value: string[]) => value.join(', ')
     },
     {
       id: 'teachers',
       label: 'Вчителі',
-      // minWidth: 170,
       align: 'left',
       format: (value: ITeacher[]) => value && value.map(teacher => teacher.fullName).join(', ') ,
     },
     {
       id: 'isActive',
       label: 'Активний',
-      // minWidth: 170,
       align: 'center',
     },
     {
       id: 'actions',
       label: 'дії',
-      // minWidth: 170,
       align: 'center',
     },
   ];

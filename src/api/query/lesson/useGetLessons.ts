@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Dayjs } from "dayjs";
 
 const fetchLessons = async (page: number, size: number, date?: Dayjs | null) => {
-    const currentDate = date?.toDate();
+    const currentDate = date ? date?.toDate() : '';
     try {
         const response: AxiosResponse = await axios.get(`/lesson?date=${currentDate}&page=${page}&limit=${size}`);
         if (response.status === 200) {

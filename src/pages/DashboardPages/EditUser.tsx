@@ -25,10 +25,6 @@ interface ICreateUser {
     email: string;
 }
 
-type Params = {
-    id: string;
-}
-
 const schema = yup
   .object({
     fullName: yup.string().min(3, 'Мінімум 3 символи').required('Email is required'),
@@ -39,7 +35,7 @@ const schema = yup
 
 const TeacherWorkTimes: FC = () => {
     const theme = useTheme();
-    const params = useParams<Params>();
+    const params = useParams<{id: string}>();
     const {data, isLoading, isFetched} = useGetUser(params.id);
     const mutation = useUpdateUser(params.id);
     const {mutate, isPending} = mutation;

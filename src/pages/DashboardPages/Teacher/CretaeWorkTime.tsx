@@ -1,32 +1,20 @@
 import { IWorktime } from "../../../types/teacher";
-import {FC, useEffect, useState} from 'react';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Avatar from '@mui/material/Avatar';
+import {FC} from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { ITeacher } from '../../../types/teacher';
 import { Grid2, CircularProgress } from '@mui/material';
-import {useParams, Navigate} from 'react-router-dom';
-import useTeacher from '../../../api/query/teacher/useGetTaecher';
-import { useTheme } from '@mui/material/styles';
-import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import Divider from '@mui/material/Divider';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { Days } from "../../../types/days";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -55,7 +43,7 @@ const schema = yup
 const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
     const mutation = useCreateWorktime(closeForm);
     const {mutate, isPending} = mutation;
-    const {register, handleSubmit, reset, control, formState: {errors}} = useForm<IWorktime>({
+    const {handleSubmit, reset, control, formState: {errors}} = useForm<IWorktime>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {

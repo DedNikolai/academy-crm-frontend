@@ -23,14 +23,6 @@ import { resetPassword } from "../api/user";
 import { useTheme } from '@mui/material/styles';
 import styles from '../styles/style.module.scss';
 
-type TypePassword = {
-    password: string
-}
-
-type TypeParams = {
-    id: string;
-}
-
 const schema = yup
   .object({
     password: yup.string().min(6, 'Занадто Короткий пароль').required('Password is required'),
@@ -44,10 +36,10 @@ const ResetPassword: FC = () => {
     const [isPasswordUpdating, setIsPasswordUpdating] = useState<boolean>(false);
     const [updateStatus, setUpdateStstus] = useState<UpdatePasswordTypes>(UpdatePasswordTypes.PENDING)
     const token = searchParams.get('token');
-    const {id} = useParams<TypeParams>();
-    const {register, handleSubmit, reset, formState: {errors}} = useForm<TypePassword>({mode: 'onSubmit', resolver: yupResolver(schema)})
+    const {id} = useParams<{id: string}>();
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<{password: string}>({mode: 'onSubmit', resolver: yupResolver(schema)})
 
-    const onSubmit: SubmitHandler<TypePassword> = (data) => {
+    const onSubmit: SubmitHandler<{password: string}> = (data) => {
         reset();
         if (id && token) {
             setIsPasswordUpdating(true);

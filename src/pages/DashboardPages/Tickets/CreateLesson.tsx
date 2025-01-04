@@ -27,6 +27,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import useCreateLesson from '../../../api/query/lesson/useCreateLesson';
+import MenuProps from '../../../utils/MenuProps';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -37,17 +38,6 @@ interface ICreateLesson {
     lesson: ILesson | null,
     setCopy: Function
 }
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const schema = yup
   .object({

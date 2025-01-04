@@ -1,7 +1,8 @@
-import dayjs, {Dayjs} from "dayjs"
+import {Dayjs} from "dayjs"
+import { shedule } from "../constants/app"
 
 export function selectWeek(date: Dayjs | null) {
-    return Array(7).fill(date?.toDate()).map((el, idx) =>
+    return Array(shedule.daysPerWeek).fill(date?.toDate()).map((el, idx) =>
       new Date(el.setDate(el.getDate() - el.getDay() + idx + 1)))
 }
 

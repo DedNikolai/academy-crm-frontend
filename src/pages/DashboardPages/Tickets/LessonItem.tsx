@@ -30,20 +30,10 @@ import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
 import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson copy';
+import MenuProps from '../../../utils/MenuProps';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 interface ILessonItem {
     lesson: ILesson,
