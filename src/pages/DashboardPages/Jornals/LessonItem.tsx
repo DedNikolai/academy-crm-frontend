@@ -13,23 +13,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import useUpdateLessonStatus from "../../../api/query/lesson/useUpdateLessonStatus";
+import MenuProps from "../../../utils/MenuProps";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-interface ILessonItemType {
-    lesson: ILessonFromServer
-}
-
-export const LessonItem: FC<ILessonItemType> = ({lesson}) => {
+export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
     const theme = useTheme();
     const [status, setStatus] = useState<string>(lesson.status)
     const mutation = useUpdateLessonStatus(setStatus);

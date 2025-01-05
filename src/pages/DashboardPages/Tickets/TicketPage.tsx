@@ -16,10 +16,6 @@ interface TabPanelProps {
   value: number;
 }
 
-type Params = {
-    id: string;
-}
-
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -44,7 +40,7 @@ function a11yProps(index: number) {
 }
 
 export default function TicketPage() {
-  const params = useParams<Params>();
+  const params = useParams<{id: string}>();
   const [value, setValue] = React.useState(0);
   const {data, isLoading, isFetched} = useTicket(params.id);
   const teachersData = useTeachers()

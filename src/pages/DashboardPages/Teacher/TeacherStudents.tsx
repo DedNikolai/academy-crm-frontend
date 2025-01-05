@@ -22,11 +22,7 @@ import { ITeacher } from '../../../types/teacher';
 import useGetTeacherStudents from '../../../api/query/student/useGetTeacherStudents';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-interface ITeacherItem {
-    teacher: ITeacher
-}
-
-const TeacherStudents: FC<ITeacherItem> = ({teacher}) => {
+const TeacherStudents: FC<{teacher: ITeacher}> = ({teacher}) => {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

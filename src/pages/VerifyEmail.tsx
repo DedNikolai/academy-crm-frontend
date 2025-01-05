@@ -14,9 +14,6 @@ import { verifyEmail } from '../api/user';
 import { useTheme } from '@mui/material/styles';
 import styles from '../styles/style.module.scss';
 
-type Params = {
-    id: string;
-}
 
 export default function VerifyEmail() {
   const theme = useTheme();
@@ -25,7 +22,7 @@ export default function VerifyEmail() {
   const token = searchParams.get('token')  
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const authContext = useContext(AuthContext);
-  const {id} = useParams<Params>();  
+  const {id} = useParams<{id: string}>();  
 
   useEffect(() => {
     if(token && id) {

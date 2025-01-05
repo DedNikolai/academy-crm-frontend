@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ITeacher } from '../../../types/teacher';
 import { useTheme } from '@mui/material/styles';
 import WorkTimeItem from './WorktimeItem';
-import { Divider, Typography } from '@mui/material';
+import { Divider } from '@mui/material';
 import {Grid2, Button} from '@mui/material';
 import CreateWorkTime from './CretaeWorkTime';
 

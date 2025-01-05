@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Grid2, Typography, Box, CircularProgress, Divider } from "@mui/material";
+import { Grid2, Typography, Box, CircularProgress } from "@mui/material";
 import dayjs, {Dayjs} from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,10 +14,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import localeData from 'dayjs/plugin/localeData';
 import useGetWeekLessons from '../../../api/query/lesson/useGetWeekLessons';
 import { selectWeek } from '../../../utils/selectWeek';
-import { timesArray, emptyArray} from '../../../utils/timesArray';
+import { timesArray, cellsArray} from '../../../utils/timesArray';
 import { isLesson } from '../../../utils/isLesson';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
-import { Colors } from '../../../types/colors';
 
 
 dayjs.extend(localeData)
@@ -101,35 +100,37 @@ export default function Shedule() {
           </TableHead>
           <TableBody>
                 {
-                    times.map(item => {
+                    times.map((item, rowIndex) => {
                         return (
                             <TableRow key={item.toString()}>
-                                <TableCell 
+                                <TableCell
+                                    id={`${rowIndex*28}`} 
                                     sx={{borderRight: 1, borderTop: 1}}
                                     style={{ position: 'sticky', left: 0, backgroundColor: '#fff' }} 
                                 >
                                     {dayjs(item).format('HH:mm')}
                                 </TableCell>
                                 {
-                                    emptyArray().map((num, index) => {
+                                    cellsArray(item, data).map((num, cellIndex) => {
                                         return (
-                                            <TableCell 
+                                            <TableCell
+                                                id={`${rowIndex*28 + cellIndex + 1}`}  
                                                 sx={{
                                                     width: 30, 
                                                     borderRight: 1, 
                                                     borderTop: 1,
-                                                    bgcolor: isLesson(item, index, data).isLesson ? isLesson(item, index, data).color : 'inherit'
+                                                    bgcolor: isLesson(item, cellIndex, data).isLesson ? isLesson(item, cellIndex, data).color : 'inherit'
                                                     }} 
-                                                rowSpan={isLesson(item, index, data).isLesson && isLesson(item, index, data).duration === 60 ? 2 : 1}
+                                                rowSpan={isLesson(item, cellIndex, data).isLesson && isLesson(item, cellIndex, data).duration === 60 ? 2 : 1}
                                                 align='center'
                                                 key={item.toString() + num}                                                              
                                             >
                                                 {
-                                                    isLesson(item, index, data).isLesson ?
+                                                    isLesson(item, cellIndex, data).isLesson ?
                                                     (
                                                         <>
-                                                            <Typography fontSize={10}>{isLesson(item, index, data).student}</Typography>
-                                                            <Typography fontSize={10}>{isLesson(item, index, data).teacher}</Typography>
+                                                            <Typography fontSize={10}>{isLesson(item, cellIndex, data).student}</Typography>
+                                                            <Typography fontSize={10}>{isLesson(item, cellIndex, data).teacher}</Typography>
                                                         </>
                                                     ) : ''
                                                 }

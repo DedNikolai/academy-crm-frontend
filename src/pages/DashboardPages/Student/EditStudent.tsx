@@ -31,26 +31,11 @@ import 'dayjs/locale/uk';
 import { IFormStudent, IStudent } from '../../../types/student';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import useUpdateStudent from '../../../api/query/student/useUpdateStudent';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+import MenuProps from '../../../utils/MenuProps';
 
 interface IStudentItem {
     student: IStudent,
     allTeachers: ITeacher[]
-}
-
-
-type Params = {
-    id: string;
 }
 
 const schema = yup
@@ -69,7 +54,7 @@ const schema = yup
 
 const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
     const theme = useTheme();
-    const params = useParams<Params>();
+    const params = useParams<{id: string}>();
     const mutation = useUpdateStudent(params.id);
     const {mutate, isPending} = mutation;
 

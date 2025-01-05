@@ -1,11 +1,12 @@
+import { IStudent } from '../../../../types/student';
 import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
 
 interface Column {
-    id: 'date' | 'time' | 'durationMinutes' | 'room' | 'ticket'
-    | 'teacher' | 'subject' | 'status' | 'actions' | 'day';
+    id: 'date' | 'time' | 'day' | 'durationMinutes' | 'room' | 'ticket'
+    | 'teacher' | 'student' | 'subject' | 'status' | 'actions';
     label: string;
     minWidth?: number;
     align?: 'right' | 'left' | 'center';
@@ -22,9 +23,8 @@ interface Column {
       label: "Час", 
       align: 'center',
     },
-    {
-      id: 'day',
-      label: 'День',
+    { id: 'day', 
+      label: "День", 
       align: 'center',
     },
     { id: 'durationMinutes', label: 'Тривалість', align: 'center' },
@@ -38,6 +38,12 @@ interface Column {
       label: 'Вчитель',
       align: 'center',
       format: (value: ITeacher) => value.fullName,
+    },
+    {
+      id: 'student',
+      label: 'Студент',
+      align: 'center',
+      format: (value: IStudent) => value.fullName,
     },
     {
       id: 'subject',
