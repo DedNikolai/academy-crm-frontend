@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 import MenuProps from "../../../utils/MenuProps";
 
 export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
-    const theme = useTheme();
     const [status, setStatus] = useState<string>(lesson.status)
     const mutation = useUpdateLessonStatus(setStatus);
     const {mutate} = mutation;

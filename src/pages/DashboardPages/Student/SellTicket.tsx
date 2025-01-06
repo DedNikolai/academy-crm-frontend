@@ -32,6 +32,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IFormDataTicket, ITicket } from '../../../types/ticket';
 import useCreateTicket from '../../../api/query/ticket/useCreateTicket';
 import MenuProps from '../../../utils/MenuProps';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { PayTypes } from '../../../types/payment';
 
 const schema = yup
   .object({
@@ -53,10 +55,11 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
     const {register, setValue, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {teacher: '', subject: ''}
+        defaultValues: {teacher: '', subject: '', isPaid: false}
     })
     const allTeachers = teachersData.data || [];
     const watchStart = watch('startDate');
+    const watchIsPaid = watch('isPaid');
 
     useEffect(() => {
         const weeks = 5
@@ -256,6 +259,52 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                                     ))}
                                 </Select>
                                 <FormHelperText>{errors.teacher?.message}</FormHelperText>
+                            </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid2 size={3} display='flex' alignItems='center'>
+                        <Controller
+                            name='isPaid'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControlLabel control={
+                                    <Checkbox 
+                                        checked={value}
+                                        onChange={onChange}
+                                    />
+                                } 
+                            label="Оплата" 
+                        />
+                        )}
+                        />
+                    </Grid2>
+                    <Grid size={3}>
+                        <Controller
+                            name='payType'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true} error={!!errors.payType}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <FormLabel htmlFor="education">Тип Оплати</FormLabel>
+                                </Box>
+                                <Select
+                                    id="payType"
+                                    value={value || ''}
+                                    onChange={onChange}
+                                    renderValue={(selected) => selected}
+                                    MenuProps={MenuProps}
+                                    color={!!errors.payType ? 'error' : 'primary'}
+                                    disabled={!watchIsPaid}
+                                >
+                                    {Object.values(PayTypes).map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                            <Checkbox checked={!!value && value === name} />
+                                            <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{errors.payType?.message}</FormHelperText>
                             </FormControl>
                             )}
                         />
