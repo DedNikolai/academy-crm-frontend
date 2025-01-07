@@ -18,8 +18,12 @@ import useDeleteTicket from '../../../api/query/ticket/useDeleteTicket';
 import { IStudent } from '../../../types/student';
 import useGetTicketsByStudent from '../../../api/query/ticket/useGetTicketsByStudents';
 import { Status } from '../../../types/lesson-status';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import { useTheme } from '@mui/material/styles';
 
 const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
+  const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {data = {docs: []}, isLoading} = useGetTicketsByStudent(student._id, page, rowsPerPage)  
@@ -76,6 +80,16 @@ const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = row[column.id];
+                      if (column.id === 'isPaid') {
+                        return (
+                            <TableCell key={column.id} align={column.align}>
+                              {row.isPaid ? 
+                                <CheckIcon sx={{color: theme.status.success}}/> 
+                                : 
+                                <ClearIcon sx={{color: theme.status.error}}/>}
+                            </TableCell>
+                        )
+                      }
                       if (column.id === 'usedAmount') {
                         return (
                           <TableCell key={column.id} align={column.align}>

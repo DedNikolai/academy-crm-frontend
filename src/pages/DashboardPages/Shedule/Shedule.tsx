@@ -17,6 +17,7 @@ import { selectWeek } from '../../../utils/selectWeek';
 import { timesArray, cellsArray} from '../../../utils/timesArray';
 import { isLesson } from '../../../utils/isLesson';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
+import { NavLink } from 'react-router-dom';
 
 
 dayjs.extend(localeData)
@@ -25,7 +26,7 @@ export default function Shedule() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs().startOf('day'));
   const weekDays = selectWeek(date);
   const times = timesArray();
-  const {data = {docs: []}, isLoading} = useGetWeekLessons(date)  
+  const {data = {docs: []}, isLoading} = useGetWeekLessons(date);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', height: '100%' }}>
@@ -114,12 +115,13 @@ export default function Shedule() {
                                     cellsArray(item, data).map((num, cellIndex) => {
                                         return (
                                             <TableCell
-                                                id={`${rowIndex*28 + cellIndex + 1}`}  
+                                                id={`${rowIndex*28 + cellIndex + 1}`}
                                                 sx={{
                                                     width: 30, 
                                                     borderRight: 1, 
                                                     borderTop: 1,
-                                                    bgcolor: isLesson(item, cellIndex, data).isLesson ? isLesson(item, cellIndex, data).color : 'inherit'
+                                                    cursor: isLesson(item, cellIndex, data).isLesson ? 'pointer' : 'inherit',
+                                                    bgcolor: isLesson(item, cellIndex, data).isLesson ? isLesson(item, cellIndex, data).color : 'inherit',
                                                     }} 
                                                 rowSpan={isLesson(item, cellIndex, data).isLesson && isLesson(item, cellIndex, data).duration === 60 ? 2 : 1}
                                                 align='center'
@@ -127,12 +129,12 @@ export default function Shedule() {
                                             >
                                                 {
                                                     isLesson(item, cellIndex, data).isLesson ?
-                                                    (
-                                                        <>
-                                                            <Typography fontSize={10}>{isLesson(item, cellIndex, data).student}</Typography>
-                                                            <Typography fontSize={10}>{isLesson(item, cellIndex, data).teacher}</Typography>
-                                                        </>
-                                                    ) : ''
+                                                    <NavLink to={`/dashboard/tickets/edit/${isLesson(item, cellIndex, data).ticket}`}>
+                                                        <Typography fontSize={10} sx={{cursor: 'pointer'}}>
+                                                            {isLesson(item, cellIndex, data).student  + ' / ' + isLesson(item, cellIndex, data).teacher}
+                                                        </Typography>
+                                                    </NavLink>
+                                                    : ''
                                                 }
                                             </TableCell>
                                         )

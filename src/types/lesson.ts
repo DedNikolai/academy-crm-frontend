@@ -41,7 +41,8 @@ export interface ILessonFromServer {
     ticket: ITicketFromServer,
     status: Status | '',
     time: Date,
-    actions?: null
+    actions?: null,
+    isPaid?: boolean
 }
 
 export interface ILessonStatus {

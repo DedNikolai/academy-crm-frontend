@@ -15,8 +15,11 @@ import ListItemText from '@mui/material/ListItemText';
 import useUpdateLessonStatus from "../../../api/query/lesson/useUpdateLessonStatus";
 import dayjs from 'dayjs';
 import MenuProps from "../../../utils/MenuProps";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
+    const theme = useTheme();
     const [status, setStatus] = useState<string>(lesson.status)
     const mutation = useUpdateLessonStatus(setStatus);
     const {mutate} = mutation;
@@ -39,6 +42,16 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
                     return (
                         <TableCell key={column.id} align={column.align}>
                             {dayjs(lesson.date).format('HH-mm')}
+                        </TableCell>
+                    )
+                }
+                if (column.id === 'isPaid') {
+                    return (
+                        <TableCell key={column.id} align={column.align}>
+                          {lesson.ticket.isPaid ? 
+                            <CheckIcon sx={{color: theme.status.success}}/> 
+                            : 
+                            <ClearIcon sx={{color: theme.status.error}}/>}
                         </TableCell>
                     )
                 }

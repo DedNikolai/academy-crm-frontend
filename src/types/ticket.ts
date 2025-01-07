@@ -58,5 +58,7 @@ export interface ITicketFromServer {
     price: number,
     subject: Subjects,
     generalAmount: number,
-    lessons: ILesson[],    
+    lessons: ILesson[],  
+    isPaid: boolean,
+    payType?: string  
 }

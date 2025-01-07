@@ -4,7 +4,7 @@ export interface IPayment {
     value: number
 }
 
-export enum PayTypes {
-    Cash = "Готівка",
-    Card = 'Безнал',
+export const PayTypes = {
+    'Cash': "Готівка",
+    'Card': 'Безнал',
 }

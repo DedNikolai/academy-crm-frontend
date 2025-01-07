@@ -68,7 +68,13 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
             const end = start.setDate(start.getDate() + weeks * 7)
             setValue('endDate', new Date(end))
         }
-    }, [watchStart])
+    }, [watchStart]);
+
+    useEffect(() => {
+        if (!watchIsPaid) {
+            setValue('payType', '')
+        }
+    }, [watchIsPaid])
 
     const onSubmit: SubmitHandler<IFormDataTicket> = (data) => {
         const ticket: ITicket = {...data, student: student._id || ''}
@@ -285,25 +291,25 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                             control={control}
                             render={({field: { onChange, value }}) => (
                                 <FormControl fullWidth={true} error={!!errors.payType}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <FormLabel htmlFor="education">Тип Оплати</FormLabel>
-                                </Box>
-                                <Select
-                                    id="payType"
-                                    value={value || ''}
-                                    onChange={onChange}
-                                    renderValue={(selected) => selected}
-                                    MenuProps={MenuProps}
-                                    color={!!errors.payType ? 'error' : 'primary'}
-                                    disabled={!watchIsPaid}
-                                >
-                                    {Object.values(PayTypes).map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={!!value && value === name} />
-                                            <ListItemText primary={name} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormLabel htmlFor="education">Тип Оплати</FormLabel>
+                                    </Box>
+                                    <Select
+                                        id="payType"
+                                        value={value || ''}
+                                        onChange={onChange}
+                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        MenuProps={MenuProps}
+                                        color={!!errors.payType ? 'error' : 'primary'}
+                                        disabled={!watchIsPaid}
+                                    >
+                                        {Object.keys(PayTypes).map((key) => (
+                                            <MenuItem key={key} value={key}>
+                                                <Checkbox checked={!!value && value === key} />
+                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
                                 <FormHelperText>{errors.payType?.message}</FormHelperText>
                             </FormControl>
                             )}

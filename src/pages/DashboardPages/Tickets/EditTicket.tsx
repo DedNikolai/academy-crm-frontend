@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -53,27 +53,33 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
     const mutation = useUpdateTicket();
 
     const {mutate, isPending} = mutation;
-    const {register, watch, getValues, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
+    const {register, watch, setValue, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {...ticket, student: ticket.student._id, teacher: ticket.teacher._id}
+        defaultValues: {
+            ...ticket, 
+            student: ticket.student._id, 
+            teacher: ticket.teacher._id,
+        }
     })
 
     const onSubmit: SubmitHandler<IEditTicket> = (value) => {
-        const indexOf = Object.values(PayTypes).indexOf(value.payType as unknown as PayTypes);
-
-        const payType = Object.keys(PayTypes)[indexOf];
         const updated: ITicket = {
             ...value, 
             _id: ticket._id, 
             student: ticket.student._id,
-            payType
             
         }
         mutate(updated);
     };
 
     const watchIsPaid = watch('isPaid');
+
+    useEffect(() => {
+        if (!watchIsPaid) {
+            setValue('payType', '')
+        }
+    }, [watchIsPaid])
 
     return (
         <>
@@ -321,25 +327,25 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                             control={control}
                             render={({field: { onChange, value }}) => (
                                 <FormControl fullWidth={true} error={!!errors.payType}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <FormLabel htmlFor="education">Тип Оплати</FormLabel>
-                                </Box>
-                                <Select
-                                    id="payType"
-                                    value={value || ''}
-                                    onChange={onChange}
-                                    renderValue={(selected) => selected}
-                                    MenuProps={MenuProps}
-                                    color={!!errors.payType ? 'error' : 'primary'}
-                                    disabled={!watchIsPaid}
-                                >
-                                    {Object.values(PayTypes).map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={!!value && value === name} />
-                                            <ListItemText primary={name} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormLabel htmlFor="education">Тип Оплати</FormLabel>
+                                    </Box>
+                                    <Select
+                                        id="payType"
+                                        value={value || ''}
+                                        onChange={onChange}
+                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        MenuProps={MenuProps}
+                                        color={!!errors.payType ? 'error' : 'primary'}
+                                        disabled={!watchIsPaid}
+                                    >
+                                        {Object.keys(PayTypes).map((key) => (
+                                            <MenuItem key={key} value={key}>
+                                                <Checkbox checked={!!value && value === key} />
+                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
                                 <FormHelperText>{errors.payType?.message}</FormHelperText>
                             </FormControl>
                             )}

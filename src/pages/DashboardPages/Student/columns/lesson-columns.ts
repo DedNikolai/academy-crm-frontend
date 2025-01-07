@@ -5,7 +5,7 @@ import { Status } from '../../../../types/lesson-status';
 
 interface Column {
     id: 'date' | 'time' | 'durationMinutes' | 'room' | 'ticket'
-    | 'teacher' | 'subject' | 'status' | 'actions' | 'day';
+    | 'teacher' | 'subject' | 'status' | 'actions' | 'day' | 'isPaid';
     label: string;
     minWidth?: number;
     align?: 'right' | 'left' | 'center';
@@ -56,6 +56,11 @@ interface Column {
       format: (value: ITicketFromServer) => {
         return value.lessons?.filter(lesson => lesson.status && lesson.status !== Status.TRANSFERED).length + `/` + value.generalAmount
       }
+    },
+    {
+      id: 'isPaid',
+      label: 'Оплата',
+      align: 'center',
     },
     {
       id: 'actions',
