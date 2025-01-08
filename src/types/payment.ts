@@ -5,6 +5,6 @@ export interface IPayment {
 }
 
 export const PayTypes = {
-    'Cash': "Готівка",
-    'Card': 'Безнал',
+    'cash': "Готівка",
+    'card': 'Безнал',
 }

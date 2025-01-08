@@ -19,8 +19,9 @@ const createTicket = async (data: ITicket) => {
         }
 
     } catch(error: any) {
+        const result = error.response.data;
         console.log(error);
-        toast.error(error.response.data.message)
+        toast.error(result.message || result[0].msg)
     }
 }
 

@@ -26,6 +26,7 @@ import FeaturedPlayListIcon from '@mui/icons-material/FeaturedPlayList';
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import PaidIcon from '@mui/icons-material/Paid';
 
 const menuList = [
   {
@@ -69,6 +70,12 @@ const menuList = [
     title: 'Абонементи',
     link: '/dashboard/tickets',
     icon: <BookOnlineIcon />
+  },
+  {
+    id: 9,
+    title: 'Виплати',
+    link: '/dashboard/payments',
+    icon: <PaidIcon />
   },
   {
     id: 8,

@@ -45,6 +45,9 @@ const schema = yup
     generalAmount: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле'),
     isPaid: yup.boolean().required('Обовязкове поле'),
+    // payType: yup.string().when('isPaid', ([isPaid], schema) => {
+    //     return isPaid ? schema.required('Виберіть тип оплати') : schema;
+    // })
   })
   .required()
 
