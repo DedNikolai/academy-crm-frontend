@@ -2,7 +2,7 @@ import { FC, Fragment, useContext } from "react";
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
-import { Box, CircularProgress, Grow } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import SavingsIcon from '@mui/icons-material/Savings';
 import { CardHeader } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
@@ -11,26 +11,31 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { AuthContext } from "../../components/AuthProvider";
 import usePayAccounts from "../../api/query/payments/useGetPayAccounts";
+import useGetTeachers from '../../api/query/teacher/useGetTeachers';
 import { IPayment, PayTypes } from "../../types/payment";
-import useGetStudents from "../../api/query/student/useGetStudents";
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Colors } from "../../types/colors";
 import useGetAllStudents from "../../api/query/student/useGetAllStudents";
 import { IStudent } from "../../types/student";
 import { Subjects } from "../../types/subjects";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { ITeacher } from "../../types/teacher";
+import { teacherStudentsCount } from "../../utils/teacherStudentsCount";
 
 const Home: FC = () => {
     const theme = useTheme();
     const authContext = useContext(AuthContext);
     const {data = [], isLoading} = usePayAccounts();
     const students = useGetAllStudents();
+    const teachers = useGetTeachers()
     const balanse = data.reduce((total: number, item: IPayment) => total + item.value, 0);
-    const cash = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] == PayTypes.cash)[0].value;
-    const card = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] == PayTypes.card)[0].value;
+    const cash = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.cash)[0].value;
+    const card = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.card)[0].value;
     const vocalCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.VOKAL)).length;
     const pianoCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.FORTEPIANO)).length;
     const guitarCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.GUITAR)).length;
     const drumsCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.DRUMS)).length;
+    const teachersList = teachers.data && teachers.data.map((item: ITeacher) => item.fullName);
     
     return (
        <Fragment>
@@ -38,7 +43,7 @@ const Home: FC = () => {
                 {`Вітаємо, ${authContext?.user?.fullName} 👋`}
             </Typography>
             {
-            isLoading || students.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isLoading || students.isLoading || teachers.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <Grid container spacing={1} alignItems='center'>
                 <Grid size={3}>
                     <Card>
@@ -123,6 +128,26 @@ const Home: FC = () => {
                                 },
                             ]}
                             width={400}
+                            height={200}
+                        />
+                    </Card>
+                </Grid>
+                <Grid size={6}>
+                    <Card>
+                        <BarChart
+                            xAxis={[
+                                {
+                                id: 'barCategories',
+                                data: teachersList,
+                                scaleType: 'band',
+                                },
+                            ]}
+                            series={[
+                                {
+                                data: teacherStudentsCount(teachers.data, students.data),
+                                },
+                            ]}
+                            width={500}
                             height={200}
                         />
                     </Card>
