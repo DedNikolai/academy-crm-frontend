@@ -20,7 +20,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
     const theme = useTheme();
     const [status, setStatus] = useState<string>(lesson.status)
-    const mutation = useUpdateLessonStatus(setStatus);
+    const mutation = useUpdateLessonStatus(setStatus, () => {});
     const {mutate} = mutation;
 
     const onChange = (e: SelectChangeEvent) => {

@@ -10,10 +10,6 @@ import TableRow from '@mui/material/TableRow';
 import { Box, CircularProgress, Grid2, Typography } from "@mui/material";
 import columns from './columns/columns';
 import useGetLessons from '../../../api/query/lesson/useGetLessons';
-import dayjs, {Dayjs} from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ILessonFromServer } from '../../../types/lesson';
 import LessonItem from './LessonItem';
 
@@ -32,7 +28,6 @@ export default function Lessons() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Grid2 container spacing={3} sx={{padding: '20px'}} alignItems='center'>

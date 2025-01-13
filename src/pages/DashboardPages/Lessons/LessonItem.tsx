@@ -10,7 +10,7 @@ import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import { Status } from "../../../types/lesson-status";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox, {} from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import useUpdateLessonStatus from "../../../api/query/lesson/useUpdateLessonStatus";
 import dayjs from 'dayjs';
@@ -20,8 +20,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
     const theme = useTheme();
-    const [status, setStatus] = useState<string>(lesson.status)
-    const mutation = useUpdateLessonStatus(setStatus);
+    const [status, setStatus] = useState<string>(lesson.status);
+    const [payout, setPayout] = useState<boolean>(!!lesson.payout)
+    const mutation = useUpdateLessonStatus(setStatus, setPayout);
     const {mutate} = mutation;
 
     const onChange = (e: SelectChangeEvent) => {
@@ -30,6 +31,16 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
             status: e.target.value as Status,
             student: lesson.student._id,
             ticket: lesson.ticket._id
+        }
+        mutate(updatedLesson);
+    }
+
+    const onChangePayout = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedLesson: ILesson = {
+            ...lesson,
+            student: lesson.student._id,
+            ticket: lesson.ticket._id,
+            payout: e.target.checked
         }
         mutate(updatedLesson);
     }
@@ -86,6 +97,16 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
                                 ))}
                                 <MenuItem value={''}>Очистити</MenuItem>                    
                              </Select>
+                        </TableCell>
+                    )
+                }
+                if (column.id === 'payout') {
+                    return (
+                        <TableCell key={column.id} align={column.align}>
+                            <Checkbox 
+                                checked={payout}
+                                onChange={onChangePayout}
+                            />
                         </TableCell>
                     )
                 }     

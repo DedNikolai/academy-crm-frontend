@@ -17,7 +17,8 @@ export interface ILesson {
     ticket: ITicket | string,
     status?: Status | '',
     time: Date,
-    actions?: null
+    actions?: null,
+    payout?: boolean
 }
 
 export interface IFormDataLesson {
@@ -27,6 +28,7 @@ export interface IFormDataLesson {
     room: number,
     status?: Status | '',
     time: Date,
+    payout?: boolean
 }
 
 export interface ILessonFromServer {
@@ -42,10 +44,11 @@ export interface ILessonFromServer {
     status: Status | '',
     time: Date,
     actions?: null,
-    isPaid?: boolean
+    isPaid?: boolean,
+    payout?: boolean
 }
 
 export interface ILessonStatus {
     _id: string,
-    status: Status
+    status: Status,
 }

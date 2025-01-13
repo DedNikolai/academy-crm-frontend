@@ -3,7 +3,7 @@ import { IWorktime } from '../../../types/teacher';
 import axios from '../../axios';
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { ILesson, ILessonFromServer, ILessonStatus } from '../../../types/lesson';
+import { ILesson} from '../../../types/lesson';
 
 export const updateLesson = async (data: ILesson) => {
     try {
@@ -21,7 +21,7 @@ export const updateLesson = async (data: ILesson) => {
     }
 }
 
-const useUpdateLessonStatus = (func: Function) => {
+const useUpdateLessonStatus = (updateStatus: Function, updatePayout: Function) => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationKey: ['lesson update status'],
@@ -31,7 +31,8 @@ const useUpdateLessonStatus = (func: Function) => {
             queryClient.invalidateQueries({queryKey: ['lessons', 'ticket',  data.ticket]});
             queryClient.invalidateQueries({queryKey: ['ticket',  data.ticket]});
             queryClient.invalidateQueries({queryKey: ['lessons', data.student]});
-            func(data.status)
+            updateStatus(data.status);
+            updatePayout(data.payout);
         },
 
     })

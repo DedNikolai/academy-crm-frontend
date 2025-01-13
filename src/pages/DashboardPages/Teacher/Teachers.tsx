@@ -43,7 +43,8 @@ const Teachers: FC = () => {
                 <TableCell align="center">Пошта</TableCell>
                 <TableCell align="center">Предмети</TableCell>
                 <TableCell align="center">Активний</TableCell>
-                <TableCell align="right">Дії</TableCell>
+                <TableCell align="center">Баланс</TableCell>
+                <TableCell align="center">Дії</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -64,7 +65,8 @@ const Teachers: FC = () => {
                             : <CancelIcon sx={{color: theme.status.error}} />
                           }   
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">{teacher.balance}</TableCell>
+                  <TableCell align="center">
                     <NavLink to={`/dashboard/teachers/edit/${teacher._id}`}>
                       <IconButton aria-label="edit">
                             <EditIcon />
