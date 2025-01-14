@@ -4,7 +4,7 @@ import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
 
 interface Column {
-    id: 'date' | 'time' | 'durationMinutes' | 'room' | 'ticket'
+    id: 'date' | 'time' | 'durationMinutes' | 'room' | 'ticket' | 'payout'
     | 'teacher' | 'subject' | 'status' | 'actions' | 'day' | 'isPaid';
     label: string;
     minWidth?: number;
@@ -47,6 +47,11 @@ interface Column {
     {
       id: 'status',
       label: 'Статус',
+      align: 'center',
+    },
+    {
+      id: 'payout',
+      label: 'Виплата',
       align: 'center',
     },
     {

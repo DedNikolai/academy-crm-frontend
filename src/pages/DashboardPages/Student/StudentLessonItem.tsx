@@ -20,9 +20,20 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 export const StudentLessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
     const theme = useTheme();
-    const [status, setStatus] = useState<string>(lesson.status)
-    const mutation = useUpdateLessonStatus(setStatus, () => {});
+    const [status, setStatus] = useState<string>(lesson.status);
+    const [payout, setPayout] = useState<boolean>(!!lesson.payout);
+    const mutation = useUpdateLessonStatus(setStatus, setPayout);
     const {mutate} = mutation;
+    
+    const onChangePayout = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedLesson: ILesson = {
+            ...lesson,
+            student: lesson.student._id,
+            ticket: lesson.ticket._id,
+            payout: e.target.checked
+        }
+        mutate(updatedLesson);
+    }
 
     const onChange = (e: SelectChangeEvent) => {
         const updatedLesson: ILesson = {
@@ -90,6 +101,16 @@ export const StudentLessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => 
                                 ))}
                                 <MenuItem value={''}>Очистити</MenuItem>                    
                              </Select>
+                        </TableCell>
+                    )
+                }
+                if (column.id === 'payout') {
+                    return (
+                        <TableCell key={column.id} align={column.align}>
+                             <Checkbox 
+                                checked={payout}
+                                onChange={onChangePayout}
+                            />
                         </TableCell>
                     )
                 }     
