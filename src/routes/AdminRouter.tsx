@@ -18,7 +18,8 @@ import CreateStudent from "../pages/DashboardPages/Student/CreateStudent";
 import Archive from "../pages/DashboardPages/Student/Archive";
 import TicketPage from "../pages/DashboardPages/Tickets/TicketPage";
 import Lessons from "../pages/DashboardPages/Lessons/Lessons";
-import Payments from "../pages/Payments";
+import Salary from "../pages/DashboardPages/Salary/Salaries";
+import CreateSalary from "../pages/DashboardPages/Salary/CreateSalary";
 
 const AdminRouter: FC = () => {
     return (
@@ -41,7 +42,8 @@ const AdminRouter: FC = () => {
             <Route path="/tickets" element={<Tickets />} />
             <Route path="/tickets/edit/:id" element={<TicketPage />} />
             <Route path="/abonements" element={<Tickets />} /> 
-            <Route path="/payments" element={<Payments />} />  
+            <Route path="/salary" element={<Salary />} /> 
+            <Route path="/salary/create" element={<CreateSalary />} />  
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />     
         </Routes>

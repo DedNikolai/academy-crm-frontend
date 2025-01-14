@@ -29,7 +29,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
-import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson copy';
+import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson';
 import MenuProps from '../../../utils/MenuProps';
 
 dayjs.extend(utc);

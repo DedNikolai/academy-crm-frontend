@@ -73,8 +73,8 @@ const menuList = [
   },
   {
     id: 9,
-    title: 'Виплати',
-    link: '/dashboard/payments',
+    title: 'Зарплати',
+    link: '/dashboard/salary',
     icon: <PaidIcon />
   },
   {
