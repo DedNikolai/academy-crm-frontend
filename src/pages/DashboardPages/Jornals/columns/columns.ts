@@ -5,8 +5,8 @@ import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
 
 interface Column {
-    id: 'date' | 'durationMinutes' | 'room' | 'ticket'
-    | 'teacher' | 'student' | 'subject' | 'status' | 'actions';
+    id: 'date' | 'durationMinutes' | 'room' | 'ticket' | 'payout'
+    | 'teacher' | 'student' | 'subject' | 'status' | 'actions' | 'isPaid';
     label: string;
     minWidth?: number;
     align?: 'right' | 'left' | 'center';
@@ -48,12 +48,22 @@ interface Column {
       align: 'center',
     },
     {
+      id: 'payout',
+      label: 'Виплата',
+      align: 'center',
+    },
+    {
       id: 'ticket',
       label: 'Заняття',
       align: 'center',
       format: (value: ITicketFromServer) => {
         return value.lessons?.filter(lesson => lesson.status && lesson.status !== Status.TRANSFERED).length + `/` + value.generalAmount
       }
+    },
+    {
+      id: 'isPaid',
+      label: 'Оплата',
+      align: 'center',
     },
     {
       id: 'actions',

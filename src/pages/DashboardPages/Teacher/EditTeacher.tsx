@@ -189,7 +189,7 @@ const EditTeacher: FC<{teacher: ITeacher}> = ({teacher}) => {
                                 />
                         </FormControl>
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={10}>
                         <Controller
                             name='subjects'
                             control={control}
@@ -218,6 +218,26 @@ const EditTeacher: FC<{teacher: ITeacher}> = ({teacher}) => {
                             </FormControl>
                             )}
                         />
+                    </Grid>
+                    <Grid size={2}>
+                        <FormControl fullWidth={true} error={!!errors.balance}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <FormLabel htmlFor="phone">Баланс</FormLabel>
+                            </Box>
+                            <TextField
+                                {...register('balance')}
+                                error={!!errors.balance}
+                                helperText={errors.balance?.message}
+                                name="balance"
+                                type="number"
+                                id="balance"
+                                autoFocus
+                                required
+                                fullWidth
+                                variant="outlined"
+                                color={!!errors.balance ? 'error' : 'primary'}
+                            />
+                        </FormControl>
                     </Grid>
                     <Grid size={10}>    
                         <FormControl fullWidth={true}>

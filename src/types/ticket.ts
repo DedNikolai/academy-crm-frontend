@@ -11,6 +11,9 @@ export interface IFormDataTicket {
     price: number,
     subject: string,
     generalAmount: number,
+    isPaid?: boolean,
+    payType?: string
+
 }
 
 export interface ITicket {
@@ -25,7 +28,9 @@ export interface ITicket {
     generalAmount: number,
     usedAmount?: number,
     transferred?: number,
-    lessons?: ILesson[]
+    lessons?: ILesson[],
+    isPaid?: boolean,
+    payType?: string
 }
 
 export interface IEditTicket {
@@ -38,7 +43,9 @@ export interface IEditTicket {
     subject: string,
     generalAmount: number,
     student?: string,
-    lessons?: ILesson[]
+    lessons?: ILesson[],
+    isPaid: boolean,
+    payType?: string
 }
 
 export interface ITicketFromServer {
@@ -51,5 +58,7 @@ export interface ITicketFromServer {
     price: number,
     subject: Subjects,
     generalAmount: number,
-    lessons: ILesson[],    
+    lessons: ILesson[],  
+    isPaid: boolean,
+    payType?: string  
 }

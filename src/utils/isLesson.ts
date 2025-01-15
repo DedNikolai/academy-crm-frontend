@@ -3,7 +3,7 @@ import { Colors } from '../types/colors';
 import { shedule } from '../constants/app';
 
 export function isLesson(row: Date, cell: number, lessons: ILessonFromServer[]) {
-    let result = {isLesson: false, color: '', teacher: '', student: '', duration: 0};
+    let result = {isLesson: false, color: '', teacher: '', student: '', duration: 0, ticket: ''};
     lessons.filter(lesson => {
         const lessonTime = new Date(lesson.date).getHours()*60 + new Date(lesson.date).getMinutes();
         const rowTime = new Date(row).getHours()*60 + new Date(row).getMinutes();
@@ -16,6 +16,7 @@ export function isLesson(row: Date, cell: number, lessons: ILessonFromServer[]) 
             result.teacher = lesson.teacher.fullName;
             result.student = lesson.student.fullName;
             result.duration = lesson.durationMinutes;
+            result.ticket = lesson.ticket._id;
         } 
     })
 

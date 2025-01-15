@@ -58,11 +58,12 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
             <CardContent sx={{padding: '0'}}>
                 <Grid2 container spacing={2} alignItems='flex-end' sx={{padding: '0 20px'}}>
                     <Grid2 size={2} sx={{textAlign: 'center'}}>Дата</Grid2>
-                    <Grid2 size={2} sx={{textAlign: 'center'}}>День</Grid2>
-                    <Grid2 size={2} sx={{textAlign: 'center'}}>Час</Grid2>
-                    <Grid2 size={1} sx={{textAlign: 'center'}}>Тривалість</Grid2>
-                    <Grid2 size={1} sx={{textAlign: 'center'}}>Кабінет</Grid2>
+                    <Grid2 size={1.5} sx={{textAlign: 'center'}}>День</Grid2>
+                    <Grid2 size={1.5} sx={{textAlign: 'center'}}>Час</Grid2>
+                    <Grid2 size={1} sx={{textAlign: 'center'}}>Трив.</Grid2>
+                    <Grid2 size={1} sx={{textAlign: 'center'}}>Каб.</Grid2>
                     <Grid2 size={2} sx={{textAlign: 'center'}}>Статус</Grid2>
+                    <Grid2 size={1} sx={{textAlign: 'center'}}>Виплата</Grid2>
                     <Grid2 size={2} sx={{textAlign: 'center'}}>Дії</Grid2>
                 </Grid2>
                 <Divider sx={{marginBottom: '15px'}}/>   

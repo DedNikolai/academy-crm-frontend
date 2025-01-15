@@ -29,7 +29,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
-import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson copy';
+import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson';
 import MenuProps from '../../../utils/MenuProps';
 
 dayjs.extend(utc);
@@ -141,7 +141,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                 )}
                     />        
                 </Grid2>
-                <Grid2 size={2}>    
+                <Grid2 size={1.5}>    
                     <Controller
                         name='day'
                         control={control}
@@ -163,7 +163,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                             )}
                     />
                 </Grid2>
-                <Grid2 size={2}>
+                <Grid2 size={1.5}>
                     <Controller
                         name='time'
                         control={control}
@@ -279,6 +279,19 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                            <FormHelperText>{errors.status?.message}</FormHelperText>
                         </FormControl>
                         )}
+                    />
+                </Grid2>
+                <Grid2 size={1} textAlign='center'>
+                    <Controller
+                        name='payout'
+                        control={control}
+                        render={({field: { onChange, value }}) => (
+                                <Checkbox 
+                                    checked={value}
+                                    onChange={onChange}
+                                    disabled={!isEdit}
+                                />
+                            )}
                     />
                 </Grid2>
                 <Grid2 size={2} sx={{textAlign: 'center'}}>

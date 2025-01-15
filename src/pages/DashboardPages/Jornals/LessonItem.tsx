@@ -14,11 +14,14 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import useUpdateLessonStatus from "../../../api/query/lesson/useUpdateLessonStatus";
 import MenuProps from "../../../utils/MenuProps";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
     const theme = useTheme();
-    const [status, setStatus] = useState<string>(lesson.status)
-    const mutation = useUpdateLessonStatus(setStatus);
+    const [status, setStatus] = useState<string>(lesson.status);
+    const [payout, setPayout] = useState<boolean>(!!lesson.payout);
+    const mutation = useUpdateLessonStatus(setStatus, setPayout);
     const {mutate} = mutation;
 
     const onChange = (e: SelectChangeEvent) => {
@@ -27,6 +30,16 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
             status: e.target.value as Status,
             student: lesson.student._id,
             ticket: lesson.ticket._id
+        }
+        mutate(updatedLesson);
+    }
+
+    const onChangePayout = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedLesson: ILesson = {
+            ...lesson,
+            student: lesson.student._id,
+            ticket: lesson.ticket._id,
+            payout: e.target.checked
         }
         mutate(updatedLesson);
     }
@@ -43,6 +56,16 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
                                     <BookOnlineIcon />
                                 </IconButton>
                             </NavLink>
+                        </TableCell>
+                    )
+                }
+                if (column.id === 'isPaid') {
+                    return (
+                        <TableCell key={column.id} align={column.align}>
+                          {lesson.ticket.isPaid ? 
+                            <CheckIcon sx={{color: theme.status.success}}/> 
+                            : 
+                            <ClearIcon sx={{color: theme.status.error}}/>}
                         </TableCell>
                     )
                 }
@@ -68,7 +91,17 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
                              </Select>
                         </TableCell>
                     )
-                }     
+                }
+                if (column.id === 'payout') {
+                    return (
+                        <TableCell key={column.id} align={column.align}>
+                            <Checkbox 
+                                checked={payout}
+                                onChange={onChangePayout}
+                            />
+                        </TableCell>
+                        )
+                    }       
                 return (
                     <TableCell key={column.id} align={column.align}>
                     {column.format ? column.format(value) : value}

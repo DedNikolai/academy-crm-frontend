@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 interface Column {
     id: 'title' | 'startDate' | 'endDate' | 'student' 
         | 'teacher' | 'price' | 'subject' | 'generalAmount' 
-        | 'usedAmount' | 'transferred' | 'actions';
+        | 'usedAmount' | 'transferred' | 'actions' | 'isPaid';
     label: string;
     minWidth?: number;
     align?: 'right' | 'left' | 'center';
@@ -37,6 +37,11 @@ interface Column {
       align: 'center'
     },
     { id: 'transferred', label: "Пееренесені", minWidth: 50, align: 'center'},
+    {
+      id: 'isPaid',
+      label: 'Оплата',
+      align: 'center',
+    },
     {
       id: 'actions',
       label: 'Дії',

@@ -2,15 +2,15 @@ import { useQueryClient, useMutation } from "@tanstack/react-query"
 import axios from "../../axios";
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { IFormDataSalary } from "../../../types/salary";
 import {useNavigate} from "react-router-dom";
-import { ITicket } from "../../../types/ticket";
 
-const createTicket = async (data: ITicket) => {
+const createSalary = async (data: IFormDataSalary) => {
     try {
-        const response: AxiosResponse = await axios.post('/ticket', data);
+        const response: AxiosResponse = await axios.post('/salary', data);
 
         if (response.status === 200) {
-            toast.success('Абонемент створено')
+            toast.success('Виплату зафіксовано')
             return response.data;
         } else {
             toast.error(response.data.message);
@@ -19,22 +19,21 @@ const createTicket = async (data: ITicket) => {
         }
 
     } catch(error: any) {
-        const result = error.response.data;
         console.log(error);
-        toast.error(result.message || result[0].msg)
+        toast.error(error.response.data.message)
     }
 }
 
-const useCreateTicket = () => {
-    const queryClient = useQueryClient();
+const useCreateSalary= () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationKey: ['ticket create'],
-        mutationFn: createTicket,
+        mutationKey: ['salary create'],
+        mutationFn: createSalary,
         onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['tickets']});
+            queryClient.invalidateQueries({queryKey: ['payaccounts']});
             if (data._id) {
-                navigate(`/dashboard/tickets/edit/${data._id}`)
+                navigate(`/dashboard/salary`)
             }
         }
     })
@@ -42,4 +41,4 @@ const useCreateTicket = () => {
     return mutation;
 }
 
-export default useCreateTicket;
+export default useCreateSalary;

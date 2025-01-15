@@ -17,8 +17,12 @@ import useGetTickets from '../../../api/query/ticket/useGetTickets';
 import { ITicket } from '../../../types/ticket';
 import useDeleteTicket from '../../../api/query/ticket/useDeleteTicket';
 import { Status } from '../../../types/lesson-status';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import { useTheme } from '@mui/material/styles';
 
 export default function Tickets() {
+  const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const {data = {docs: []}, isLoading} = useGetTickets(page, rowsPerPage)  
@@ -86,6 +90,16 @@ export default function Tickets() {
                                 <IconButton aria-label="delete" onClick={() => deleteItem(row._id || '')}>
                                     <DeleteIcon />
                                 </IconButton>
+                            </TableCell>
+                        )
+                      }
+                      if (column.id === 'isPaid') {
+                        return (
+                            <TableCell key={column.id} align={column.align}>
+                              {row.isPaid ? 
+                                <CheckIcon sx={{color: theme.status.success}}/> 
+                                : 
+                                <ClearIcon sx={{color: theme.status.error}}/>}
                             </TableCell>
                         )
                       }

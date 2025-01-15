@@ -11,7 +11,8 @@ export interface ITeacher {
     education?: string,
     worktimes?: IWorktime[],
     subjects: string[],
-    isActive: boolean
+    isActive: boolean,
+    balance?: number
 }
 
 export interface IWorktime {

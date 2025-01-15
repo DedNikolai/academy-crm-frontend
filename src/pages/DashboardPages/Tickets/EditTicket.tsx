@@ -1,5 +1,5 @@
 
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -31,6 +31,8 @@ import { IEditTicket, ITicket, ITicketFromServer } from '../../../types/ticket';
 import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
 import { Status } from '../../../types/lesson-status';
 import MenuProps from '../../../utils/MenuProps';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { PayTypes } from '../../../types/payment';
 
 
 const schema = yup
@@ -41,7 +43,11 @@ const schema = yup
     endDate: yup.date().required('Обовязкове поле'),
     price: yup.number().required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
-    teacher: yup.string().required('Обовязкове поле')
+    teacher: yup.string().required('Обовязкове поле'),
+    isPaid: yup.boolean().required('Обовязкове поле'),
+    // payType: yup.string().when('isPaid', ([isPaid], schema) => {
+    //     return isPaid ? schema.required('Виберіть тип оплати') : schema;
+    // })
   })
   .required()
 
@@ -50,16 +56,33 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
     const mutation = useUpdateTicket();
 
     const {mutate, isPending} = mutation;
-    const {register, reset, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
+    const {register, watch, setValue, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {...ticket, student: ticket.student._id, teacher: ticket.teacher._id}
+        defaultValues: {
+            ...ticket, 
+            student: ticket.student._id, 
+            teacher: ticket.teacher._id,
+        }
     })
 
     const onSubmit: SubmitHandler<IEditTicket> = (value) => {
-        const updated: ITicket = {...value, _id: ticket._id, student: ticket.student._id}
+        const updated: ITicket = {
+            ...value, 
+            _id: ticket._id, 
+            student: ticket.student._id,
+            
+        }
         mutate(updated);
     };
+
+    const watchIsPaid = watch('isPaid');
+
+    useEffect(() => {
+        if (!watchIsPaid) {
+            setValue('payType', '')
+        }
+    }, [watchIsPaid])
 
     return (
         <>
@@ -284,6 +307,52 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                 value={ticket.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}
                             />
                         </FormControl>
+                    </Grid>
+                    <Grid2 size={3} display='flex' alignItems='center'>
+                        <Controller
+                            name='isPaid'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControlLabel control={
+                                    <Checkbox 
+                                        checked={value}
+                                        onChange={onChange}
+                                    />
+                                } 
+                            label="Оплата" 
+                        />
+                        )}
+                        />
+                    </Grid2>
+                    <Grid size={3}>
+                        <Controller
+                            name='payType'
+                            control={control}
+                            render={({field: { onChange, value }}) => (
+                                <FormControl fullWidth={true} error={!!errors.payType}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormLabel htmlFor="education">Тип Оплати</FormLabel>
+                                    </Box>
+                                    <Select
+                                        id="payType"
+                                        value={value || ''}
+                                        onChange={onChange}
+                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        MenuProps={MenuProps}
+                                        color={!!errors.payType ? 'error' : 'primary'}
+                                        disabled={!watchIsPaid}
+                                    >
+                                        {Object.keys(PayTypes).map((key) => (
+                                            <MenuItem key={key} value={key}>
+                                                <Checkbox checked={!!value && value === key} />
+                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                <FormHelperText>{errors.payType?.message}</FormHelperText>
+                            </FormControl>
+                            )}
+                        />
                     </Grid>
                     </Grid>
                     <Grid2 sx={{textAlign: 'right'}}>
