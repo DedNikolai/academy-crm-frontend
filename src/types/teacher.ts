@@ -17,7 +17,7 @@ export interface ITeacher {
 
 export interface IWorktime {
     _id?: string,
-    day: Days,
+    day: string,
     startTime: Date,
     endTime: Date,
     teacher?: ITeacher
@@ -30,7 +30,7 @@ export interface ISubjects {
 
 export interface IWorktimeItem {
     _id?: string,
-    day: Days,
+    day: string,
     startTime: Date,
     endTime: Date,
     teacher: string

@@ -32,7 +32,7 @@ const Home: FC = () => {
     const cash = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.cash)[0].value;
     const card = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.card)[0].value;
     const vocalCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.VOKAL)).length;
-    const pianoCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.FORTEPIANO)).length;
+    const pianoCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.PIANO)).length;
     const guitarCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.GUITAR)).length;
     const drumsCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes(Subjects.DRUMS)).length;
     const teachersList = teachers.data && teachers.data.map((item: ITeacher) => item.fullName);

@@ -17,6 +17,7 @@ import { ITeacher } from "../../../types/teacher";
 import useDeleteTeacher from "../../../api/query/teacher/useDeleteTeacher";
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Subjects } from "../../../types/subjects";
 
 const Teachers: FC = () => {
     const theme = useTheme();
@@ -58,7 +59,7 @@ const Teachers: FC = () => {
                   </TableCell>
                   <TableCell align="center">{teacher.phone}</TableCell>
                   <TableCell align="center">{teacher.email}</TableCell>
-                  <TableCell align="center">{teacher.subjects.join(', ')}</TableCell>
+                  <TableCell align="center">{teacher.subjects.map(subject => Subjects[subject as keyof typeof Subjects]).join(', ')}</TableCell>
                   <TableCell align="center">
                           {
                             teacher.isActive ? <CheckBoxIcon sx={{color: theme.status.success}} />

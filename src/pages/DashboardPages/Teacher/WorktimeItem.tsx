@@ -35,7 +35,7 @@ interface IWorktimeItem {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().required(),
     startTime: yup.date().required('Обовязкове поле'),
     endTime: yup.date().required('Обовязкове поле'),
     teacher: yup.mixed<ITeacher>()
@@ -53,9 +53,20 @@ const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
         defaultValues: {...data}
     })
 
+    const getDayValue = (key: string) => {
+        let day = '';
+        Object.keys(Days).forEach(item => {
+            if (key === item) {
+                day = Days[item as keyof typeof Days];
+            }
+        })
+    
+        return day;
+    }
+
     const onSubmit: SubmitHandler<IWorktime> = (data) => {
-        const updatedWorktime: IWorktime = {...data};
-        mutate(updatedWorktime);    
+        const worktime: IWorktime = {...data};
+        mutate(worktime);    
     };
 
     const deleteItem = () => {
@@ -95,10 +106,10 @@ const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
                                 id="day"
                                 value={value}
                                 onChange={onChange}
-                                renderValue={(selected) => selected}
+                                renderValue={(selected) => getDayValue(selected)}
                             >
-                                {Object.values(Days).map((name) => (
-                                    <MenuItem key={name} value={name}>{name}</MenuItem>
+                                {Object.keys(Days).map((key) => (
+                                    <MenuItem key={key} value={key}>{Days[key as keyof typeof Days]}</MenuItem>
                                     ))}
                             </Select>
                         </FormControl>

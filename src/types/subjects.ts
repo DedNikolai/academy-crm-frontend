@@ -1,6 +1,6 @@
 export enum Subjects {
     VOKAL = "Вокал",
-    FORTEPIANO = "Фортепіано",
+    PIANO = "Фортепіано",
     GUITAR = "Гітара",
     DRUMS = "Барабани"
 }
