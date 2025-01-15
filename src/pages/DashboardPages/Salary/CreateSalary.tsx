@@ -23,11 +23,11 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import useCreateTicket from '../../../api/query/ticket/useCreateTicket';
 import MenuProps from '../../../utils/MenuProps';
 import { IPayment, PayTypes } from '../../../types/payment';
 import { IFormDataSalary } from '../../../types/salary';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
+import useCreateSalary from '../../../api/query/salary/useCreateSalary';
 
 const schema = yup
   .object({
@@ -39,22 +39,23 @@ const schema = yup
 
 const CreateSalary: FC = () => {
     const theme = useTheme();
-    const mutation = useCreateTicket();
+    const mutation = useCreateSalary();
     const payAccounts = usePayAccounts();
     const {mutate, isPending} = mutation;
-    const {data = [], isFetching, isLoading} = useTeachers()
+    const {data = [], isLoading} = useTeachers()
     const {register, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataSalary>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
+        defaultValues: {teacher: ''}
     })
 
     const watchTeacher= watch('teacher');
     const balance = watchTeacher && data.filter((teacher: ITeacher) => teacher._id === watchTeacher)[0].balance;
 
     const onSubmit: SubmitHandler<IFormDataSalary> = (data) => {
-        const salary: IFormDataSalary = {...data};
-        console.log(salary);
-        // mutate(salary);
+        const payaccount = payAccounts.data.filter((item: IPayment) => item.title === data.payaccount)[0];
+        const salary: IFormDataSalary = {...data, payaccount: payaccount._id};
+        mutate(salary);
     };
 
     return (
@@ -69,10 +70,14 @@ const CreateSalary: FC = () => {
                 title={`Виплата зарплати`}
             />
             {
-            isPending || payAccounts.isLoading ?  <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isLoading || payAccounts.isLoading || isPending ?  <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>
-            <Grid>
-                {payAccounts.data.map((item: IPayment) => <Typography>{item.title + ': ' + item.value}</Typography>)}
+            <Grid container spacing={1} marginBottom={5}>
+                {payAccounts.data.map((item: IPayment) => (
+                    <Grid size={3} key={item._id}>
+                        <Typography variant='h4'>{item.title + ': ' + item.value}</Typography>
+                    </Grid>
+                    ))}
             </Grid>       
             <Box
                 component="form"
@@ -119,7 +124,7 @@ const CreateSalary: FC = () => {
                         />
                     </Grid>
                     <Grid size={3}>
-                        <FormControl fullWidth={true}  error={!!errors.value}>
+                        <FormControl fullWidth={true}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <FormLabel htmlFor="fullName">Баланс</FormLabel>
                             </Box>
@@ -132,7 +137,6 @@ const CreateSalary: FC = () => {
                                 required
                                 fullWidth
                                 variant="outlined"
-                                color={!!errors.teacherBalance ? 'error' : 'primary'}
                                 disabled={true}
                             />
                         </FormControl>

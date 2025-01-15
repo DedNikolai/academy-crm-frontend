@@ -3,6 +3,7 @@ import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
+import { IPayment } from '../../../../types/payment';
 
 interface Column {
     id: 'timestamp' | 'payaccount' | 'teacher' | 'value' | 'actions' ;
@@ -28,6 +29,7 @@ interface Column {
       id: 'payaccount',
       label: 'Тип оплати',
       align: 'center',
+      format: (value: IPayment) => value.title,
     },
     {
       id: 'value',

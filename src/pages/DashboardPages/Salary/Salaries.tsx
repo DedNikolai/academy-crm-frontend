@@ -9,10 +9,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Box, CircularProgress, Grid2, Typography, Button } from "@mui/material";
 import columns from './columns/columns';
-import useGetLessons from '../../../api/query/lesson/useGetLessons';
-import { ILessonFromServer } from '../../../types/lesson';
 import LessonItem from './SalaryItem';
-import useGetSalaries from '../../../api/query/salary/useGetLessons copy';
+import useGetSalaries from '../../../api/query/salary/useGetSalaries';
 import { ISalary } from '../../../types/salary';
 import {NavLink} from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
@@ -27,7 +25,7 @@ export default function Salaries() {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
+  
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -62,7 +60,7 @@ export default function Salaries() {
             {data.docs
               .map((row: ISalary) => {
                 return (
-                 <LessonItem  salary={row} key={row._id}/>
+                 <LessonItem  salary={row} setPage={setPage} key={row._id}/>
                 );
               })}
           </TableBody>
