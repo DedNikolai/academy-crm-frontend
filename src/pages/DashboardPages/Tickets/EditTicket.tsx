@@ -33,6 +33,7 @@ import { Status } from '../../../types/lesson-status';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { PayTypes } from '../../../types/payment';
+import { Subjects } from '../../../types/subjects';
 
 
 const schema = yup
@@ -224,14 +225,14 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                     id="subject"
                                     value={value}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Subjects[selected as keyof typeof Subjects]}
                                     MenuProps={MenuProps}
                                     color={!!errors.subject ? 'error' : 'primary'}
                                 >
                                     {ticket.student.subjects.map((name: string) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value == name} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Subjects[name as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>

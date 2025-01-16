@@ -34,6 +34,7 @@ import useCreateTicket from '../../../api/query/ticket/useCreateTicket';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { PayTypes } from '../../../types/payment';
+import { Subjects } from '../../../types/subjects';
 
 const schema = yup
   .object({
@@ -41,7 +42,7 @@ const schema = yup
     subject: yup.string().required('Обовязкове поле'),
     startDate: yup.date().required('Обовязкове поле'),
     endDate: yup.date().required('Обовязкове поле'),
-    price: yup.number().required('Обовязкове поле'),
+    price: yup.number().min(1, 'Вартість не може бути відємною').required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле')
   })
@@ -221,14 +222,14 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                                     id="subject"
                                     value={value}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Subjects[selected as keyof typeof Subjects]}
                                     MenuProps={MenuProps}
                                     color={!!errors.subject ? 'error' : 'primary'}
                                 >
                                     {student.subjects.map((name) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value == name} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Subjects[name as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>

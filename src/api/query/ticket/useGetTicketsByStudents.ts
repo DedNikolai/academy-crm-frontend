@@ -21,7 +21,7 @@ const fetchTicketsByStudent = async (studentId: string, page: number, size: numb
 
 const useGetTicketsByStudent = (studentId: string = '', page: number = 0, size: number = 10) => {
     const {data = [], isFetching, isLoading, isFetched} = useQuery({
-        queryKey: ['students', studentId, page, size],
+        queryKey: ['tickets', 'students', studentId, page, size],
         queryFn: () => fetchTicketsByStudent(studentId, page, size,),
         
     })

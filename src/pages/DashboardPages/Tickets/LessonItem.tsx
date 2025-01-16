@@ -43,7 +43,7 @@ interface ILessonItem {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().required('Обовязкове поле'),
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
@@ -84,7 +84,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     useEffect(() => {
         if (watchDate) {
             setValue('time', new Date(watchDate))
-            setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
+            setValue('day', Object.keys(Days)[new Date(watchDate).getDay()])
         }
     }, [watchDate])
 
@@ -95,6 +95,17 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                 deleteMutation.mutate(lesson._id)
             }
         }
+    }
+
+    const getStatusValue = (key: string) => {
+            let status = '';
+            Object.keys(Status).forEach(item => {
+                if (key === item) {
+                    status = Status[item as keyof typeof Status];
+                }
+            })
+         
+            return status;
     }
 
     if (isPending || deleteMutation.isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
@@ -151,11 +162,11 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     id="day"
                                     value={value || ''}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Days[selected as keyof typeof Days]}
                                     disabled
                                 >
-                                    {Object.values(Days).map((name) => (
-                                        <MenuItem key={name} value={name}>{name}</MenuItem>
+                                    {Object.keys(Days).map((name) => (
+                                        <MenuItem key={name} value={name}>{Days[name as keyof typeof Days]}</MenuItem>
                                         ))}
                                 </Select>
                                 <FormHelperText>{errors.time?.message}</FormHelperText>
@@ -263,15 +274,15 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     id="status"
                                     value={value || ''}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => getStatusValue(selected)}
                                     MenuProps={MenuProps}
                                     color={!!errors.status ? 'error' : 'primary'}
                                     disabled={!isEdit}
                                 >
-                                    {Object.values(Status).map((name) => (
+                                    {Object.keys(Status).map((name) => (
                                     <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Status[name as keyof typeof Status]} />
                                     </MenuItem>
                                     ))}
                                         <MenuItem value={''}>Очистити</MenuItem>                    

@@ -2,6 +2,8 @@ import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
+import { Days } from '../../../../types/days';
+import { Subjects } from '../../../../types/subjects';
 
 interface Column {
     id: 'date' | 'time' | 'durationMinutes' | 'room' | 'ticket' | 'payout'
@@ -26,6 +28,7 @@ interface Column {
       id: 'day',
       label: 'День',
       align: 'center',
+      format: (value: string) => Days[value as keyof typeof Days]
     },
     { id: 'durationMinutes', label: 'Тривалість', align: 'center' },
     {
@@ -43,6 +46,7 @@ interface Column {
       id: 'subject',
       label: 'Предмет',
       align: 'center',
+      format: (value: string) => Subjects[value as keyof typeof Subjects]
     },
     {
       id: 'status',

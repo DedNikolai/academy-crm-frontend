@@ -23,7 +23,7 @@ export interface IFormStudent {
     teachers: string[];
     isActive: boolean,
     email?: string,
-    gender: 'Чоловіча' | 'Жіноча' | ''
+    gender: string
     actions?: null,
     birthday?: Date | null,
     parents?: string

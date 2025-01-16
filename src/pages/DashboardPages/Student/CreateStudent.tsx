@@ -32,6 +32,7 @@ import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import useCreateStudent from '../../../api/query/student/useCreateStudent';
 import MenuProps from '../../../utils/MenuProps';
+import { Gender } from '../../../types/gender';
 
 const schema = yup
   .object({
@@ -42,7 +43,7 @@ const schema = yup
     parents: yup.string().optional(),
     birthday: yup.date().optional().nullable(),
     isActive: yup.boolean().required('Обовязкове поле'),
-    gender: yup.string().oneOf(['Чоловіча', 'Жіноча', '']).required('Обовязкове поле'),
+    gender: yup.string().required('Обовязкове поле'),
     teachers: yup.array().min(1, 'Необхідно вибрати хоча б одне значення').required('Обовязкове поле')
   })
   .required()
@@ -52,7 +53,7 @@ const CreateStudent: FC = () => {
     const mutation = useCreateStudent();
     const {mutate, isPending} = mutation;
     const teachersData = useTeachers()
-    const {register, watch, handleSubmit, reset, formState: {errors}, control} = useForm<IFormStudent>({
+    const {register, watch, handleSubmit, formState: {errors}, control} = useForm<IFormStudent>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
         defaultValues: {isActive: true, gender: '', subjects: [], teachers: []}
@@ -65,6 +66,17 @@ const CreateStudent: FC = () => {
         const student: IFormStudent = {...data}
         mutate(student);
     };
+
+    const getSubjectValue = (key: string) => {
+        let day = '';
+        Object.keys(Subjects).forEach(item => {
+            if (key === item) {
+                day = Subjects[item as keyof typeof Subjects];
+            }
+        })
+     
+        return day;
+    }
 
     return (
         <>
@@ -164,13 +176,13 @@ const CreateStudent: FC = () => {
                                     value={value}
                                     onChange={onChange}
                                     MenuProps={MenuProps}
-                                    renderValue={value => value || ''}
+                                    renderValue={value => value ? Gender[value as keyof typeof Gender] : ''}
                                     color={!!errors.gender ? 'error' : 'primary'}
                                 >
-                                    {['Чоловіча', 'Жіноча'].map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={!!value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                    {Object.keys(Gender).map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox checked={!!value && value === key} />
+                                            <ListItemText primary={Gender[key as keyof typeof Gender]} />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -252,14 +264,14 @@ const CreateStudent: FC = () => {
                                     multiple
                                     value={value || []}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected.join(', ')}
+                                    renderValue={(selected) => selected.map(subject => getSubjectValue(subject)).join(', ')}
                                     MenuProps={MenuProps}
                                     color={!!errors.subjects ? 'error' : 'primary'}
                                 >
-                                    {Object.values(Subjects).map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                    {Object.keys(Subjects).map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox checked={value && value.includes(key)} />
+                                            <ListItemText primary={Subjects[key as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>

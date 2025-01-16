@@ -1,3 +1,4 @@
+import { Subjects } from '../../../../types/subjects';
 import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 
@@ -33,7 +34,13 @@ interface Column {
       format: (value: ITeacher) => value.fullName
     },
     { id: 'price', label: "Вартість", minWidth: 50, align: 'center'},
-    { id: 'subject', label: "Предмет", minWidth: 50, align: 'center'},
+    { 
+      id: 'subject', 
+      label: "Предмет", 
+      minWidth: 50, 
+      align: 'center',
+      format: (value: string) => Subjects[value as keyof typeof Subjects]
+    },
     { id: 'generalAmount', label: "Всього", minWidth: 50, align: 'center'},
     { id: 'usedAmount', 
       label: "Використані", 

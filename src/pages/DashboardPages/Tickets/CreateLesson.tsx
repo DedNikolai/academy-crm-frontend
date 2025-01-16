@@ -41,7 +41,7 @@ interface ICreateLesson {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().defined(),
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
@@ -125,7 +125,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                                 )}
                     />        
                 </Grid2>
-                <Grid2 size={2}>    
+                <Grid2 size={1.5}>    
                     <Controller
                         name='day'
                         control={control}
@@ -147,7 +147,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                             )}
                     />
                 </Grid2>
-                <Grid2 size={2}>
+                <Grid2 size={1.5}>
                     <Controller
                         name='time'
                         control={control}
@@ -261,6 +261,19 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                         )}
                     />
                 </Grid2>
+                <Grid2 size={1} textAlign='center'>
+                    <Controller
+                        name='payout'
+                        control={control}
+                        render={({field: { onChange, value }}) => (
+                                    <Checkbox 
+                                        checked={value}
+                                        onChange={onChange}
+                                        disabled
+                                    />
+                                   )}
+                                    />
+                                </Grid2>
                 <Grid2 size={2} sx={{textAlign: 'center'}}>
                 <IconButton aria-label="save" type="submit">
                         <SaveIcon />
