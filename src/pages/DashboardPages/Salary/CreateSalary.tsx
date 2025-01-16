@@ -75,7 +75,7 @@ const CreateSalary: FC = () => {
             <Grid container spacing={1} marginBottom={5}>
                 {payAccounts.data.map((item: IPayment) => (
                     <Grid size={3} key={item._id}>
-                        <Typography variant='h4'>{item.title + ': ' + item.value}</Typography>
+                        <Typography variant='h4'>{PayTypes[item.title as keyof typeof PayTypes] + ': ' + item.value}</Typography>
                     </Grid>
                     ))}
             </Grid>       

@@ -3,6 +3,7 @@ import { ITeacher } from '../../../../types/teacher';
 import dayjs from 'dayjs';
 import { ITicketFromServer } from '../../../../types/ticket';
 import { Status } from '../../../../types/lesson-status';
+import { Subjects } from '../../../../types/subjects';
 
 interface Column {
     id: 'date' | 'durationMinutes' | 'room' | 'ticket' | 'payout'
@@ -41,6 +42,7 @@ interface Column {
       id: 'subject',
       label: 'Предмет',
       align: 'center',
+      format: (value: string) => Subjects[value as keyof typeof Subjects],
     },
     {
       id: 'status',

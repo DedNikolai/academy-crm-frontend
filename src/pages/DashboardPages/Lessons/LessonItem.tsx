@@ -84,15 +84,15 @@ export const LessonItem: FC<{lesson: ILessonFromServer}> = ({lesson}) => {
                                 id="status"
                                 value={status}
                                 onChange={onChange}
-                                renderValue={(selected) => selected}
+                                renderValue={(selected) => Status[selected as keyof typeof Status]}
                                 MenuProps={MenuProps}
                                 size="small"
                                 sx={{minWidth: 150}}
                             >
-                                {Object.values(Status).map((name) => (
+                                {Object.keys(Status).map((name) => (
                                     <MenuItem key={name} value={name}>
                                         <Checkbox checked={name === status} />
-                                        <ListItemText primary={name} />
+                                        <ListItemText primary={Status[name as keyof typeof Status]} />
                                     </MenuItem>
                                 ))}
                                 <MenuItem value={''}>Очистити</MenuItem>                    

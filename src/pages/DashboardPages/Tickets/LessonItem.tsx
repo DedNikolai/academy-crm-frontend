@@ -31,6 +31,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
 import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson';
 import MenuProps from '../../../utils/MenuProps';
+import { Durations, Rooms, shedule } from '../../../constants/app';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,7 +64,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     const {mutate, isPending} = mutation;
     const copyLesson = () => {
         const current = new Date(lesson.date);
-        const dateAfterWeek = new Date(current.setDate(current.getDate() + 7));
+        const dateAfterWeek = new Date(current.setDate(current.getDate() + shedule.daysPerWeek));
         const {_id, status,...rest} = lesson;
         const copyAfterWeek: ILesson = {...rest, date: dateAfterWeek};
         copy(copyAfterWeek);
@@ -225,7 +226,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     MenuProps={MenuProps}
                                     color={!!errors.durationMinutes ? 'error' : 'primary'}
                                 >
-                                    {[30, 60].map((item) => (
+                                    {Object.values(Durations).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
@@ -252,7 +253,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     MenuProps={MenuProps}
                                     color={!!errors.room ? 'error' : 'primary'}
                                 >
-                                    {[1, 2, 3, 4].map((item) => (
+                                    {Object.values(Rooms).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
