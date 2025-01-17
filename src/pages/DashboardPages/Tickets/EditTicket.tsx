@@ -32,7 +32,7 @@ import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
 import { Status } from '../../../types/lesson-status';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { IPayment, IPaymentFromServer, PayTypes } from '../../../types/payment';
+import { IPaymentFromServer } from '../../../types/payment';
 import { Subjects } from '../../../types/subjects';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
 

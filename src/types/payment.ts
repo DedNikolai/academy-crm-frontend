@@ -6,7 +6,7 @@ export interface IPayment {
 
 export enum PayTypes {
     CASH = "Готівка",
-    CARD = 'Безнал',
+    CARD = 'Банк',
 }
 
 export interface IPaymentFromServer {

@@ -33,7 +33,7 @@ import { IFormDataTicket, ITicket } from '../../../types/ticket';
 import useCreateTicket from '../../../api/query/ticket/useCreateTicket';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { IPaymentFromServer, PayTypes } from '../../../types/payment';
+import { IPaymentFromServer } from '../../../types/payment';
 import { Subjects } from '../../../types/subjects';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
 

@@ -28,8 +28,8 @@ const Home: FC = () => {
     const students = useGetAllStudents();
     const teachers = useGetTeachers()
     const balanse = data.reduce((total: number, item: IPayment) => total + item.value, 0);
-    const cash = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.CASH)[0].value;
-    const card = data.length && data.filter((item: IPayment) => PayTypes[item.title as keyof typeof PayTypes] === PayTypes.CARD)[0].value;
+    const cash = data.length && data.filter((item: IPayment) => item.title === PayTypes.CASH)[0].value;
+    const card = data.length && data.filter((item: IPayment) => item.title === PayTypes.CARD)[0].value;
     const vocalCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes('VOCAL')).length;
     const pianoCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes('PIANO')).length;
     const guitarCount = students.data && students.data.filter((item: IStudent) => item.subjects.includes('GUITAR')).length;
