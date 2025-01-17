@@ -1,5 +1,6 @@
 import { IStudent } from '../../../../types/student';
 import dayjs from 'dayjs';
+import { Subjects } from '../../../../types/subjects';
 
 interface Column {
     id: 'title' | 'startDate' | 'endDate' | 'student' 
@@ -30,7 +31,12 @@ interface Column {
       format: (value: IStudent) => value.fullName
     },
     { id: 'price', label: "Вартість", align: 'center'},
-    { id: 'subject', label: "Предмет", align: 'center'},
+    { 
+      id: 'subject', 
+      label: "Предмет", 
+      align: 'center',
+      format: (value: string) => Subjects[value as keyof typeof Subjects]
+    },
     { id: 'generalAmount', label: "Всього", align: 'center'},
     { id: 'usedAmount', 
       label: "Використані", 

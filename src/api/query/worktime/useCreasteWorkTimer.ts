@@ -1,5 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import { ITeacher, IWorktime } from '../../../types/teacher';
+import { IWorktime } from '../../../types/teacher';
 import axios from '../../axios';
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";

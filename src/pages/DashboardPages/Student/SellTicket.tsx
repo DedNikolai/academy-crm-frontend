@@ -33,7 +33,9 @@ import { IFormDataTicket, ITicket } from '../../../types/ticket';
 import useCreateTicket from '../../../api/query/ticket/useCreateTicket';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { PayTypes } from '../../../types/payment';
+import { IPaymentFromServer } from '../../../types/payment';
+import { Subjects } from '../../../types/subjects';
+import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
 
 const schema = yup
   .object({
@@ -41,7 +43,7 @@ const schema = yup
     subject: yup.string().required('Обовязкове поле'),
     startDate: yup.date().required('Обовязкове поле'),
     endDate: yup.date().required('Обовязкове поле'),
-    price: yup.number().required('Обовязкове поле'),
+    price: yup.number().min(1, 'Вартість не може бути відємною').required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле')
   })
@@ -50,6 +52,7 @@ const schema = yup
 const SellTicket: FC<{student: IStudent}> = ({student}) => {
     const theme = useTheme();
     const mutation = useCreateTicket();
+    const payAccounts = usePayAccounts();
     const {mutate, isPending} = mutation;
     const teachersData = useTeachers()
     const {register, setValue, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataTicket>({
@@ -93,7 +96,7 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                 title={`Продати абонемент ${student.fullName}`}
             />
             {
-            isPending || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending || payAccounts.isLoading || teachersData.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -221,14 +224,14 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                                     id="subject"
                                     value={value}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Subjects[selected as keyof typeof Subjects]}
                                     MenuProps={MenuProps}
                                     color={!!errors.subject ? 'error' : 'primary'}
                                 >
                                     {student.subjects.map((name) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value == name} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Subjects[name as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -298,15 +301,15 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
                                         id="payType"
                                         value={value || ''}
                                         onChange={onChange}
-                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        renderValue={(selected) => selected ? payAccounts.data.filter((item: IPaymentFromServer) => item._id === selected)[0].title : ''}
                                         MenuProps={MenuProps}
                                         color={!!errors.payType ? 'error' : 'primary'}
                                         disabled={!watchIsPaid}
                                     >
-                                        {Object.keys(PayTypes).map((key) => (
-                                            <MenuItem key={key} value={key}>
-                                                <Checkbox checked={!!value && value === key} />
-                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                        {payAccounts.data.map((key: IPaymentFromServer) => (
+                                            <MenuItem key={key._id} value={key._id}>
+                                                <Checkbox checked={!!value && value === key._id} />
+                                                <ListItemText primary={key.title} />
                                             </MenuItem>
                                         ))}
                                     </Select>

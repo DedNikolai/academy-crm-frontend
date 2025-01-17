@@ -1,3 +1,4 @@
+import { Subjects } from '../../../../types/subjects';
 import { ITeacher } from '../../../../types/teacher';
 
 interface Column {
@@ -15,7 +16,7 @@ interface Column {
       id: 'subjects',
       label: 'Предменти',
       align: 'left',
-      format: (value: string[]) => value.join(', ')
+      format: (value: string[]) => value.map(item => Subjects[item as keyof typeof Subjects]).join(', ')
     },
     {
       id: 'teachers',

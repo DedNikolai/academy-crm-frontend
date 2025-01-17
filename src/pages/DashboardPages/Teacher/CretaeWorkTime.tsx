@@ -33,7 +33,7 @@ interface ICreateWorktime {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().required(),
     startTime: yup.date().required('Обовязкове поле'),
     endTime: yup.date().required('Обовязкове поле'),
     teacher: yup.mixed<ITeacher>().optional()
@@ -49,7 +49,7 @@ const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
         defaultValues: {
             startTime: new Date('1970-01-01T00:00:00'),
             endTime: new Date('1970-01-01T00:00:00'),
-            teacher
+            teacher,
         }
     })
     
@@ -58,6 +58,17 @@ const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
         mutate(worktime);
         reset();
     };
+
+    const getDayValue = (key: string) => {
+        let day = '';
+        Object.keys(Days).forEach(item => {
+            if (key === item) {
+                day = Days[item as keyof typeof Days];
+            }
+        })
+    
+        return day;
+    }
 
     if (isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
 
@@ -86,10 +97,10 @@ const CreateWorkTime: FC<ICreateWorktime> = ({closeForm, teacher}) => {
                                 id="day"
                                 value={value || ''}
                                 onChange={onChange}
-                                renderValue={(selected) => selected || ''}
+                                renderValue={(selected) => getDayValue(selected)}
                             >
-                                {Object.values(Days).map((name) => (
-                                    <MenuItem key={name} value={name}>{name}</MenuItem>
+                                {Object.keys(Days).map((key) => (
+                                    <MenuItem key={key} value={key}>{Days[key as keyof typeof Days]}</MenuItem>
                                     ))}
                             </Select>
                         </FormControl>

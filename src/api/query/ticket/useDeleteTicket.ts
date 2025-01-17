@@ -9,7 +9,7 @@ const deleteTicket = async (id: string) => {
 
         if (response.status === 200) {
             toast.success('Абонемент видалено')
-            return true
+            return response.data
         } else {
             toast.error(response.data.message);
             return false;
@@ -27,8 +27,9 @@ const useDeleteTicket = () => {
     const mutation = useMutation({
         mutationKey: ['abonement delete'],
         mutationFn: deleteTicket,
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['tickets']})
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['tickets']});
+            queryClient.invalidateQueries({queryKey: ['tickets', 'students' , data.student, 0, 10]})
         }
     })
 

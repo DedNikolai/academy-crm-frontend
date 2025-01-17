@@ -23,6 +23,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { pagination } from '../../../constants/app';
 
 export default function Archive() {
   const theme = useTheme();
@@ -144,7 +145,7 @@ export default function Archive() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[2, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

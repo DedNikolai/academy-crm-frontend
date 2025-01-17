@@ -18,6 +18,8 @@ import { timesArray, cellsArray} from '../../../utils/timesArray';
 import { isLesson } from '../../../utils/isLesson';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import { NavLink } from 'react-router-dom';
+import { Subjects } from '../../../types/subjects';
+import { Rooms } from '../../../constants/app';
 
 
 dayjs.extend(localeData)
@@ -54,10 +56,10 @@ export default function Shedule() {
                 />
             </LocalizationProvider>
          </Grid2>
-         <Grid2 size={2} display='flex'>Вокал - <Brightness1Icon sx={{color: '#00e5ff'}}/></Grid2>
-         <Grid2 size={2} display='flex'>Фортепіано - <Brightness1Icon sx={{color: '#ffef62'}}/></Grid2>
-         <Grid2 size={2} display='flex'>Гітара - <Brightness1Icon sx={{color: '#ffa733'}}/></Grid2>
-         <Grid2 size={2} display='flex'>Ударні - <Brightness1Icon sx={{color: '#91ff35'}}/></Grid2>
+         <Grid2 size={2} display='flex'>{`${Subjects.VOCAL} - `}<Brightness1Icon sx={{color: '#00e5ff'}}/></Grid2>
+         <Grid2 size={2} display='flex'>{`${Subjects.PIANO} - `}<Brightness1Icon sx={{color: '#ffef62'}}/></Grid2>
+         <Grid2 size={2} display='flex'>{`${Subjects.GUITAR} - `}<Brightness1Icon sx={{color: '#ffa733'}}/></Grid2>
+         <Grid2 size={2} display='flex'>{`${Subjects.DRUMS} - `}<Brightness1Icon sx={{color: '#91ff35'}}/></Grid2>
       </Grid2>  
       {
         isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
@@ -89,10 +91,10 @@ export default function Shedule() {
                     weekDays.map((item, index) => {
                         return (
                             <React.Fragment key={item.toString() + index}>
-                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>1</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>2</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>3</TableCell>
-                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>4</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>{Rooms.ROOM1}</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>{Rooms.ROOM2}</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>{Rooms.ROOM3}</TableCell>
+                                <TableCell style={{ top: 38}} sx={{width: 30, borderRight: 1, borderTop: 1}} align='center'>{Rooms.ROOM4}</TableCell>
                             </React.Fragment>
                         )
                     })

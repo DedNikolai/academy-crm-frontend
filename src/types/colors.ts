@@ -1,7 +1,7 @@
 
 export const Colors: { [key: string]: string } = {
-   "Вокал": '#00e5ff',
-   "Фортепіано": '#ffef62',
-   "Гітара": '#ffa733',
-   "Барабани": '#91ff35',
+   "VOCAL": '#00e5ff',
+   "PIANO": '#ffef62',
+   "GUITAR": '#ffa733',
+   "DRUMS": '#91ff35',
 }

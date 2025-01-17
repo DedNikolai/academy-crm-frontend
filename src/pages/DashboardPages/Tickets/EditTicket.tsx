@@ -32,7 +32,9 @@ import useUpdateTicket from '../../../api/query/ticket/useUpdateTicket';
 import { Status } from '../../../types/lesson-status';
 import MenuProps from '../../../utils/MenuProps';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { PayTypes } from '../../../types/payment';
+import { IPaymentFromServer } from '../../../types/payment';
+import { Subjects } from '../../../types/subjects';
+import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
 
 
 const schema = yup
@@ -54,6 +56,7 @@ const schema = yup
 const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({ticket, teachers}) => {
     const theme = useTheme();
     const mutation = useUpdateTicket();
+    const payAccounts = usePayAccounts();
 
     const {mutate, isPending} = mutation;
     const {register, watch, setValue, handleSubmit, formState: {errors}, control} = useForm<IEditTicket>({
@@ -96,7 +99,7 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                 title={`абонемент ${ticket.student.fullName}`}
             />
             {
-            isPending ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            isPending || payAccounts.isLoading ? <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>   
             <Box
                 component="form"
@@ -224,14 +227,14 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                     id="subject"
                                     value={value}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Subjects[selected as keyof typeof Subjects]}
                                     MenuProps={MenuProps}
                                     color={!!errors.subject ? 'error' : 'primary'}
                                 >
                                     {ticket.student.subjects.map((name: string) => (
                                         <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value == name} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Subjects[name as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -337,15 +340,15 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                         id="payType"
                                         value={value || ''}
                                         onChange={onChange}
-                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        renderValue={(selected) => selected ? payAccounts.data.filter((item: IPaymentFromServer) => item._id === selected)[0].title : ''}
                                         MenuProps={MenuProps}
                                         color={!!errors.payType ? 'error' : 'primary'}
                                         disabled={!watchIsPaid}
                                     >
-                                        {Object.keys(PayTypes).map((key) => (
-                                            <MenuItem key={key} value={key}>
-                                                <Checkbox checked={!!value && value === key} />
-                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                        {payAccounts.data.map((key: IPaymentFromServer) => (
+                                            <MenuItem key={key._id} value={key._id}>
+                                                <Checkbox checked={!!value && value === key._id} />
+                                                <ListItemText primary={key.title} />
                                             </MenuItem>
                                         ))}
                                     </Select>

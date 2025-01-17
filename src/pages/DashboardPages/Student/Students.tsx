@@ -23,11 +23,12 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { pagination } from '../../../constants/app';
 
 export default function Students() {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const [params, setParams] = React.useState<string>('')
   const {data = {docs: []}, isLoading} = useGetStudents(page, rowsPerPage, params)  
   const mutation = useDeleteStudent()
@@ -144,7 +145,7 @@ export default function Students() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

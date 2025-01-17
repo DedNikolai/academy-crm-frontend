@@ -14,6 +14,7 @@ import CreateLesson from './CreateLesson';
 import useGetLessonsByTicket from '../../../api/query/lesson/useGetLessonsByTicket';
 import { Status } from '../../../types/lesson-status';
 import dayjs from 'dayjs';
+import { Subjects } from '../../../types/subjects';
 
 interface ITicketItem {
     ticket: ITicketFromServer
@@ -24,6 +25,17 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
     const theme = useTheme();
     const [addIsOpen, setAddIsOpen] = useState<boolean>(false); 
     const {data = [], isLoading} = useGetLessonsByTicket(ticket._id);
+
+    const getSubjectValue = (key: string) => {
+        let day = '';
+        Object.keys(Subjects).forEach(item => {
+            if (key === item) {
+                day = Subjects[item as keyof typeof Subjects];
+            }
+        })
+     
+        return day;
+    }
 
     return (
         <Card sx={{boxShadow: 'none'}}>
@@ -38,7 +50,7 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                         <Grid2 size={3}>{ticket.title}</Grid2>
                         <Grid2 size={3}>{`Учень: ${ticket.student.fullName}`}</Grid2>
                         <Grid2 size={3}>{`Вчитель: ${ticket.teacher.fullName}`}</Grid2>
-                        <Grid2 size={3}>{`Предмет: ${ticket.subject}`}</Grid2>
+                        <Grid2 size={3}>{`Предмет: ${getSubjectValue(ticket.subject)}`}</Grid2>
                     </Grid2>
                 }
                 subheader={

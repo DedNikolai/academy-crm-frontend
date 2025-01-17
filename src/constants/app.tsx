@@ -9,3 +9,20 @@ export const shedule = {
     daysPerWeek: 7,
     roomsCount: 4
 }
+
+export const Rooms = {
+    ROOM1: 1,
+    ROOM2: 2,
+    ROOM3: 3,
+    ROOM4: 4
+}
+
+export const Durations = {
+    CHILD: 30,
+    MAN: 60  
+}
+
+export const pagination = {
+    items: [5, 10, 25],
+    rowsPerPage: 10
+};

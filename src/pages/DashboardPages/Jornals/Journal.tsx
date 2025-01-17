@@ -16,14 +16,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ILessonFromServer } from '../../../types/lesson';
 import LessonItem from './LessonItem';
+import { pagination } from '../../../constants/app';
 
 export default function Journal() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const [date, setDate] = React.useState<Dayjs | null>(dayjs().startOf('day'))
   const {data = {docs: []}, isLoading} = useGetLessons(page, rowsPerPage, date)  
-
-  const isPending = false;
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -56,7 +55,7 @@ export default function Journal() {
          </Grid2>
       </Grid2>  
       {
-        isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
+        isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table" size="small">
@@ -85,7 +84,7 @@ export default function Journal() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

@@ -31,6 +31,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import useUpdateLesson from '../../../api/query/lesson/useUpdateLesson';
 import useDeleteLesson from '../../../api/query/lesson/useDeleteLesson';
 import MenuProps from '../../../utils/MenuProps';
+import { Durations, Rooms, shedule } from '../../../constants/app';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -43,7 +44,7 @@ interface ILessonItem {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().required('Обовязкове поле'),
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
@@ -63,7 +64,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     const {mutate, isPending} = mutation;
     const copyLesson = () => {
         const current = new Date(lesson.date);
-        const dateAfterWeek = new Date(current.setDate(current.getDate() + 7));
+        const dateAfterWeek = new Date(current.setDate(current.getDate() + shedule.daysPerWeek));
         const {_id, status,...rest} = lesson;
         const copyAfterWeek: ILesson = {...rest, date: dateAfterWeek};
         copy(copyAfterWeek);
@@ -84,7 +85,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
     useEffect(() => {
         if (watchDate) {
             setValue('time', new Date(watchDate))
-            setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
+            setValue('day', Object.keys(Days)[new Date(watchDate).getDay()])
         }
     }, [watchDate])
 
@@ -95,6 +96,17 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                 deleteMutation.mutate(lesson._id)
             }
         }
+    }
+
+    const getStatusValue = (key: string) => {
+            let status = '';
+            Object.keys(Status).forEach(item => {
+                if (key === item) {
+                    status = Status[item as keyof typeof Status];
+                }
+            })
+         
+            return status;
     }
 
     if (isPending || deleteMutation.isPending) return <Box sx={{textAlign: 'center'}}><CircularProgress /></Box>
@@ -151,11 +163,11 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     id="day"
                                     value={value || ''}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Days[selected as keyof typeof Days]}
                                     disabled
                                 >
-                                    {Object.values(Days).map((name) => (
-                                        <MenuItem key={name} value={name}>{name}</MenuItem>
+                                    {Object.keys(Days).map((name) => (
+                                        <MenuItem key={name} value={name}>{Days[name as keyof typeof Days]}</MenuItem>
                                         ))}
                                 </Select>
                                 <FormHelperText>{errors.time?.message}</FormHelperText>
@@ -214,7 +226,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     MenuProps={MenuProps}
                                     color={!!errors.durationMinutes ? 'error' : 'primary'}
                                 >
-                                    {[30, 60].map((item) => (
+                                    {Object.values(Durations).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
@@ -241,7 +253,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     MenuProps={MenuProps}
                                     color={!!errors.room ? 'error' : 'primary'}
                                 >
-                                    {[1, 2, 3, 4].map((item) => (
+                                    {Object.values(Rooms).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
@@ -263,15 +275,15 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     id="status"
                                     value={value || ''}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => getStatusValue(selected)}
                                     MenuProps={MenuProps}
                                     color={!!errors.status ? 'error' : 'primary'}
-                                    disabled={!isEdit}
+                                    disabled
                                 >
-                                    {Object.values(Status).map((name) => (
+                                    {Object.keys(Status).map((name) => (
                                     <MenuItem key={name} value={name}>
                                             <Checkbox checked={!!value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                            <ListItemText primary={Status[name as keyof typeof Status]} />
                                     </MenuItem>
                                     ))}
                                         <MenuItem value={''}>Очистити</MenuItem>                    
@@ -289,7 +301,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                 <Checkbox 
                                     checked={value}
                                     onChange={onChange}
-                                    disabled={!isEdit}
+                                    disabled
                                 />
                             )}
                     />

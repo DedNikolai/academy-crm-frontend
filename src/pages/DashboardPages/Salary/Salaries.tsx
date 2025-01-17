@@ -14,10 +14,11 @@ import useGetSalaries from '../../../api/query/salary/useGetSalaries';
 import { ISalary } from '../../../types/salary';
 import {NavLink} from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
+import { pagination } from '../../../constants/app';
 
 export default function Salaries() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const {data = {docs: []}, isLoading} = useGetSalaries(page, rowsPerPage)  
   const theme = useTheme();
   const isPending = false;
@@ -67,7 +68,7 @@ export default function Salaries() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

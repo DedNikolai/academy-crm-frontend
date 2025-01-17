@@ -32,6 +32,7 @@ import { IFormStudent, IStudent } from '../../../types/student';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import useUpdateStudent from '../../../api/query/student/useUpdateStudent';
 import MenuProps from '../../../utils/MenuProps';
+import { Gender } from '../../../types/gender';
 
 interface IStudentItem {
     student: IStudent,
@@ -47,7 +48,7 @@ const schema = yup
     parents: yup.string().optional(),
     birthday: yup.date().optional().nullable(),
     isActive: yup.boolean().required('Обовязкове поле'),
-    gender: yup.string().oneOf(['Чоловіча', 'Жіноча', '']).required('Обовязкове поле'),
+    gender: yup.string().required('Обовязкове поле'),
     teachers: yup.array().min(1, 'Необхідно вибрати хоча б одне значення').required('Обовязкове поле')
   })
   .required()
@@ -71,6 +72,17 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
         const updatedStudent: IFormStudent = {...data}
         mutate(updatedStudent);
     };
+
+    const getSubjectValue = (key: string) => {
+        let day = '';
+        Object.keys(Subjects).forEach(item => {
+            if (key === item) {
+                day = Subjects[item as keyof typeof Subjects];
+            }
+        })
+     
+        return day;
+    }
 
     return (
         <>
@@ -170,13 +182,13 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                                     value={value}
                                     onChange={onChange}
                                     MenuProps={MenuProps}
-                                    renderValue={value => value}
+                                    renderValue={value => value ? Gender[value as keyof typeof Gender] : ''}
                                     color={!!errors.gender ? 'error' : 'primary'}
                                 >
-                                    {['Чоловіча', 'Жіноча'].map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={!!value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                    {Object.keys(Gender).map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox checked={!!value && value === key} />
+                                            <ListItemText primary={Gender[key as keyof typeof Gender]} />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -258,14 +270,14 @@ const EditStudent: FC<IStudentItem> = ({student, allTeachers}) => {
                                     multiple
                                     value={value || []}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected.join(', ')}
+                                    renderValue={(selected) => selected.map(subject => getSubjectValue(subject)).join(', ')}
                                     MenuProps={MenuProps}
                                     color={!!errors.subjects ? 'error' : 'primary'}
                                 >
-                                    {Object.values(Subjects).map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                    {Object.keys(Subjects).map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox checked={value && value.includes(key)} />
+                                            <ListItemText primary={Subjects[key as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>

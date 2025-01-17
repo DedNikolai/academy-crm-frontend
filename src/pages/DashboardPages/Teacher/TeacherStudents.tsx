@@ -21,11 +21,12 @@ import useDeleteStudent from '../../../api/query/student/useDeleteStudent';
 import { ITeacher } from '../../../types/teacher';
 import useGetTeacherStudents from '../../../api/query/student/useGetTeacherStudents';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { pagination } from '../../../constants/app';
 
 const TeacherStudents: FC<{teacher: ITeacher}> = ({teacher}) => {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const {data = {docs: []}, isLoading} = useGetTeacherStudents(teacher?._id, page, rowsPerPage)  
   const mutation = useDeleteStudent()
   const {mutate, isPending} = mutation;
@@ -115,7 +116,7 @@ const TeacherStudents: FC<{teacher: ITeacher}> = ({teacher}) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

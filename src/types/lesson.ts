@@ -7,7 +7,7 @@ import { Subjects } from "./subjects";
 
 export interface ILesson {
     _id?: string,
-    day: Days,
+    day: string,
     date: Date,
     durationMinutes: number,
     room: number,
@@ -22,7 +22,7 @@ export interface ILesson {
 }
 
 export interface IFormDataLesson {
-    day: Days,
+    day: string,
     date: Date,
     durationMinutes: number,
     room: number,
@@ -33,7 +33,7 @@ export interface IFormDataLesson {
 
 export interface ILessonFromServer {
     _id: string,
-    day: Days,
+    day: string,
     date: Date,
     durationMinutes: number,
     room: number,

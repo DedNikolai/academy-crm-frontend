@@ -24,7 +24,7 @@ import Checkbox from '@mui/material/Checkbox';
 import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import MenuProps from '../../../utils/MenuProps';
-import { IPayment, PayTypes } from '../../../types/payment';
+import { IPayment, IPaymentFromServer } from '../../../types/payment';
 import { IFormDataSalary } from '../../../types/salary';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
 import useCreateSalary from '../../../api/query/salary/useCreateSalary';
@@ -53,8 +53,7 @@ const CreateSalary: FC = () => {
     const balance = watchTeacher && data.filter((teacher: ITeacher) => teacher._id === watchTeacher)[0].balance;
 
     const onSubmit: SubmitHandler<IFormDataSalary> = (data) => {
-        const payaccount = payAccounts.data.filter((item: IPayment) => item.title === data.payaccount)[0];
-        const salary: IFormDataSalary = {...data, payaccount: payaccount._id};
+        const salary: IFormDataSalary = {...data};
         mutate(salary);
     };
 
@@ -75,7 +74,7 @@ const CreateSalary: FC = () => {
             <Grid container spacing={1} marginBottom={5}>
                 {payAccounts.data.map((item: IPayment) => (
                     <Grid size={3} key={item._id}>
-                        <Typography variant='h4'>{item.title + ': ' + item.value}</Typography>
+                        <Typography variant='h4'>{item.title  + ': ' + item.value}</Typography>
                     </Grid>
                     ))}
             </Grid>       
@@ -174,14 +173,14 @@ const CreateSalary: FC = () => {
                                         id="payaccount"
                                         value={value || ''}
                                         onChange={onChange}
-                                        renderValue={(selected) => PayTypes[selected as keyof typeof PayTypes]}
+                                        renderValue={(selected) => selected ? payAccounts.data.filter((item: IPaymentFromServer) => item._id === selected)[0].title : ''}
                                         MenuProps={MenuProps}
                                         color={!!errors.payaccount ? 'error' : 'primary'}
                                     >
-                                        {Object.keys(PayTypes).map((key) => (
-                                            <MenuItem key={key} value={key}>
-                                                <Checkbox checked={!!value && value === key} />
-                                                <ListItemText primary={PayTypes[key as keyof typeof PayTypes]} />
+                                        {payAccounts.data.map((key: IPaymentFromServer) => (
+                                            <MenuItem key={key._id} value={key._id}>
+                                                <Checkbox checked={!!value && value === key._id} />
+                                                <ListItemText primary={key.title} />
                                             </MenuItem>
                                         ))}
                                     </Select>

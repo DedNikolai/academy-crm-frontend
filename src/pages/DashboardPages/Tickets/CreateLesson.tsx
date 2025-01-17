@@ -28,6 +28,7 @@ import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import useCreateLesson from '../../../api/query/lesson/useCreateLesson';
 import MenuProps from '../../../utils/MenuProps';
+import { Durations, Rooms } from '../../../constants/app';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -41,7 +42,7 @@ interface ICreateLesson {
 
 const schema = yup
   .object({
-    day: yup.mixed<Days>().oneOf(Object.values(Days)).defined(),
+    day: yup.string().defined(),
     date: yup.date().required('Обовязкове поле'),
     durationMinutes: yup.number().required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
@@ -63,7 +64,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
     useEffect(() => {
         if (watchDate) {
             setValue('time', new Date(watchDate))
-            setValue('day', Object.values(Days)[new Date(watchDate).getDay()])
+            setValue('day', Object.keys(Days)[new Date(watchDate).getDay()])
         }
 
 
@@ -125,7 +126,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                                 )}
                     />        
                 </Grid2>
-                <Grid2 size={2}>    
+                <Grid2 size={1.5}>    
                     <Controller
                         name='day'
                         control={control}
@@ -135,11 +136,11 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                                     id="day"
                                     value={value || ''}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected}
+                                    renderValue={(selected) => Days[selected as keyof typeof Days]}
                                     disabled
                                 >
-                                    {Object.values(Days).map((name) => (
-                                        <MenuItem key={name} value={name}>{name}</MenuItem>
+                                    {Object.keys(Days).map((name) => (
+                                        <MenuItem key={name} value={name}>{Days[name as keyof typeof Days]}</MenuItem>
                                         ))}
                                 </Select>
                                 <FormHelperText>{errors.time?.message}</FormHelperText>
@@ -147,7 +148,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                             )}
                     />
                 </Grid2>
-                <Grid2 size={2}>
+                <Grid2 size={1.5}>
                     <Controller
                         name='time'
                         control={control}
@@ -196,7 +197,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                                     MenuProps={MenuProps}
                                     color={!!errors.durationMinutes ? 'error' : 'primary'}
                                 >
-                                    {[30, 60].map((item) => (
+                                    {Object.values(Durations).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
@@ -222,7 +223,7 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                                     MenuProps={MenuProps}
                                     color={!!errors.room ? 'error' : 'primary'}
                                 >
-                                    {[1, 2, 3, 4].map((item) => (
+                                    {Object.values(Rooms).map((item) => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={!!value && value == item} />
                                             <ListItemText primary={item} />
@@ -261,6 +262,19 @@ const CreateLesson: FC<ICreateLesson> = ({closeForm, ticket, lesson, setCopy}) =
                         )}
                     />
                 </Grid2>
+                <Grid2 size={1} textAlign='center'>
+                    <Controller
+                        name='payout'
+                        control={control}
+                        render={({field: { onChange, value }}) => (
+                                    <Checkbox 
+                                        checked={value}
+                                        onChange={onChange}
+                                        disabled
+                                    />
+                                   )}
+                                    />
+                                </Grid2>
                 <Grid2 size={2} sx={{textAlign: 'center'}}>
                 <IconButton aria-label="save" type="submit">
                         <SaveIcon />

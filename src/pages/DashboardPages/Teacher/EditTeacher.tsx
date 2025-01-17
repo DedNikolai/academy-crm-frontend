@@ -65,6 +65,17 @@ const EditTeacher: FC<{teacher: ITeacher}> = ({teacher}) => {
         mutate(updatedTeacher);
     };
 
+    const geSubjectValue = (key: string) => {
+        let day = '';
+        Object.keys(Subjects).forEach(item => {
+            if (key === item) {
+                day = Subjects[item as keyof typeof Subjects];
+            }
+        })
+     
+        return day;
+    }
+
     return (
         <>
         <Card sx={{boxShadow: 'none'}}>
@@ -203,14 +214,14 @@ const EditTeacher: FC<{teacher: ITeacher}> = ({teacher}) => {
                                     multiple
                                     value={value || []}
                                     onChange={onChange}
-                                    renderValue={(selected) => selected.join(', ')}
+                                    renderValue={(selected) => selected.map(item => geSubjectValue(item)).join(', ')}
                                     MenuProps={MenuProps}
                                     color={!!errors.subjects ? 'error' : 'primary'}
                                 >
-                                    {Object.values(Subjects).map((name) => (
-                                        <MenuItem key={name} value={name}>
-                                            <Checkbox checked={value && value.includes(name)} />
-                                            <ListItemText primary={name} />
+                                    {Object.keys(Subjects).map((key) => (
+                                        <MenuItem key={key} value={key}>
+                                            <Checkbox checked={value && value.includes(key)} />
+                                            <ListItemText primary={Subjects[key as keyof typeof Subjects]} />
                                         </MenuItem>
                                     ))}
                                 </Select>
