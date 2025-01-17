@@ -21,11 +21,12 @@ import { Status } from '../../../types/lesson-status';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useTheme } from '@mui/material/styles';
+import { pagination } from '../../../constants/app';
 
 const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const {data = {docs: []}, isLoading} = useGetTicketsByStudent(student._id, page, rowsPerPage)  
   const mutation = useDeleteTicket()
   const {mutate, isPending} = mutation;
@@ -131,7 +132,7 @@ const StudentTickets: React.FC<{student: IStudent}> = ({student}) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

@@ -278,7 +278,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                     renderValue={(selected) => getStatusValue(selected)}
                                     MenuProps={MenuProps}
                                     color={!!errors.status ? 'error' : 'primary'}
-                                    disabled={!isEdit}
+                                    disabled
                                 >
                                     {Object.keys(Status).map((name) => (
                                     <MenuItem key={name} value={name}>
@@ -301,7 +301,7 @@ const LessonItem: FC<ILessonItem> = ({lesson, copy, addNew}) => {
                                 <Checkbox 
                                     checked={value}
                                     onChange={onChange}
-                                    disabled={!isEdit}
+                                    disabled
                                 />
                             )}
                     />

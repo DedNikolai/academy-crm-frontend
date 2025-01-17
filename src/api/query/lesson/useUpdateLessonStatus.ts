@@ -7,7 +7,7 @@ import { ILesson} from '../../../types/lesson';
 
 export const updateLesson = async (data: ILesson) => {
     try {
-        const response: AxiosResponse = await axios.patch(`/lesson/${data._id}`, data);
+        const response: AxiosResponse = await axios.put(`/lesson/${data._id}`, data);
 
         if (response.status === 200) {
             toast.success('Урок оновлено');

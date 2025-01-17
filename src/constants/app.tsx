@@ -21,3 +21,8 @@ export const Durations = {
     CHILD: 30,
     MAN: 60  
 }
+
+export const pagination = {
+    items: [5, 10, 25],
+    rowsPerPage: 10
+};

@@ -13,10 +13,11 @@ import { ILessonFromServer } from '../../../types/lesson';
 import StudentLessonItem from './StudentLessonItem';
 import { IStudent } from '../../../types/student';
 import useGetLessonsByStudent from '../../../api/query/lesson/useGetLessonsByStudent';
+import { pagination } from '../../../constants/app';
 
 const StudentLessons: React.FC<{student: IStudent}> = ({student}) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const {data = {docs: []}, isLoading} = useGetLessonsByStudent(page, rowsPerPage, student._id)  
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -63,7 +64,7 @@ const StudentLessons: React.FC<{student: IStudent}> = ({student}) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}

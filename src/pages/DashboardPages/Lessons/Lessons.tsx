@@ -12,13 +12,12 @@ import columns from './columns/columns';
 import useGetLessons from '../../../api/query/lesson/useGetLessons';
 import { ILessonFromServer } from '../../../types/lesson';
 import LessonItem from './LessonItem';
+import { pagination } from '../../../constants/app';
 
 export default function Lessons() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(pagination.rowsPerPage);
   const {data = {docs: []}, isLoading} = useGetLessons(page, rowsPerPage, null)  
-
-  const isPending = false;
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -36,7 +35,7 @@ export default function Lessons() {
          </Grid2>
       </Grid2>  
       {
-        isLoading || isPending ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
+        isLoading ? <Box sx={{textAlign: 'center', margin: '20px 0'}}><CircularProgress /></Box> :
       <>  
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table" size="small">
@@ -65,7 +64,7 @@ export default function Lessons() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={pagination.items}
         component="div"
         count={data.totalDocs}
         rowsPerPage={rowsPerPage}
