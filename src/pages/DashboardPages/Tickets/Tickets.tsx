@@ -25,7 +25,7 @@ export default function Tickets() {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const {data = {docs: []}, isLoading} = useGetTickets(page, rowsPerPage)  
+  const {data = {docs: []}, isLoading} = useGetTickets(page, rowsPerPage);
   const mutation = useDeleteTicket()
   const {mutate, isPending} = mutation;
 
