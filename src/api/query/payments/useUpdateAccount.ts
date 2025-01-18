@@ -1,36 +1,37 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import { IWorktime } from '../../../types/teacher';
 import axios from '../../axios';
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { IPayment } from '../../../types/payment';
 
-export const deleteSalary = async (id: string) => {
+export const updateAccount= async (data: IPayment) => {
     try {
-        const response: AxiosResponse = await axios.delete(`/salary/${id}`);
+        const response: AxiosResponse = await axios.patch(`/payaccount/${data._id}`, data);
 
         if (response.status === 200) {
-            toast.success('Зарплату видалено');
+            toast.success('Акаунт оновлено');
             return response.data;
         } else {
             toast.error(response.data.message)
         }
     } catch(error) {
         console.log(error);
-        toast.error('Помилка при видаленні зарплати');
+        toast.error('Помилка при оновлені акаунта');
     }
 }
 
-const useDeleteSalary= () => {
+const useUpdatePayAccount = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationKey: ['salary delete'],
-        mutationFn: deleteSalary,
+        mutationKey: ['payaccount update'],
+        mutationFn: updateAccount,
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['payaccounts']});
-            queryClient.invalidateQueries({queryKey: ['salaries']});
         }
     })
 
     return mutation;
 }
 
-export default useDeleteSalary;
+export default useUpdatePayAccount;

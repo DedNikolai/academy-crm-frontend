@@ -27,6 +27,7 @@ import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import PaidIcon from '@mui/icons-material/Paid';
+import MoneyIcon from '@mui/icons-material/Money';
 
 const menuList = [
   {
@@ -76,6 +77,12 @@ const menuList = [
     title: 'Зарплати',
     link: '/dashboard/salary',
     icon: <PaidIcon />
+  },
+  {
+    id: 10,
+    title: 'Витрати',
+    link: '/dashboard/expense',
+    icon: <MoneyIcon />
   },
   {
     id: 8,

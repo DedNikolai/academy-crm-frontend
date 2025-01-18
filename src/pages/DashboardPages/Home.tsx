@@ -84,7 +84,7 @@ const Home: FC = () => {
                             avatar={<CreditCardIcon sx={{fontSize: 60, color: theme.palette.primary.main }}/> }
                             title={
                                 <Fragment>
-                                    <Typography sx={{fontSize: 18}}>Рахунок</Typography>
+                                    <Typography sx={{fontSize: 18}}>Банк</Typography>
                                     <Typography 
                                         component="h2" sx={{fontSize: 32, fontWeight: 'bold'}}
                                     >

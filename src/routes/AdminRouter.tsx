@@ -20,6 +20,9 @@ import TicketPage from "../pages/DashboardPages/Tickets/TicketPage";
 import Lessons from "../pages/DashboardPages/Lessons/Lessons";
 import Salary from "../pages/DashboardPages/Salary/Salaries";
 import CreateSalary from "../pages/DashboardPages/Salary/CreateSalary";
+import Expenses from "../pages/DashboardPages/Expenses/Expenses";
+import CreateExpense from "../pages/DashboardPages/Expenses/CreateExpense";
+import Bills from "../pages/DashboardPages/Bills";
 
 const AdminRouter: FC = () => {
     return (
@@ -32,6 +35,7 @@ const AdminRouter: FC = () => {
             <Route path="/archive" element={<Archive />} />
             <Route path="/students/create" element={<CreateStudent />} />
             <Route path="/students/edit/:id" element={<StudentPage />} />
+            <Route path="/bills" element={<Bills />} />
             <Route path="/admins" element={<Admins />} />
             <Route path="/admins/create" element={<CreateUser />} /> 
             <Route path="/admins/edit/:id" element={<EditUser />} /> 
@@ -44,6 +48,8 @@ const AdminRouter: FC = () => {
             <Route path="/abonements" element={<Tickets />} /> 
             <Route path="/salary" element={<Salary />} /> 
             <Route path="/salary/create" element={<CreateSalary />} />  
+            <Route path="/expense" element={<Expenses />} /> 
+            <Route path="/expense/create" element={<CreateExpense />} />  
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />     
         </Routes>
