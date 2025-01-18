@@ -3,34 +3,34 @@ import axios from '../../axios';
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 
-export const deleteSalary = async (id: string) => {
+export const deleteExpense= async (id: string) => {
     try {
-        const response: AxiosResponse = await axios.delete(`/salary/${id}`);
+        const response: AxiosResponse = await axios.delete(`/expense/${id}`);
 
         if (response.status === 200) {
-            toast.success('Зарплату видалено');
+            toast.success('Витрату видалено');
             return response.data;
         } else {
             toast.error(response.data.message)
         }
     } catch(error) {
         console.log(error);
-        toast.error('Помилка при видаленні зарплати');
+        toast.error('Помилка при видаленні витрати');
     }
 }
 
-const useDeleteSalary= () => {
+const useDeleteExpense = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationKey: ['salary delete'],
-        mutationFn: deleteSalary,
+        mutationKey: ['expense delete'],
+        mutationFn: deleteExpense,
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['payaccounts']});
-            queryClient.invalidateQueries({queryKey: ['salaries']});
+            queryClient.invalidateQueries({queryKey: ['expenses']});
         }
     })
 
     return mutation;
 }
 
-export default useDeleteSalary;
+export default useDeleteExpense;

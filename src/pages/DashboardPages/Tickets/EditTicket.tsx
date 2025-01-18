@@ -43,7 +43,7 @@ const schema = yup
     subject: yup.string().required('Обовязкове поле'),
     startDate: yup.date().required('Обовязкове поле'),
     endDate: yup.date().required('Обовязкове поле'),
-    price: yup.number().required('Обовязкове поле'),
+    price: yup.number().min(1, 'Значення має бути більше 0').required('Обовязкове поле'),
     generalAmount: yup.number().required('Обовязкове поле'),
     teacher: yup.string().required('Обовязкове поле'),
     isPaid: yup.boolean().required('Обовязкове поле'),

@@ -44,7 +44,7 @@ const schema = yup
   .object({
     day: yup.string().defined(),
     date: yup.date().required('Обовязкове поле'),
-    durationMinutes: yup.number().required('Обовязкове поле'),
+    durationMinutes: yup.number().min(1, 'Значення має бути більше 0').required('Обовязкове поле'),
     room: yup.number().required('Обовязкове поле'),
     time: yup.date().required('Обовязкове поле'),
   })

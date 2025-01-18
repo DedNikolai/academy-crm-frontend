@@ -15,46 +15,39 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { Grid2, CircularProgress, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { ITeacher } from '../../../types/teacher';
 import Grid from '@mui/material/Grid2';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import MenuProps from '../../../utils/MenuProps';
 import { IPayment, IPaymentFromServer } from '../../../types/payment';
-import { IFormDataSalary } from '../../../types/salary';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
-import useCreateSalary from '../../../api/query/salary/useCreateSalary';
+import useCreateExpense from '../../../api/query/expense/useCreateExpense';
+import { IFormDataExpense } from '../../../types/expense';
 
 const schema = yup
   .object({
     payaccount: yup.string().required('Обовязкове поле'),
     value: yup.number().min(1, 'Значення має бути більше 0').required('Обовязкове поле'),
-    teacher: yup.string().required('Обовязкове поле')
+    title: yup.string().required('Обовязкове поле')
   })
   .required()
 
-const CreateSalary: FC = () => {
+const CreateExpense: FC = () => {
     const theme = useTheme();
-    const mutation = useCreateSalary();
+    const mutation = useCreateExpense();
     const payAccounts = usePayAccounts();
     const {mutate, isPending} = mutation;
-    const {data = [], isLoading} = useTeachers()
-    const {register, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataSalary>({
+    const {register, handleSubmit, formState: {errors}, control} = useForm<IFormDataExpense>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
-        defaultValues: {teacher: ''}
     })
 
-    const watchTeacher= watch('teacher');
-    const balance = watchTeacher && data.filter((teacher: ITeacher) => teacher._id === watchTeacher)[0].balance;
-
-    const onSubmit: SubmitHandler<IFormDataSalary> = (data) => {
-        const salary: IFormDataSalary = {...data};
-        mutate(salary);
+    const onSubmit: SubmitHandler<IFormDataExpense> = (data) => {
+        const expense: IFormDataExpense = {...data};
+        mutate(expense);
     };
 
     return (
@@ -66,10 +59,10 @@ const CreateSalary: FC = () => {
                         <AddCircleIcon />
                     </Avatar>
                 }
-                title={`Виплата зарплати`}
+                title={`Створити витрату`}
             />
             {
-            isLoading || payAccounts.isLoading || isPending ?  <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
+            payAccounts.isLoading || isPending ?  <Box sx={{textAlign: 'center'}}><CircularProgress /></Box> :
             <CardContent>
             <Grid container spacing={1} marginBottom={5}>
                 {payAccounts.data.map((item: IPayment) => (
@@ -90,53 +83,23 @@ const CreateSalary: FC = () => {
                 }}
             >
                 <Grid container spacing={2}>                    
-                    <Grid size={3}>
-                        <Controller
-                            name='teacher'
-                            control={control}
-                            render={({field: { onChange, value }}) => (
-                                <FormControl fullWidth={true} error={!!errors.teacher}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <FormLabel htmlFor="education">Вчитель *</FormLabel>
-                                </Box>
-                                <Select
-                                    id="teacher"
-                                    value={value}
-                                    onChange={onChange}
-                                    renderValue={
-                                        (selected) => data.find((teacher:ITeacher) => teacher._id == selected).fullName}
-                                    MenuProps={MenuProps}
-                                    color={!!errors.teacher ? 'error' : 'primary'}
-                                >
-                                    {data.map((teacher: ITeacher) => (
-                                        <MenuItem key={teacher._id} value={teacher._id}>
-                                            <Checkbox checked={
-                                                !!value && teacher._id == value}
-                                             />
-                                            <ListItemText primary={teacher.fullName} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText>{errors.teacher?.message}</FormHelperText>
-                            </FormControl>
-                            )}
-                        />
-                    </Grid>
-                    <Grid size={3}>
-                        <FormControl fullWidth={true}>
+                    <Grid size={6}>
+                        <FormControl fullWidth={true}  error={!!errors.value}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="fullName">Баланс</FormLabel>
+                                <FormLabel htmlFor="fullName">Назва *</FormLabel>
                             </Box>
                             <TextField
-                                name="teacherBalance"
-                                type="number"
-                                id="teacherBalance"
-                                value={balance}
+                                {...register('title')}
+                                error={!!errors.title}
+                                helperText={errors.title?.message}
+                                name="title"
+                                type="text"
+                                id="title"
                                 autoFocus
                                 required
                                 fullWidth
                                 variant="outlined"
-                                disabled={true}
+                                color={!!errors.title ? 'error' : 'primary'}
                             />
                         </FormControl>
                     </Grid>
@@ -208,4 +171,4 @@ const CreateSalary: FC = () => {
     )
 };
 
-export default CreateSalary;
+export default CreateExpense;
