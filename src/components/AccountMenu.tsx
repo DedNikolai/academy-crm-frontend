@@ -15,6 +15,7 @@ import { AuthContext } from './AuthProvider';
 // import {removeCookie} from 'typescript-cookie';
 import { Roles } from '../types/roles';
 import {NavLink} from 'react-router-dom';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -122,6 +123,17 @@ export default function AccountMenu() {
                   <PersonAdd fontSize="small" />
                 </ListItemIcon>
                 Додати Адміністратора
+              </MenuItem>
+            </NavLink>
+        }
+                {
+          isOwner &&
+          <NavLink to='/dashboard/bills'>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <AttachMoneyIcon fontSize="small" />
+                </ListItemIcon>
+                 Рахунки
               </MenuItem>
             </NavLink>
         }
