@@ -69,7 +69,7 @@ interface Column {
       label: 'Заняття',
       align: 'center',
       format: (value: ITicketFromServer) => {
-        return value.lessons?.filter(lesson => lesson.status && lesson.status !== Status.TRANSFERED).length + `/` + value.generalAmount
+        return value.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] !== Status.TRANSFERED && lesson.status).length + `/` + value.generalAmount
       }
     },
     {
