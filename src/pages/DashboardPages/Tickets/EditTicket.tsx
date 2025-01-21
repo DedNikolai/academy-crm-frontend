@@ -289,7 +289,7 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                 fullWidth
                                 variant="outlined"
                                 disabled
-                                value={ticket.lessons?.filter(lesson => lesson.status === Status.SUCCESS).length}
+                                value={ticket.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.SUCCESS).length}
                             />
                         </FormControl>
                     </Grid>
@@ -307,7 +307,7 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
                                 fullWidth
                                 variant="outlined"
                                 disabled
-                                value={ticket.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}
+                                value={ticket.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.TRANSFERED).length}
                             />
                         </FormControl>
                     </Grid>

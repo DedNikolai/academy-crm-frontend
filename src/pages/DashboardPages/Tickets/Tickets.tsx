@@ -107,14 +107,14 @@ export default function Tickets() {
                       if (column.id === 'usedAmount') {
                         return (
                             <TableCell key={column.id} align={column.align}>
-                              {row.lessons?.filter(lesson => lesson.status === Status.SUCCESS).length}
+                              {row.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.SUCCESS).length}
                             </TableCell>
                         )
                       }
                       if (column.id === 'transferred') {
                         return (
                             <TableCell key={column.id} align={column.align}>
-                              {row.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}
+                              {row.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.TRANSFERED).length}
                             </TableCell>
                         )
                       }     

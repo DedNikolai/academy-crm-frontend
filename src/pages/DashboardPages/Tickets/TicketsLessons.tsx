@@ -58,8 +58,8 @@ const TicketLessons: FC<ITicketItem> = ({ticket}) => {
                         <Grid2 size={6}>
                             {`використано / скасовано / перенесено: 
                                 ${ticket.generalAmount} / 
-                                ${ticket.lessons?.filter(lesson => lesson.status === Status.SUCCESS).length} / 
-                                ${ticket.lessons?.filter(lesson => lesson.status === Status.TRANSFERED).length}`
+                                ${ticket.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.SUCCESS).length} / 
+                                ${ticket.lessons?.filter(lesson => Status[lesson.status as keyof typeof Status] === Status.TRANSFERED).length}`
                             }
                         </Grid2>
                         <Grid2 size={3}>{`Початок: ${dayjs(ticket.startDate).format('DD/MM/YYYY')}`}</Grid2>
