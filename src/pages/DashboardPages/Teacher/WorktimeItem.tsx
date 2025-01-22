@@ -24,7 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import useUpdateWorktime from "../../../api/query/worktime/useUpdateWorktime";
-import useDeleteWorktime from "../../../api/query/worktime/useDeleteWorktime copy";
+import useDeleteWorktime from "../../../api/query/worktime/useDeleteWorktime";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
