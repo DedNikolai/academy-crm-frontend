@@ -10,6 +10,14 @@ export const shedule = {
     roomsCount: 4
 }
 
+export const teacherShedule = {
+    dayStartTime: 9,
+    dayEndTime: 22,
+    timeInterval: 30,
+    daysPerWeek: 7,
+    roomsCount: 1
+}
+
 export const Rooms = {
     ROOM1: 1,
     ROOM2: 2,
