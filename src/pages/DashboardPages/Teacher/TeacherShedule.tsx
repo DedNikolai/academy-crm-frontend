@@ -24,12 +24,15 @@ import { Rooms } from '../../../constants/app';
 import { ITeacher } from '../../../types/teacher';
 import useGetTieacherTimes from '../../../api/query/studentTime/useGetStudentsTimeByTeacher';
 import { Days } from '../../../types/days';
+import CustomCell from '../../../components/dashboard/CustomCell';
 
 
 dayjs.extend(localeData)
 
 const TeacherShedule: React.FC<{teacher: ITeacher}> = ({teacher}) => {
   const weekDays = Object.values(Days);
+  weekDays.shift();
+  weekDays.push(Days.SUNDAY)
   const times = timesArray();
   const {data = {docs: []}, isLoading} = useGetTieacherTimes(teacher._id || '');
 
@@ -83,27 +86,35 @@ const TeacherShedule: React.FC<{teacher: ITeacher}> = ({teacher}) => {
                                 {
                                     teacherCellsArray(item, data).map((num, cellIndex) => {
                                         return (
-                                            <TableCell
-                                                id={`${rowIndex*7 + cellIndex + 1}`}
-                                                sx={{
-                                                    width: 100, 
-                                                    borderRight: 1, 
-                                                    borderTop: 1,
-                                                    cursor: isTeacherLesson(item, cellIndex, data).isLesson ? 'pointer' : 'inherit',
-                                                    bgcolor: isTeacherLesson(item, cellIndex, data).isLesson ? isTeacherLesson(item, cellIndex, data).color : 'inherit',
-                                                    }} 
-                                                rowSpan={isTeacherLesson(item, cellIndex, data).isLesson && isTeacherLesson(item, cellIndex, data).duration === 60 ? 2 : 1}
-                                                align='center'
-                                                key={item.toString() + num}                                                              
-                                            >
-                                                {
-                                                    isTeacherLesson(item, cellIndex, data).isLesson ?
-                                                    <Typography fontSize={14} sx={{cursor: 'pointer'}}>
-                                                            {isTeacherLesson(item, cellIndex, data).student  + ' / ' + isTeacherLesson(item, cellIndex, data).room}
-                                                     </Typography>
-                                                    : ''
-                                                }
-                                            </TableCell>
+                                            <CustomCell  
+                                                rowIndex={rowIndex}
+                                                cellIndex={cellIndex}
+                                                time={item}
+                                                lessons={data}
+                                                workTimes={teacher.worktimes}
+                                                key={num}
+                                            />
+                                            // <TableCell
+                                            //     id={`${rowIndex*7 + cellIndex + 1}`}
+                                            //     sx={{
+                                            //         width: 100, 
+                                            //         borderRight: 1, 
+                                            //         bgcolor: isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).color,
+                                            //         borderTop: isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).borderTop,
+                                            //         borderBottom: isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).borderBottom,
+                                            //     }} 
+                                            //     align='center'
+                                            //     key={item.toString() + num}                                                              
+                                            // >
+                                            //     {
+                                            //         isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).isText ?
+                                            //         <Typography fontSize={14} sx={{cursor: 'pointer'}}>
+                                            //                 {isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).student  + ' / ' + isTeacherLesson(item, cellIndex, data, teacher.worktimes || []).room}
+                                            //          </Typography>
+                                            //         : ''
+                                            //     }
+                                            // </TableCell>
+                                            
                                         )
                                     })
                                 }
@@ -121,4 +132,6 @@ const TeacherShedule: React.FC<{teacher: ITeacher}> = ({teacher}) => {
 }
 
 export default  TeacherShedule;
+
+
 

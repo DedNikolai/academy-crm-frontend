@@ -193,7 +193,7 @@ const WorkTimeItem: FC<IWorktimeItem> = ({data}) => {
                             aria-label="cancel" 
                             onClick={() => {
                                 setIsEdit(false);
-                                reset();
+                                // reset();
                             }}
                         >
                             <CancelIcon />
