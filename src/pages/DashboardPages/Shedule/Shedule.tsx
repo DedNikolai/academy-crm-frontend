@@ -20,6 +20,7 @@ import Brightness1Icon from '@mui/icons-material/Brightness1';
 import { NavLink } from 'react-router-dom';
 import { Subjects } from '../../../types/subjects';
 import { Rooms } from '../../../constants/app';
+import CustomSheduleCell from '../../../components/dashboard/CustomSheduleCell';
 
 
 dayjs.extend(localeData)
@@ -114,31 +115,39 @@ export default function Shedule() {
                                     {dayjs(item).format('HH:mm')}
                                 </TableCell>
                                 {
-                                    cellsArray(item, data).map((num, cellIndex) => {
+                                    cellsArray().map((num, cellIndex) => {
                                         return (
-                                            <TableCell
-                                                id={`${rowIndex*28 + cellIndex + 1}`}
-                                                sx={{
-                                                    width: 30, 
-                                                    borderRight: 1, 
-                                                    borderTop: 1,
-                                                    cursor: isLesson(item, cellIndex, data).isLesson ? 'pointer' : 'inherit',
-                                                    bgcolor: isLesson(item, cellIndex, data).isLesson ? isLesson(item, cellIndex, data).color : 'inherit',
-                                                    }} 
-                                                rowSpan={isLesson(item, cellIndex, data).isLesson && isLesson(item, cellIndex, data).duration === 60 ? 2 : 1}
-                                                align='center'
-                                                key={item.toString() + num}                                                              
-                                            >
-                                                {
-                                                    isLesson(item, cellIndex, data).isLesson ?
-                                                    <NavLink to={`/dashboard/tickets/edit/${isLesson(item, cellIndex, data).ticket}`}>
-                                                        <Typography fontSize={10} sx={{cursor: 'pointer'}}>
-                                                            {isLesson(item, cellIndex, data).student  + ' / ' + isLesson(item, cellIndex, data).teacher}
-                                                        </Typography>
-                                                    </NavLink>
-                                                    : ''
-                                                }
-                                            </TableCell>
+                                            <CustomSheduleCell
+                                                rowIndex={rowIndex}
+                                                cellIndex={cellIndex}
+                                                time={item}
+                                                lessons={data} 
+                                                key={item.toString() + num}
+                                            />
+                                            // <TableCell
+                                            //     id={`${rowIndex*28 + cellIndex + 1}`}
+                                            //     sx={{
+                                            //         width: 30, 
+                                            //         borderRight: 1, 
+                                            //         cursor: isLesson(item, cellIndex, data).isLessonTime ? 'pointer' : 'inherit',
+                                            //         bgcolor: isLesson(item, cellIndex, data).isLessonTime ? isLesson(item, cellIndex, data).color : 'inherit',
+                                            //         borderTop: isLesson(item, cellIndex, data).borderTop,
+                                            //         borderBottom: isLesson(item, cellIndex, data).borderBottom,
+                                                    
+                                            //         }} 
+                                            //     align='center'
+                                            //     key={item.toString() + num}                                                              
+                                            // >
+                                            //     {
+                                            //         isLesson(item, cellIndex, data).isText ?
+                                            //         <NavLink to={`/dashboard/tickets/edit/${isLesson(item, cellIndex, data).ticket}`}>
+                                            //             <Typography fontSize={10} sx={{cursor: 'pointer'}}>
+                                            //                 {isLesson(item, cellIndex, data).student  + ' / ' + isLesson(item, cellIndex, data).teacher}
+                                            //             </Typography>
+                                            //         </NavLink>
+                                            //         : ''
+                                            //     }
+                                            // </TableCell>
                                         )
                                     })
                                 }

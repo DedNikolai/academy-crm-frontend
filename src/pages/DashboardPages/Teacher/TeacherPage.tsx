@@ -9,6 +9,7 @@ import TeacherWorkTimes from './TeacherWorkTimes';
 import useTeacher from '../../../api/query/teacher/useGetTaecher';
 import { CircularProgress } from '@mui/material';
 import TeacherStudents from './TeacherStudents';
+import TeacherShedule from './TeacherShedule';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,7 +59,8 @@ export default function TeacherPage() {
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="Особисті дані" {...a11yProps(0)} />
               <Tab label="Графік роботи" {...a11yProps(1)} />
-              <Tab label="учні" {...a11yProps(2)} />
+              <Tab label="Учні" {...a11yProps(2)} />
+              <Tab label="Розклад" {...a11yProps(3)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
@@ -69,6 +71,9 @@ export default function TeacherPage() {
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
               <TeacherStudents teacher={data} />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+              <TeacherShedule teacher={data}/>
           </CustomTabPanel>
         </Box>
         }

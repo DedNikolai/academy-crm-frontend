@@ -1,3 +1,4 @@
+import { IStudentTime } from "./studentTime";
 import { ITeacher } from "./teacher";
 
 
@@ -13,6 +14,7 @@ export interface IStudent {
     actions?: null,
     birthday?: Date | null,
     parents?: string
+    lessontimes?: IStudentTime[]
 }
 
 export interface IFormStudent {

@@ -11,6 +11,7 @@ import useTeachers from '../../../api/query/teacher/useGetTeachers';
 import SellTicket from './SellTicket';
 import StudentTickets from './StudentTickets';
 import StudentLessons from './StudentLessons';
+import StudentTime from './StudentTime';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -60,21 +61,25 @@ export default function StudentPage() {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab label="Особисті дані" {...a11yProps(0)} />
-                <Tab label="Графік відвідувань" {...a11yProps(1)} />
-                <Tab label="Продати абонемент" {...a11yProps(2)} />
-                <Tab label="Всі  абонементи" {...a11yProps(3)} />
+                <Tab label="Графік" {...a11yProps(1)} />
+                <Tab label="Заняття" {...a11yProps(2)} />
+                <Tab label="Продати абонемент" {...a11yProps(3)} />
+                <Tab label="Всі  абонементи" {...a11yProps(4)} />
               </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
               <EditStudent student={data} allTeachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <StudentLessons student={data} />
+            <StudentTime student={data} teachers={teachersData.data}/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-              <SellTicket student={data}/>
+            <StudentLessons student={data} />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
+              <SellTicket student={data}/>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={4}>
               <StudentTickets student={data}/>
           </CustomTabPanel>
         </Box>

@@ -54,7 +54,7 @@ const SellTicket: FC<{student: IStudent}> = ({student}) => {
     const mutation = useCreateTicket();
     const payAccounts = usePayAccounts();
     const {mutate, isPending} = mutation;
-    const teachersData = useTeachers()
+    const teachersData = useTeachers();
     const {register, setValue, handleSubmit, watch, formState: {errors}, control} = useForm<IFormDataTicket>({
         mode: 'onSubmit', 
         resolver: yupResolver(schema),
