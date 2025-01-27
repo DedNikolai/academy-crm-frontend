@@ -10,10 +10,9 @@ type CustomCellTyle = {
     time: Date,
     lessons: IStudentTime[],
     workTimes?: IWorktime[],
-    key: number
 }
 
-const CustomCell: FC<CustomCellTyle> = ({rowIndex, cellIndex, time, lessons, workTimes, key}) => {
+const CustomCell: FC<CustomCellTyle> = ({rowIndex, cellIndex, time, lessons, workTimes}) => {
     const {color, borderTop, borderBottom, isText, student, room} = isTeacherLesson(time, cellIndex, lessons, workTimes || []);
     return (
         <TableCell
@@ -26,7 +25,6 @@ const CustomCell: FC<CustomCellTyle> = ({rowIndex, cellIndex, time, lessons, wor
                 borderBottom: borderBottom,
             }} 
             align='center'
-            key={time.toString() + key}                                                              
         >
             {
                 isText ?

@@ -15,21 +15,9 @@ export function timesArray() {
     return array;
 }
 
-export function cellsArray(row: Date, lessons: ILessonFromServer[]) {
-    const rowTime = new Date(row).getHours()*60 + new Date(row).getMinutes();
+export function cellsArray() {
     let arr = [];
     let length = shedule.daysPerWeek*shedule.roomsCount;
-    if (rowTime > shedule.dayStartTime*60) {
-        let prevTime = rowTime - shedule.timeInterval;
-        lessons.filter(lesson => {
-                const lessonTime = new Date(lesson.date).getHours()*60 + new Date(lesson.date).getMinutes();
-                return prevTime === lessonTime;
-            }).forEach(lesson => {
-                if (lesson.durationMinutes === 60) {
-                    length -= 1;
-                } 
-            })
-    }
     
     for (let i = 0; i < length; i++) {
         arr.push(i);
@@ -38,21 +26,9 @@ export function cellsArray(row: Date, lessons: ILessonFromServer[]) {
     return arr
 }
 
-export function teacherCellsArray(row: Date, lessons: IStudentTime[]) {
-    const rowTime = new Date(row).getHours()*60 + new Date(row).getMinutes();
+export function teacherCellsArray() {
     let arr = [];
     let length = teacherShedule.daysPerWeek*teacherShedule.roomsCount;
-    // if (rowTime > teacherShedule.dayStartTime*60) {
-    //     let prevTime = rowTime - teacherShedule.timeInterval;
-    //     lessons.filter(lesson => {
-    //             const lessonTime = new Date(lesson.startTime).getHours()*60 + new Date(lesson.startTime).getMinutes();
-    //             return prevTime === lessonTime;
-    //         }).forEach(lesson => {
-    //             if (lesson.duration === 60) {
-    //                 length -= 1;
-    //             } 
-    //         })
-    // }
     
     for (let i = 0; i < length; i++) {
         arr.push(i);

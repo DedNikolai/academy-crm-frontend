@@ -8,19 +8,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Grid2, Typography, Box, CircularProgress } from "@mui/material";
-import dayjs, {Dayjs} from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
-import useGetWeekLessons from '../../../api/query/lesson/useGetWeekLessons';
-import { selectWeek } from '../../../utils/selectWeek';
 import { timesArray, teacherCellsArray} from '../../../utils/timesArray';
-import { isTeacherLesson } from '../../../utils/isTeacherLesson';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
-import { NavLink } from 'react-router-dom';
 import { Subjects } from '../../../types/subjects';
-import { Rooms } from '../../../constants/app';
 import { ITeacher } from '../../../types/teacher';
 import useGetTieacherTimes from '../../../api/query/studentTime/useGetStudentsTimeByTeacher';
 import { Days } from '../../../types/days';
@@ -84,7 +76,7 @@ const TeacherShedule: React.FC<{teacher: ITeacher}> = ({teacher}) => {
                                     {dayjs(item).format('HH:mm')}
                                 </TableCell>
                                 {
-                                    teacherCellsArray(item, data).map((num, cellIndex) => {
+                                    teacherCellsArray().map((num, cellIndex) => {
                                         return (
                                             <CustomCell  
                                                 rowIndex={rowIndex}
@@ -92,7 +84,7 @@ const TeacherShedule: React.FC<{teacher: ITeacher}> = ({teacher}) => {
                                                 time={item}
                                                 lessons={data}
                                                 workTimes={teacher.worktimes}
-                                                key={num}
+                                                key={item.toString() + num}
                                             />
                                             // <TableCell
                                             //     id={`${rowIndex*7 + cellIndex + 1}`}

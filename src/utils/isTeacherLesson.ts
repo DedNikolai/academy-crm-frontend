@@ -1,11 +1,8 @@
-import { ILessonFromServer } from '../types/lesson';
 import { Colors } from '../types/colors';
-import { teacherShedule } from '../constants/app';
 import { IStudentTime } from '../types/studentTime';
 import { Days } from '../types/days';
 import { Subjects } from '../types/subjects';
 import { IWorktime } from '../types/teacher';
-import { string } from 'yup';
 
 export function isTeacherLesson(row: Date, cell: number, lessons: IStudentTime[], workTimes: IWorktime[]) {
     let result = {
@@ -33,14 +30,6 @@ export function isTeacherLesson(row: Date, cell: number, lessons: IStudentTime[]
         weekDays.shift();
         weekDays.push(Days.SUNDAY);
         const woktimeDay = weekDays.indexOf(worktime.day);
-
-        // const isLessonTime = lessons.some(lesson => {
-        //     const lessonStart = new Date(lesson.startTime).getHours()*60 + new Date(lesson.startTime).getMinutes();
-        //     const lessonEnd = lessonStart + lesson.duration;
-        //     const isLessonDay = worktime.day === lesson.day
-
-        //     return rowTime + 1 > lessonStart && rowTime < lessonEnd - 1 && isLessonDay;
-        // })
 
         if (woktimeDay === cell) {
             result.isWorkTime = true;
