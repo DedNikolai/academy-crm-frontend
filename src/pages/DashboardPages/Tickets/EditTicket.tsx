@@ -35,6 +35,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { IPaymentFromServer } from '../../../types/payment';
 import { Subjects } from '../../../types/subjects';
 import usePayAccounts from '../../../api/query/payments/useGetPayAccounts';
+import { TicketNames } from '../../../constants/app';
 
 
 const schema = yup
@@ -114,24 +115,33 @@ const EditTicket: FC<{ticket: ITicketFromServer, teachers: ITeacher[]}> = ({tick
             >
                 <Grid container spacing={2}>
                     <Grid size={4}>
-                        <FormControl fullWidth={true}  error={!!errors.title}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="fullName">Назва *</FormLabel>
-                            </Box>
-                            <TextField
-                                {...register('title')}
-                                error={!!errors.title}
-                                helperText={errors.title?.message}
-                                name="title"
-                                type="text"
-                                id="title"
-                                autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                color={!!errors.title ? 'error' : 'primary'}
-                            />
-                        </FormControl>
+                    <Controller
+                                name='title'
+                                control={control}
+                                render={({field: { onChange, value }}) => (
+                                    <FormControl fullWidth={true} error={!!errors.title}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormLabel htmlFor="education">Предмет *</FormLabel>
+                                    </Box>
+                                    <Select
+                                        id="title"
+                                        value={value}
+                                        onChange={onChange}
+                                        renderValue={(selected) => TicketNames[selected as keyof typeof TicketNames]}
+                                        MenuProps={MenuProps}
+                                        color={!!errors.title ? 'error' : 'primary'}
+                                    >
+                                        {Object.keys(TicketNames).map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={!!value && value == name} />
+                                                <ListItemText primary={TicketNames[name as keyof typeof TicketNames]} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText>{errors.title?.message}</FormHelperText>
+                                </FormControl>
+                                )}
+                        />
                     </Grid>
                     <Grid size={4}>
                         <Controller

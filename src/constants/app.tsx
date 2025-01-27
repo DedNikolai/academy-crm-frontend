@@ -34,3 +34,12 @@ export const pagination = {
     items: [5, 10, 25],
     rowsPerPage: 10
 };
+
+export enum TicketNames {
+    TICKET1 = "Дитячий 4",
+    TICKET2 = 'Дитячий 8',
+    TICKET3 = 'Дитячий 12',
+    TICKET4 = 'Дорослий 4',
+    TICKET5 = 'Дорослий 8',
+    TICKET6 = 'Дорослий 12',
+}
