@@ -1,9 +1,9 @@
 import axios from "axios";
-import {getCookie} from 'typescript-cookie';
+// import {getCookie} from 'typescript-cookie';
 import {app} from '../constants/app';
 
 const instance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || app.SERVER_URL,
+    baseURL: process.env.REACT_APP_API_URL || app.SERVER_URL + '/api',
 });
 
 instance.interceptors.request.use(
