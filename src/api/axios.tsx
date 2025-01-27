@@ -5,7 +5,7 @@ import {app} from '../constants/app';
 const apiUrl = process.env.REACT_APP_API_URL || app.SERVER_URL;
 
 const instance = axios.create({
-    baseURL: apiUrl + '/api',
+    baseURL: apiUrl + 'api',
 });
 
 instance.interceptors.request.use(
